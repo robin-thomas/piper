@@ -1,0 +1,29 @@
+{
+  "name": "piper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "next": "^8.1.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robin-thomas/piper.git"
+  },
+  "keywords": [],
+  "author": "Robin Thomas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robin-thomas/piper/issues"
+  },
+  "homepage": "https://github.com/robin-thomas/piper#readme"
+}
