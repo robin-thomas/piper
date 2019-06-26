@@ -12,7 +12,6 @@ const Header = () => (
         background: #fff;
         height: 64px;
         box-shadow: 0 2px 6px 0 rgba(0,0,0,0.12);
-        font-family: 'Roboto', sans-serif;
         font-size: 1.375rem;
         font-weight: 400;
         line-height: 1.75rem;
