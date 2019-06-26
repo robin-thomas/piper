@@ -3,7 +3,7 @@ import Head from "next/head";
 import { Container } from "react-bootstrap";
 
 import Header from "../components/Header";
-import ExtensionHeader from "../components/extension/ExtensionHeader";
+import Extension from "../components/Extension";
 
 export default () => (
   <div>
@@ -18,21 +18,22 @@ export default () => (
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-        crossorigin="anonymous"
+        crossOrigin="anonymous"
+      />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        charSet="UTF-8"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+      />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
       />
     </Head>
     <Header />
-    <Container>
-      <ExtensionHeader
-        name="Honey"
-        iconURI="https://lh3.googleusercontent.com/RAJJ1tQvIm8nT90qSd8eiU7SoWJifeTsPFPDUeCzcLiTDKcpFXhlsvoJCFIP4ZE61DckltS-=w128-h128-e365"
-        author="https://www.joinhoney.com/"
-        category="Shopping"
-        downloads="699"
-        rating={2.5}
-        reviews="6788"
-      />
-    </Container>
+    <Extension />
     <style jsx global>{`
       body {
         padding: 0;
