@@ -10,7 +10,7 @@
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
-    "husky": "^2.5.0",
+    "husky": "^2.3.0",
     "lint-staged": "^8.2.1",
     "prettier": "^1.18.2"
   },
