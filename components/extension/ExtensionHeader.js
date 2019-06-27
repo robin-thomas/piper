@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { MDBInput } from "mdbreact";
 import StarRatings from "react-star-ratings";
 
 import ExtensionCategory from "./ExtensionCategory";
@@ -34,14 +35,12 @@ const ExtensionHeader = props => (
               </Col>
               <Col md="5">
                 {props.editable ? (
-                  <Form.Group style={{ marginBottom: "0px" }}>
-                    <Form.Control
-                      size="sm"
-                      type="text"
-                      defaultValue={props.author}
-                      placeholder="Enter author URL"
-                    />
-                  </Form.Group>
+                  <MDBInput
+                    type="text"
+                    valueDefault={props.author}
+                    hint="Enter author URL"
+                    size="sm"
+                  />
                 ) : (
                   <Link href={props.author}>
                     <a target="_blank">{props.author}</a>
@@ -95,14 +94,12 @@ const ExtensionHeader = props => (
             <Row>
               <Col md="auto">
                 {props.editable ? (
-                  <Form.Group style={{ marginBottom: "0px" }}>
-                    <Form.Control
-                      size="sm"
-                      type="text"
-                      defaultValue={props.developerETH}
-                      placeholder="Your ETH address"
-                    />
-                  </Form.Group>
+                  <MDBInput
+                    type="text"
+                    valueDefault={props.developerETH}
+                    hint="Your ETH address"
+                    size="sm"
+                  />
                 ) : (
                   <Button
                     variant="outline-dark"
@@ -133,7 +130,7 @@ const ExtensionHeader = props => (
         width: 60px;
       }
 
-      .extension-header .extension-header-details > .row {
+      .extension-header .extension-header-details > .row:first-child {
         height: 40px;
       }
 

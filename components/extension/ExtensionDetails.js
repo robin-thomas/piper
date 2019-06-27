@@ -4,12 +4,17 @@ import { Component } from "react";
 
 import moment from "moment";
 
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
+import { MDBInput } from "mdbreact";
 
 const formatAdditionalDetails = props => {
-  const keys = ["version", "updated", "size"];
+  const keys = {
+    version: true,
+    updated: false,
+    size: false
+  };
 
-  return keys.map((key, index) => (
+  return Object.keys(keys).map((key, index) => (
     <div key={index}>
       <Row>
         <Col>&nbsp;</Col>
@@ -19,7 +24,16 @@ const formatAdditionalDetails = props => {
       </Row>
       <Row>
         <Col className="extension-details-additional-details">
-          {format(key, props[key])}
+          {props.editable && keys[key] ? (
+            <MDBInput
+              type="text"
+              valueDefault={props[key]}
+              hint={`Enter ${key}`}
+              size="sm"
+            />
+          ) : (
+            format(key, props[key])
+          )}
         </Col>
       </Row>
     </div>
@@ -83,7 +97,11 @@ const ExtensionDetails = props => (
         <Row>
           <Col>&nbsp;</Col>
         </Row>
-        {Formatter.formatData(props.overview)}
+        {props.editable ? (
+          <MDBInput type="textarea" valueDefault={props.overview} rows="5" />
+        ) : (
+          Formatter.formatData(props.overview)
+        )}
       </Col>
       <Col md="3">
         <Row className="extension-details-title">

@@ -18,7 +18,7 @@ const Extension = props => (
       reviews="6788"
       network="ropsten"
       developerETH="0x63B42a7662538A1dA732488c252433313396eade"
-      editable={false}
+      editable={props.editable}
     />
     <ExtensionImageSlider
       images={[
@@ -27,6 +27,7 @@ const Extension = props => (
       ]}
     />
     <ExtensionDetails
+      editable={props.editable}
       version="3.1.19252.1308"
       size="11110555"
       overview={`Save to Google Keep in a single click!

@@ -22,6 +22,14 @@ export default () => (
       />
       <link
         rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+      />
+      <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.3/css/mdb.min.css"
+        rel="stylesheet"
+      />
+      <link
+        rel="stylesheet"
         type="text/css"
         charSet="UTF-8"
         href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
@@ -41,7 +49,7 @@ export default () => (
       ></script>
     </Head>
     <Header />
-    <Extension />
+    <Extension editable={false} />
     <style jsx global>{`
       body {
         padding: 0;
@@ -53,6 +61,11 @@ export default () => (
         font: 500 14px "Roboto", sans-serif !important;
         letter-spacing: 0.25px !important;
         padding: 8px 24px !important;
+      }
+
+      .md-form {
+        margin-bottom: 0px;
+        margin-top: 0px;
       }
     `}</style>
   </div>
