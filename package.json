@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "moment": "^2.24.0",
     "next": "^8.1.0",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.9",

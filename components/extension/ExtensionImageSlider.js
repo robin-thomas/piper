@@ -14,7 +14,8 @@ export default class ExtensionImageSlider extends Component {
       dots: true,
       infinite: true,
       speed: 500,
-      slidesToShow: 1
+      slidesToShow: 1,
+      autoplay: true
     };
 
     return (
