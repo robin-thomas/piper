@@ -18,6 +18,7 @@ const Extension = props => (
       reviews="6788"
       network="ropsten"
       developerETH="0x63B42a7662538A1dA732488c252433313396eade"
+      editable={false}
     />
     <ExtensionImageSlider
       images={[

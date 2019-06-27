@@ -1,7 +1,9 @@
 import Link from "next/link";
 
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import StarRatings from "react-star-ratings";
+
+import ExtensionCategory from "./ExtensionCategory";
 
 const prettifyString = str => {
   if (str === undefined) {
@@ -20,68 +22,105 @@ const ExtensionHeader = props => (
       <Col md="1">
         <img src={props.iconURI} />
       </Col>
-      <Col md="7" className="extension-header-details">
+      <Col md="9" className="extension-header-details">
         <Row>
           <Col className="extension-header-name">{props.name}</Col>
         </Row>
         <Row>
           <Col className="extension-header-author">
-            Offered by:&nbsp;
-            <Link href={props.author}>
-              <a>{props.author}</a>
-            </Link>
+            <Row>
+              <Col md="auto" className="align-self-center pr-0">
+                <span>Offered by:&nbsp;</span>
+              </Col>
+              <Col md="5">
+                {props.editable ? (
+                  <Form.Group style={{ marginBottom: "0px" }}>
+                    <Form.Control
+                      size="sm"
+                      type="text"
+                      defaultValue={props.author}
+                      placeholder="Enter author URL"
+                    />
+                  </Form.Group>
+                ) : (
+                  <Link href={props.author}>
+                    <a target="_blank">{props.author}</a>
+                  </Link>
+                )}
+              </Col>
+            </Row>
           </Col>
         </Row>
-        <Row className="extension-header-extra-details">
-          <Col md="auto" className="align-self-center">
-            <StarRatings
-              rating={props.rating}
-              starRatedColor="black"
-              numberOfStars={5}
-              name="rating"
-              starDimension="15px"
-              starSpacing="0"
-            />
-            &nbsp;
-            <span className="align-text-top">
-              {prettifyString(props.reviews)}
-            </span>
+        <Row className="extension-header-extra-details" noGutters="true">
+          <Col md="8" className="align-self-center">
+            <Row>
+              <Col md="auto" className="align-self-center">
+                <StarRatings
+                  rating={props.rating}
+                  starRatedColor="black"
+                  numberOfStars={5}
+                  name="rating"
+                  starDimension="15px"
+                  starSpacing="0"
+                />
+                &nbsp;
+                <span className="align-text-top">
+                  {prettifyString(props.reviews)}
+                </span>
+              </Col>
+              <Col
+                md="auto"
+                className="extension-header-extra-details-border px-0"
+              ></Col>
+              <Col md="auto" className="align-self-center">
+                <ExtensionCategory
+                  editable={props.editable}
+                  category={props.category}
+                />
+              </Col>
+              <Col
+                md="auto"
+                className="extension-header-extra-details-border px-0"
+              ></Col>
+              <Col md="auto" className="align-self-center">
+                <img src="/static/images/user.svg" style={{ width: "25px" }} />
+                &nbsp;
+                <span className="align-text-top">
+                  {prettifyString(props.downloads)} users
+                </span>
+              </Col>
+            </Row>
           </Col>
-          <Col
-            md="auto"
-            className="extension-header-extra-details-border px-0"
-          ></Col>
           <Col md="auto" className="align-self-center">
-            {props.category}
-          </Col>
-          <Col
-            md="auto"
-            className="extension-header-extra-details-border px-0"
-          ></Col>
-          <Col md="auto" className="align-self-center">
-            <img src="/static/images/user.svg" style={{ width: "25px" }} />
-            &nbsp;
-            <span className="align-text-top">
-              {prettifyString(props.downloads)} users
-            </span>
-          </Col>
-          <Col md="4">
-            {props.developerETH !== undefined ? (
-              <Button
-                variant="outline-dark"
-                href={`https://widget.kyber.network/v0.7.0/?type=pay&mode=tab&receiveAddr=${props.developerETH}&receiveToken=ETH&network=${props.network}&lang=en&theme=theme-dark`}
-                target="_blank"
-              >
-                Tip the Developer
-              </Button>
-            ) : null}
+            <Row>
+              <Col md="auto">
+                {props.editable ? (
+                  <Form.Group style={{ marginBottom: "0px" }}>
+                    <Form.Control
+                      size="sm"
+                      type="text"
+                      defaultValue={props.developerETH}
+                      placeholder="Your ETH address"
+                    />
+                  </Form.Group>
+                ) : (
+                  <Button
+                    variant="outline-dark"
+                    href={`https://widget.kyber.network/v0.7.0/?type=pay&mode=tab&receiveAddr=${props.developerETH}&receiveToken=ETH&network=${props.network}&lang=en&theme=theme-dark`}
+                    target="_blank"
+                  >
+                    Tip the Developer
+                  </Button>
+                )}
+              </Col>
+            </Row>
           </Col>
         </Row>
         <Row>
           <Col>&nbsp;</Col>
         </Row>
       </Col>
-      <Col md="4" className="text-right">
+      <Col md="2" className="text-right">
         <Button variant="dark">Add to Chrome</Button>
       </Col>
     </Row>
@@ -95,10 +134,10 @@ const ExtensionHeader = props => (
       }
 
       .extension-header .extension-header-details > .row {
-        height: 45px;
+        height: 40px;
       }
 
-      .extension-header .extension-header-details > .row:nth-child(3) {
+      .extension-header .extension-header-details > .row:last-child {
         height: 25px;
       }
 
