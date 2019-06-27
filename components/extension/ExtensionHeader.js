@@ -65,13 +65,24 @@ const ExtensionHeader = props => (
               {prettifyString(props.downloads)} users
             </span>
           </Col>
+          <Col md="4">
+            {props.developerETH !== undefined ? (
+              <Button
+                variant="outline-dark"
+                href={`https://widget.kyber.network/v0.7.0/?type=pay&mode=tab&receiveAddr=${props.developerETH}&receiveToken=ETH&network=${props.network}&lang=en&theme=theme-dark`}
+                target="_blank"
+              >
+                Tip the Developer
+              </Button>
+            ) : null}
+          </Col>
         </Row>
         <Row>
           <Col>&nbsp;</Col>
         </Row>
       </Col>
       <Col md="4" className="text-right">
-        <Button variant="primary">Add to Chrome</Button>
+        <Button variant="dark">Add to Chrome</Button>
       </Col>
     </Row>
     <style jsx global>{`

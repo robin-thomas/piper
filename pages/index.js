@@ -31,6 +31,14 @@ export default () => (
         type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
       />
+      <link
+        rel="stylesheet"
+        href="https://widget.kyber.network/v0.7.0/widget.css"
+      />
+      <script
+        async
+        src="https://widget.kyber.network/v0.7.0/widget.js"
+      ></script>
     </Head>
     <Header />
     <Extension />

@@ -48,8 +48,8 @@ const Formatter = {
     data = data.replace(/\r?\n/g, "<br />");
     data = data.split("<br />");
 
-    return data.map(line => (
-      <p>
+    return data.map((line, index) => (
+      <p key={index}>
         {line}
         <br />
       </p>
