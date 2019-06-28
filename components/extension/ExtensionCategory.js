@@ -28,6 +28,15 @@ export default class ExtensionCategory extends Component {
     };
   }
 
+  componentWillReceiveProps = nextProps => {
+    if (this.props.editable !== nextProps.user) {
+      this.setState({
+        editable:
+          nextProps.editable !== undefined && nextProps.editable === true
+      });
+    }
+  };
+
   updateCategory = e => {
     e.preventDefault();
 

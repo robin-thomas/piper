@@ -143,7 +143,7 @@ const ExtensionDetails = props => (
       .extension-details-additional-details {
         letter-spacing: 0.01785714em;
         font-size: 0.875rem;
-        font-weight: 500;
+        font-weight: 400;
         line-height: 1.25rem;
         color: #5f6368;
       }
