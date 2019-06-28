@@ -49,7 +49,19 @@ export default () => (
       ></script>
     </Head>
     <Header />
-    <Extension authorEditable={true} />
+    <Extension
+      name="Honey"
+      iconURL="https://lh3.googleusercontent.com/RAJJ1tQvIm8nT90qSd8eiU7SoWJifeTsPFPDUeCzcLiTDKcpFXhlsvoJCFIP4ZE61DckltS-=w128-h128-e365"
+      developer="https://www.joinhoney.com/"
+      category="Shopping"
+      downloads="699"
+      rating={2.5}
+      reviews="6788"
+      network="ropsten"
+      developerETH="0x63B42a7662538A1dA732488c252433313396eade"
+      authorEditable={true}
+      extensionSize="11110555"
+    />
     <style jsx global>{`
       body {
         padding: 0;

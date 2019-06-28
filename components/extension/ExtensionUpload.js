@@ -21,7 +21,12 @@ class ExtensionUpload extends Component {
 
   uploadExtension = e => {
     const r = new FileReader();
-    r.onload = e => {};
+    r.onload = () => {
+      // TODO: to be done after extension is uploaded.
+
+      // update parent with extensionSize.
+      this.props.updateExtensionSize(r.result.byteLength);
+    };
     r.onprogress = async data => {
       this.setState({
         progress: parseInt((data.loaded / data.total) * 100)

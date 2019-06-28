@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import { Container } from "react-bootstrap";
 
+import moment from "moment";
+
 import { Component } from "react";
 
 import ExtensionHeader from "./extension/ExtensionHeader";
@@ -13,13 +15,36 @@ class Extension extends Component {
     super(props);
 
     this.state = {
-      editable: false
+      editable: false,
+      extensionSize: this.props.extensionSize
     };
   }
 
   updateEditable = editable => {
+    if (editable === false) {
+      this.setState({
+        editable: editable,
+        updated: moment()
+          .local()
+          .valueOf()
+      });
+    } else {
+      this.setState({
+        editable: editable
+      });
+    }
+  };
+
+  updateExtensionSize = extensionSize => {
     this.setState({
-      editable: editable
+      extensionSize: extensionSize
+    });
+  };
+
+  cancelUpdate = () => {
+    this.setState({
+      extensionSize: this.props.extensionSize,
+      editable: false
     });
   };
 
@@ -27,18 +52,20 @@ class Extension extends Component {
     return (
       <Container>
         <ExtensionHeader
-          name="Honey"
-          iconURI="https://lh3.googleusercontent.com/RAJJ1tQvIm8nT90qSd8eiU7SoWJifeTsPFPDUeCzcLiTDKcpFXhlsvoJCFIP4ZE61DckltS-=w128-h128-e365"
-          author="https://www.joinhoney.com/"
-          category="Shopping"
-          downloads="699"
-          rating={2.5}
-          reviews="6788"
-          network="ropsten"
-          developerETH="0x63B42a7662538A1dA732488c252433313396eade"
+          name={this.props.name}
+          iconURL={this.props.iconURL}
+          developer={this.props.developer}
+          category={this.props.category}
+          downloads={this.props.downloads}
+          rating={this.props.rating}
+          reviews={this.props.reviews}
+          network={this.props.network}
+          developerETH={this.props.developerETH}
           editable={this.state.editable}
           authorEditable={this.props.authorEditable}
           onEditExtension={this.updateEditable}
+          updateExtensionSize={this.updateExtensionSize}
+          onCancelUpdate={this.cancelUpdate}
         />
         <ExtensionImageSlider
           images={[
@@ -48,8 +75,10 @@ class Extension extends Component {
         />
         <ExtensionDetails
           editable={this.state.editable}
+          onSaveExtension={this.saveExtension}
           version="3.1.19252.1308"
-          size="11110555"
+          updated={this.state.updated}
+          size={this.state.extensionSize}
           overview={`Save to Google Keep in a single click!
          Found a webpage, image, or quote that you want to save for later? With the Google Keep Chrome Extension, easily save the things  you care about  to Keep and have them synced across all of the platforms that you use — including web, Android, iOS, and Wear. Take notes for additional detail and add labels to quickly categorize your note for later retrieval.
 
