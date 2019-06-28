@@ -49,7 +49,7 @@ export default () => (
       ></script>
     </Head>
     <Header />
-    <Extension editable={true} />
+    <Extension authorEditable={true} />
     <style jsx global>{`
       body {
         padding: 0;

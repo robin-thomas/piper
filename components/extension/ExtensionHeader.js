@@ -1,10 +1,11 @@
 import Link from "next/link";
 
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
-import { MDBInput, MDBProgress } from "mdbreact";
+import { MDBInput } from "mdbreact";
 import StarRatings from "react-star-ratings";
 
 import ExtensionCategory from "./ExtensionCategory";
+import ExtensionUpload from "./ExtensionUpload";
 
 const prettifyString = str => {
   if (str === undefined) {
@@ -131,32 +132,25 @@ const ExtensionHeader = props => (
         <Row>
           <Col>
             {props.editable ? (
-              <Button variant="success">Save</Button>
+              <Button
+                variant="success"
+                onClick={() => props.onEditExtension(false)}
+              >
+                Save
+              </Button>
+            ) : props.authorEditable ? (
+              <Button
+                variant="success"
+                onClick={() => props.onEditExtension(true)}
+              >
+                Edit
+              </Button>
             ) : (
               <Button variant="dark">Add to Chrome</Button>
             )}
           </Col>
         </Row>
-        <Row>
-          <Col>
-            {props.editable ? (
-              <Button variant="dark">Upload .crx file</Button>
-            ) : null}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {props.editable ? (
-              <MDBProgress
-                className="my-2"
-                material
-                value={0}
-                color="dark"
-                height="3px"
-              />
-            ) : null}
-          </Col>
-        </Row>
+        <ExtensionUpload editable={props.editable} />
       </Col>
     </Row>
     <style jsx global>{`
