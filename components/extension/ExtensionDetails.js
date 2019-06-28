@@ -1,154 +1,170 @@
 import Link from "next/link";
 
-import { Component } from "react";
-
-import moment from "moment";
-
 import { Row, Col, Form } from "react-bootstrap";
 import { MDBInput } from "mdbreact";
 
-const formatAdditionalDetails = props => {
-  const keys = {
-    version: true,
-    updated: false,
-    size: false
+import { useState, forwardRef, useImperativeHandle } from "react";
+
+import Formatter from "../utils/Formatter";
+
+const ExtensionDetails = forwardRef((props, ref) => {
+  const [version_, setVersion] = useState(props.version);
+  const [overview_, setOverview] = useState(props.overview);
+  const [updated_, setUpdated] = useState(props.updated);
+  const [extensionSize_, setExtensionSize] = useState(props.extensionSize);
+
+  const updateVersion = e => {
+    e.preventDefault();
+
+    setVersion(e.target.value);
   };
 
-  return Object.keys(keys).map((key, index) => (
-    <div key={index}>
-      <Row>
-        <Col>&nbsp;</Col>
-      </Row>
-      <Row>
-        <Col className="extension-details-additional-details-title">{key}</Col>
-      </Row>
-      <Row>
-        <Col className="extension-details-additional-details">
-          {props.editable && keys[key] ? (
-            <MDBInput
-              type="text"
-              valueDefault={props[key]}
-              hint={`Enter ${key}`}
-              size="sm"
-            />
-          ) : (
-            format(key, props[key])
-          )}
-        </Col>
-      </Row>
-    </div>
-  ));
-};
+  const updateOverview = e => {
+    e.preventDefault();
 
-const format = (key, data) => {
-  switch (key) {
-    case "updated":
-      return Formatter.formatDate(data);
+    setOverview(e.target.value);
+  };
 
-    case "size":
-      return Formatter.formatFileSize(data);
-
-    default:
-      return data;
-  }
-};
-
-const Formatter = {
-  formatData: data => {
-    if (data === undefined) {
-      return;
+  useImperativeHandle(ref, () => ({
+    reset() {
+      setVersion(props.version);
+      setOverview(props.overview);
+      setUpdated(props.updated);
+      setExtensionSize(props.extensionSize);
     }
+  }));
 
-    data = data.replace(/\r?\n/g, "<br />");
-    data = data.split("<br />");
+  const format = (key, data) => {
+    switch (key) {
+      case "updated":
+        return Formatter.formatDate(data);
 
-    return data.map((line, index) => (
-      <p key={index}>
-        {line}
-        <br />
-      </p>
-    ));
-  },
+      case "extensionSize":
+        return Formatter.formatFileSize(data);
 
-  formatDate: timestamp => {
-    return moment(timestamp)
-      .local()
-      .format("MMM DD, YYYY");
-  },
+      default:
+        return data;
+    }
+  };
 
-  formatFileSize: bytes => {
-    const size = ["B", "kB", "MB", "GB"];
-    const factor = Math.floor((bytes.toString().length - 1) / 3);
-    return (bytes / Math.pow(1024, factor)).toFixed(2) + size[factor];
-  }
-};
+  const formatAdditionalDetails = props => {
+    const extensionDetails = {
+      version: {
+        editable: true,
+        handler: updateVersion,
+        value: version_
+      },
+      updated: {
+        editable: false,
+        value: props.updated
+      },
+      extensionSize: {
+        editable: false,
+        value: props.extensionSize
+      }
+    };
 
-const ExtensionDetails = props => (
-  <div>
-    <Row className="extension-details-empty-row">
-      <Col>&nbsp;</Col>
-    </Row>
-    <Row>
-      <Col md="1"></Col>
-      <Col md="8" className="extension-details-overview">
-        <Row className="extension-details-title">
-          <Col>Overview</Col>
-        </Row>
+    return Object.keys(extensionDetails).map((key, index) => (
+      <div key={key}>
         <Row>
           <Col>&nbsp;</Col>
         </Row>
-        {props.editable ? (
-          <MDBInput type="textarea" valueDefault={props.overview} rows="5" />
-        ) : (
-          Formatter.formatData(props.overview)
-        )}
-      </Col>
-      <Col md="3">
-        <Row className="extension-details-title">
-          <Col>Additional Information</Col>
+        <Row>
+          <Col className="extension-details-additional-details-title">
+            {key}
+          </Col>
         </Row>
         <Row>
-          <Col>{formatAdditionalDetails(props)}</Col>
+          <Col className="extension-details-additional-details">
+            {props.editable && extensionDetails[key].editable ? (
+              <MDBInput
+                type="text"
+                valueDefault={extensionDetails[key].value}
+                hint={`Enter ${key}`}
+                size="sm"
+                onChange={extensionDetails[key].handler}
+              />
+            ) : (
+              format(key, extensionDetails[key].value)
+            )}
+          </Col>
         </Row>
-      </Col>
-    </Row>
-    <Row className="extension-details-empty-row">
-      <Col>&nbsp;</Col>
-    </Row>
-    <style jsx global>{`
-      .extension-details-empty-row {
-        height: 100px;
-      }
+      </div>
+    ));
+  };
 
-      .extension-details-overview {
-        border-right: 2px solid #f1f3f4;
-      }
+  return (
+    <div>
+      <Row className="extension-details-empty-row">
+        <Col>&nbsp;</Col>
+      </Row>
+      <Row>
+        <Col md="1"></Col>
+        <Col md="8" className="extension-details-overview">
+          <Row className="extension-details-title">
+            <Col>Overview</Col>
+          </Row>
+          <Row>
+            <Col>&nbsp;</Col>
+          </Row>
+          {props.editable ? (
+            <MDBInput
+              type="textarea"
+              valueDefault={overview_}
+              rows="5"
+              onInput={updateOverview}
+            />
+          ) : (
+            Formatter.formatText(overview_)
+          )}
+        </Col>
+        <Col md="3">
+          <Row className="extension-details-title">
+            <Col>Additional Information</Col>
+          </Row>
+          <Row>
+            <Col>{formatAdditionalDetails(props)}</Col>
+          </Row>
+        </Col>
+      </Row>
+      <Row className="extension-details-empty-row">
+        <Col>&nbsp;</Col>
+      </Row>
+      <style jsx global>{`
+        .extension-details-empty-row {
+          height: 100px;
+        }
 
-      .extension-details-title {
-        font-size: 1.375rem;
-        font-weight: 400;
-        line-height: 1.75rem;
-        color: #202124;
-      }
+        .extension-details-overview {
+          border-right: 2px solid #f1f3f4;
+        }
 
-      .extension-details-additional-details-title {
-        font-size: 0.875rem;
-        font-weight: 600;
-        line-height: 1.25rem;
-        color: #3c4043;
-        letter-spacing: 0.01785714em;
-        text-transform: capitalize;
-      }
+        .extension-details-title {
+          font-size: 1.375rem;
+          font-weight: 400;
+          line-height: 1.75rem;
+          color: #202124;
+        }
 
-      .extension-details-additional-details {
-        letter-spacing: 0.01785714em;
-        font-size: 0.875rem;
-        font-weight: 400;
-        line-height: 1.25rem;
-        color: #5f6368;
-      }
-    `}</style>
-  </div>
-);
+        .extension-details-additional-details-title {
+          font-size: 0.875rem;
+          font-weight: 600;
+          line-height: 1.25rem;
+          color: #3c4043;
+          letter-spacing: 0.01785714em;
+          text-transform: capitalize;
+        }
+
+        .extension-details-additional-details {
+          letter-spacing: 0.01785714em;
+          font-size: 0.875rem;
+          font-weight: 400;
+          line-height: 1.25rem;
+          color: #5f6368;
+        }
+      `}</style>
+    </div>
+  );
+});
 
 export default ExtensionDetails;

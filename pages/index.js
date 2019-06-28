@@ -61,6 +61,7 @@ export default () => (
       developerETH="0x63B42a7662538A1dA732488c252433313396eade"
       authorEditable={true}
       extensionSize="11110555"
+      version="3.1.19252.1308"
     />
     <style jsx global>{`
       body {

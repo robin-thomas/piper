@@ -1,77 +1,73 @@
 import Link from "next/link";
 
-import { Component } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 
 import { Row, Col, Button } from "react-bootstrap";
 import { MDBInput, MDBProgress } from "mdbreact";
 
-class ExtensionUpload extends Component {
-  constructor(props) {
-    super(props);
+const ExtensionUpload = forwardRef(({ editable, updateExtensionSize }, ref) => {
+  const [progress_, setProgress] = useState(0);
 
-    this.state = {
-      progress: 0
-    };
-  }
-
-  fakeUpload = e => {
+  const fakeUpload = e => {
     e.preventDefault();
     document.getElementById("uploadExtension").click();
   };
 
-  uploadExtension = e => {
+  const uploadExtension = e => {
     const r = new FileReader();
     r.onload = () => {
       // TODO: to be done after extension is uploaded.
 
       // update parent with extensionSize.
-      this.props.updateExtensionSize(r.result.byteLength);
+      updateExtensionSize(r.result.byteLength);
     };
     r.onprogress = async data => {
-      this.setState({
-        progress: parseInt((data.loaded / data.total) * 100)
-      });
+      setProgress(parseInt((data.loaded / data.total) * 100));
     };
     r.readAsArrayBuffer(e.target.files[0]);
   };
 
-  render() {
-    return (
-      <div>
-        <Row>
-          <Col>
-            {this.props.editable ? (
-              <div>
-                <input
-                  id="uploadExtension"
-                  name="myname"
-                  type="file"
-                  hidden
-                  onChange={this.uploadExtension}
-                />
-                <Button variant="dark" onClick={this.fakeUpload}>
-                  Upload .crx file
-                </Button>
-              </div>
-            ) : null}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {this.props.editable ? (
-              <MDBProgress
-                className="my-2"
-                material
-                value={this.state.progress}
-                color="dark"
-                height="3px"
+  useImperativeHandle(ref, () => ({
+    reset() {
+      setProgress(0);
+    }
+  }));
+
+  return (
+    <div ref={ref}>
+      <Row>
+        <Col>
+          {editable ? (
+            <div>
+              <input
+                id="uploadExtension"
+                name="myname"
+                type="file"
+                hidden
+                onChange={uploadExtension}
               />
-            ) : null}
-          </Col>
-        </Row>
-      </div>
-    );
-  }
-}
+              <Button variant="dark" onClick={fakeUpload}>
+                Upload .crx file
+              </Button>
+            </div>
+          ) : null}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          {editable ? (
+            <MDBProgress
+              className="my-2"
+              material
+              value={progress_}
+              color="dark"
+              height="3px"
+            />
+          ) : null}
+        </Col>
+      </Row>
+    </div>
+  );
+});
 
 export default ExtensionUpload;
