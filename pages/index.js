@@ -49,7 +49,7 @@ export default () => (
       ></script>
     </Head>
     <Header />
-    <Extension editable={false} />
+    <Extension editable={true} />
     <style jsx global>{`
       body {
         padding: 0;
@@ -61,6 +61,7 @@ export default () => (
         font: 500 14px "Roboto", sans-serif !important;
         letter-spacing: 0.25px !important;
         padding: 8px 24px !important;
+        margin: 0.35rem 0 !important;
       }
 
       .md-form {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
-import { MDBInput } from "mdbreact";
+import { MDBInput, MDBProgress } from "mdbreact";
 import StarRatings from "react-star-ratings";
 
 import ExtensionCategory from "./ExtensionCategory";
@@ -118,7 +118,35 @@ const ExtensionHeader = props => (
         </Row>
       </Col>
       <Col md="2" className="text-right">
-        <Button variant="dark">Add to Chrome</Button>
+        <Row>
+          <Col>
+            {props.editable ? (
+              <Button variant="success">Save</Button>
+            ) : (
+              <Button variant="dark">Add to Chrome</Button>
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {props.editable ? (
+              <Button variant="dark">Upload .crx file</Button>
+            ) : null}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {props.editable ? (
+              <MDBProgress
+                className="my-2"
+                material
+                value={0}
+                color="dark"
+                height="3px"
+              />
+            ) : null}
+          </Col>
+        </Row>
       </Col>
     </Row>
     <style jsx global>{`
