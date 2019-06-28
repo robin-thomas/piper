@@ -23,9 +23,19 @@ const ExtensionHeader = props => (
       <Col md="1">
         <img src={props.iconURI} />
       </Col>
-      <Col md="9" className="extension-header-details">
+      <Col md="8" className="extension-header-details">
         <Row>
-          <Col className="extension-header-name">{props.name}</Col>
+          <Col className="extension-header-name">
+            {props.editable ? (
+              <MDBInput
+                type="text"
+                valueDefault={props.name}
+                hint="Your Extension name"
+              />
+            ) : (
+              props.name
+            )}
+          </Col>
         </Row>
         <Row>
           <Col className="extension-header-author">
@@ -51,7 +61,7 @@ const ExtensionHeader = props => (
           </Col>
         </Row>
         <Row className="extension-header-extra-details" noGutters="true">
-          <Col md="8" className="align-self-center">
+          <Col md="auto" className="align-self-center">
             <Row>
               <Col md="auto" className="align-self-center">
                 <StarRatings
@@ -90,7 +100,7 @@ const ExtensionHeader = props => (
               </Col>
             </Row>
           </Col>
-          <Col md="auto" className="align-self-center">
+          <Col md="auto" className="ml-auto align-self-center">
             <Row>
               <Col md="auto">
                 {props.editable ? (
@@ -117,7 +127,7 @@ const ExtensionHeader = props => (
           <Col>&nbsp;</Col>
         </Row>
       </Col>
-      <Col md="2" className="text-right">
+      <Col md="2" className="ml-auto text-right">
         <Row>
           <Col>
             {props.editable ? (
@@ -159,7 +169,7 @@ const ExtensionHeader = props => (
       }
 
       .extension-header .extension-header-details > .row:first-child {
-        height: 40px;
+        height: 50px;
       }
 
       .extension-header .extension-header-details > .row:last-child {
