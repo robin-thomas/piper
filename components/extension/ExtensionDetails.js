@@ -12,6 +12,7 @@ const ExtensionDetails = forwardRef((props, ref) => {
   const [overview_, setOverview] = useState(props.overview);
   const [updated_, setUpdated] = useState(props.updated);
   const [extensionSize_, setExtensionSize] = useState(props.extensionSize);
+  const [disableTextFields_, disableTextField] = useState(false);
 
   const updateVersion = e => {
     e.preventDefault();
@@ -31,6 +32,10 @@ const ExtensionDetails = forwardRef((props, ref) => {
       setOverview(props.overview);
       setUpdated(props.updated);
       setExtensionSize(props.extensionSize);
+    },
+
+    disable(status) {
+      disableTextField(status);
     }
   }));
 
@@ -83,6 +88,7 @@ const ExtensionDetails = forwardRef((props, ref) => {
                 hint={`Enter ${key}`}
                 size="sm"
                 onChange={extensionDetails[key].handler}
+                disabled={disableTextFields_}
               />
             ) : (
               format(key, extensionDetails[key].value)
@@ -113,6 +119,7 @@ const ExtensionDetails = forwardRef((props, ref) => {
               valueDefault={overview_}
               rows="5"
               onInput={updateOverview}
+              disabled={disableTextFields_}
             />
           ) : (
             Formatter.formatText(overview_)

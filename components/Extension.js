@@ -10,6 +10,8 @@ import ExtensionHeader from "./extension/ExtensionHeader";
 import ExtensionDetails from "./extension/ExtensionDetails";
 import ExtensionImageSlider from "./extension/ExtensionImageSlider";
 
+import IPFS from "./utils/IPFS";
+
 const Extension = props => {
   const extensionHeaderRef = useRef(null);
   const extensionDetailsRef = useRef(null);
@@ -17,6 +19,7 @@ const Extension = props => {
   const [editable_, setEditable] = useState(false);
   const [updated_, setUpdated] = useState(props.updated);
   const [extensionSize_, setExtensionSize] = useState(props.extensionSize);
+  const [extensionCrx_, setExtensionCrx] = useState(null);
 
   const reset = () => {
     extensionHeaderRef.current.reset();
@@ -25,16 +28,44 @@ const Extension = props => {
     setEditable(false);
     setUpdated(props.updated);
     setExtensionSize(props.extensionSize);
+    setExtensionCrx(null);
   };
 
-  const updateEditable = (editable, updated = false) => {
+  const updateExtensionCrx = arrayBuffer => {
+    setExtensionCrx(arrayBuffer);
+  };
+
+  const disable_ = status => {
+    extensionDetailsRef.current.disable(status);
+    extensionHeaderRef.current.disable(status);
+  };
+
+  const updateEditable = async (editable, updated = false) => {
     if (updated) {
+      disable_(true);
+
+      // Upload the extension.crx to IPFS
+      try {
+        const hash = await IPFS.uploadBuffer(extensionCrx_);
+        console.log(`https://ipfs.infura.io/ipfs/${hash}`);
+      } catch (err) {
+        console.log(err);
+
+        alert("Failed to update the extension!");
+
+        disable_(false);
+        return;
+      }
+
       setUpdated(
         moment()
           .local()
           .valueOf()
       );
+
+      disable_(false);
     }
+
     setEditable(editable);
   };
 
@@ -54,6 +85,7 @@ const Extension = props => {
         authorEditable={props.authorEditable}
         onEditExtension={updateEditable}
         updateExtensionSize={setExtensionSize}
+        updateExtensionCrx={updateExtensionCrx}
         ref={extensionHeaderRef}
         parentReset={reset}
       />

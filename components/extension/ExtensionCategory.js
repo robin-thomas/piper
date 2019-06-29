@@ -4,6 +4,7 @@ import { Dropdown, DropdownButton } from "react-bootstrap";
 
 const ExtensionCategory = forwardRef(({ category, editable }, ref) => {
   const [category_, setCategory] = useState(category);
+  const [disableTextFields_, disableTextFields] = useState(false);
 
   const categories = [
     "All",
@@ -29,6 +30,10 @@ const ExtensionCategory = forwardRef(({ category, editable }, ref) => {
   useImperativeHandle(ref, () => ({
     reset() {
       setCategory(category);
+    },
+
+    disable(status) {
+      disableTextFields(status);
     }
   }));
 
@@ -38,6 +43,7 @@ const ExtensionCategory = forwardRef(({ category, editable }, ref) => {
         <DropdownButton
           variant="outline-dark"
           title={category_ !== undefined ? category_ : categories[0]}
+          disabled={disableTextFields_}
         >
           {categories.map(category => (
             <Dropdown.Item key={category} onClick={updateCategory}>

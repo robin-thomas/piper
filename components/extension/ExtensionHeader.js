@@ -8,7 +8,7 @@ import {
   useImperativeHandle
 } from "react";
 
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Form, Spinner } from "react-bootstrap";
 import { MDBInput } from "mdbreact";
 import StarRatings from "react-star-ratings";
 
@@ -31,6 +31,25 @@ const ExtensionHeader = forwardRef((props, ref) => {
   const [iconURL_, setIconURL] = useState(props.iconURL);
   const [developer_, setDeveloper] = useState(props.developer);
   const [developerETH_, setDeveloperETH] = useState(props.developerETH);
+  const [disableSaveButton_, disableSaveButton] = useState(false);
+  const [disableCancelButton_, disableCancelButton] = useState(false);
+  const [disableTextFields_, disableTextFields] = useState(false);
+
+  const save = e => {
+    e.preventDefault();
+
+    props.onEditExtension(false, true);
+  };
+
+  const disable_ = status => {
+    disableSaveButton(status);
+    disableCancelButton(status);
+    disableTextFields(status);
+
+    // Child components.
+    extensionUploadRef.current.disable(status);
+    extensionCategoryRef.current.disable(status);
+  };
 
   const updateName = e => {
     e.preventDefault();
@@ -59,6 +78,10 @@ const ExtensionHeader = forwardRef((props, ref) => {
       setIconURL(props.iconURL);
       setDeveloper(props.developer);
       setDeveloperETH(props.developerETH);
+    },
+
+    disable(status) {
+      disable_(status);
     }
   }));
 
@@ -68,10 +91,10 @@ const ExtensionHeader = forwardRef((props, ref) => {
         <Col>&nbsp;</Col>
       </Row>
       <Row className="extension-header" noGutters="true">
-        <Col md="1">
+        <Col md="1" xs="2">
           <img src={iconURL_} />
         </Col>
-        <Col md="8" className="extension-header-details">
+        <Col md="8" xs="10" className="extension-header-details">
           <Row>
             <Col className="extension-header-name">
               {props.editable ? (
@@ -80,6 +103,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
                   valueDefault={name_}
                   hint="Your Extension name"
                   onChange={updateName}
+                  disabled={disableTextFields_}
                 />
               ) : (
                 name_
@@ -100,6 +124,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
                       hint="Enter developer URL"
                       size="sm"
                       onChange={updateDeveloper}
+                      disabled={disableTextFields_}
                     />
                   ) : (
                     <Link href={developer_}>
@@ -164,6 +189,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
                       hint="Your ETH address"
                       size="sm"
                       onChange={updateDeveloperETH}
+                      disabled={disableTextFields_}
                     />
                   ) : (
                     <Button
@@ -191,15 +217,31 @@ const ExtensionHeader = forwardRef((props, ref) => {
                     <Col>
                       <Button
                         variant="success"
-                        onClick={() => props.onEditExtension(false, true)}
+                        onClick={save}
+                        disabled={disableSaveButton_}
                       >
-                        Save
+                        <Spinner
+                          animation={`${disableSaveButton_ ? "border" : null}`}
+                          size="sm"
+                          role="status"
+                        />
+                        <span
+                          style={{
+                            display: `${disableSaveButton_ ? "none" : "inline"}`
+                          }}
+                        >
+                          Save
+                        </span>
                       </Button>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
-                      <Button variant="danger" onClick={props.parentReset}>
+                      <Button
+                        variant="danger"
+                        onClick={props.parentReset}
+                        disabled={disableCancelButton_}
+                      >
                         Cancel
                       </Button>
                     </Col>
@@ -220,7 +262,9 @@ const ExtensionHeader = forwardRef((props, ref) => {
           <ExtensionUpload
             ref={extensionUploadRef}
             updateExtensionSize={props.updateExtensionSize}
+            updateExtensionCrx={props.updateExtensionCrx}
             editable={props.editable}
+            disableParent={disable_}
           />
         </Col>
       </Row>

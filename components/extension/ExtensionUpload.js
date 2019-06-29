@@ -5,8 +5,9 @@ import { useState, forwardRef, useImperativeHandle } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import { MDBInput, MDBProgress } from "mdbreact";
 
-const ExtensionUpload = forwardRef(({ editable, updateExtensionSize }, ref) => {
+const ExtensionUpload = forwardRef((props, ref) => {
   const [progress_, setProgress] = useState(0);
+  const [disableUploadCrxButton_, disableUploadCrxButton] = useState(false);
 
   const fakeUpload = e => {
     e.preventDefault();
@@ -14,12 +15,14 @@ const ExtensionUpload = forwardRef(({ editable, updateExtensionSize }, ref) => {
   };
 
   const uploadExtension = e => {
+    props.disableParent(true);
+
     const r = new FileReader();
     r.onload = () => {
-      // TODO: to be done after extension is uploaded.
+      props.updateExtensionSize(r.result.byteLength);
+      props.updateExtensionCrx(Buffer.from(r.result));
 
-      // update parent with extensionSize.
-      updateExtensionSize(r.result.byteLength);
+      props.disableParent(false);
     };
     r.onprogress = async data => {
       setProgress(parseInt((data.loaded / data.total) * 100));
@@ -30,6 +33,10 @@ const ExtensionUpload = forwardRef(({ editable, updateExtensionSize }, ref) => {
   useImperativeHandle(ref, () => ({
     reset() {
       setProgress(0);
+    },
+
+    disable(status) {
+      disableUploadCrxButton(status);
     }
   }));
 
@@ -37,7 +44,7 @@ const ExtensionUpload = forwardRef(({ editable, updateExtensionSize }, ref) => {
     <div ref={ref}>
       <Row>
         <Col>
-          {editable ? (
+          {props.editable ? (
             <div>
               <input
                 id="uploadExtension"
@@ -46,7 +53,11 @@ const ExtensionUpload = forwardRef(({ editable, updateExtensionSize }, ref) => {
                 hidden
                 onChange={uploadExtension}
               />
-              <Button variant="dark" onClick={fakeUpload}>
+              <Button
+                variant="dark"
+                onClick={fakeUpload}
+                disabled={disableUploadCrxButton_}
+              >
                 Upload .crx file
               </Button>
             </div>
@@ -55,7 +66,7 @@ const ExtensionUpload = forwardRef(({ editable, updateExtensionSize }, ref) => {
       </Row>
       <Row>
         <Col>
-          {editable ? (
+          {props.editable ? (
             <MDBProgress
               className="my-2"
               material

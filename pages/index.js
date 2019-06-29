@@ -81,6 +81,10 @@ export default () => (
         margin-bottom: 0px;
         margin-top: 0px;
       }
+
+      .btn {
+        margin: 0.375rem 0;
+      }
     `}</style>
   </div>
 );
