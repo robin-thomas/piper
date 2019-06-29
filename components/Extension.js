@@ -44,24 +44,40 @@ const Extension = props => {
     if (updated) {
       disable_(true);
 
-      // Upload the extension.crx to IPFS
-      try {
-        const hash = await IPFS.uploadBuffer(extensionCrx_);
-        console.log(`https://ipfs.infura.io/ipfs/${hash}`);
-      } catch (err) {
-        console.log(err);
+      // Upload the extension.crx to IPFS (only if updated).
+      let hash = props.hash;
+      if (extensionSize_ !== props.extensionSize) {
+        try {
+          hash = await IPFS.uploadBuffer(extensionCrx_);
+          console.log(`https://ipfs.infura.io/ipfs/${hash}`);
+        } catch (err) {
+          console.log(err);
 
-        alert("Failed to update the extension!");
+          alert("Failed to update the extension!");
 
-        disable_(false);
-        return;
+          disable_(false);
+          return;
+        }
       }
 
-      setUpdated(
-        moment()
-          .local()
-          .valueOf()
-      );
+      // Update the last updated time.
+      const updatedTime = moment()
+        .local()
+        .valueOf();
+      setUpdated(updatedTime);
+
+      // Create the extension object.
+      const extensionHeaderDetails = extensionHeaderRef.current.details();
+      const extensionAdditionalDetails = extensionDetailsRef.current.details();
+      const extension = {
+        hash,
+        ...extensionHeaderDetails,
+        ...extensionAdditionalDetails,
+        updated: updatedTime,
+        extensionSize: extensionSize_
+      };
+
+      console.log(extension);
 
       disable_(false);
     }

@@ -1,12 +1,6 @@
 import Link from "next/link";
 
-import {
-  Component,
-  useRef,
-  useState,
-  forwardRef,
-  useImperativeHandle
-} from "react";
+import { useRef, useState, forwardRef, useImperativeHandle } from "react";
 
 import { Container, Row, Col, Button, Form, Spinner } from "react-bootstrap";
 import { MDBInput } from "mdbreact";
@@ -82,6 +76,18 @@ const ExtensionHeader = forwardRef((props, ref) => {
 
     disable(status) {
       disable_(status);
+    },
+
+    details() {
+      const extensionCategoryDetails = extensionCategoryRef.current.details();
+
+      return {
+        name: name_,
+        iconURL: iconURL_,
+        developer: developer_,
+        developerETH: developerETH_,
+        ...extensionCategoryDetails
+      };
     }
   }));
 
@@ -113,10 +119,10 @@ const ExtensionHeader = forwardRef((props, ref) => {
           <Row>
             <Col className="extension-header-author">
               <Row>
-                <Col md="auto" className="align-self-center pr-0">
+                <Col md="2" className="align-self-center pr-0">
                   <span>Offered by:&nbsp;</span>
                 </Col>
-                <Col md="5">
+                <Col md="10" className="pl-0">
                   {props.editable ? (
                     <MDBInput
                       type="text"

@@ -34,6 +34,12 @@ const ExtensionCategory = forwardRef(({ category, editable }, ref) => {
 
     disable(status) {
       disableTextFields(status);
+    },
+
+    details() {
+      return {
+        category: category_
+      };
     }
   }));
 

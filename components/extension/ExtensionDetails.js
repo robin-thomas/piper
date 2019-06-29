@@ -10,8 +10,6 @@ import Formatter from "../utils/Formatter";
 const ExtensionDetails = forwardRef((props, ref) => {
   const [version_, setVersion] = useState(props.version);
   const [overview_, setOverview] = useState(props.overview);
-  const [updated_, setUpdated] = useState(props.updated);
-  const [extensionSize_, setExtensionSize] = useState(props.extensionSize);
   const [disableTextFields_, disableTextField] = useState(false);
 
   const updateVersion = e => {
@@ -30,12 +28,17 @@ const ExtensionDetails = forwardRef((props, ref) => {
     reset() {
       setVersion(props.version);
       setOverview(props.overview);
-      setUpdated(props.updated);
-      setExtensionSize(props.extensionSize);
     },
 
     disable(status) {
       disableTextField(status);
+    },
+
+    details() {
+      return {
+        version: version_,
+        overview: overview_
+      };
     }
   }));
 
