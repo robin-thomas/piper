@@ -6,5 +6,8 @@
       "port": 5001,
       "protocol": "https"
     }
+  },
+  "deployment": {
+    "contract_address": "0xa0bc202ddc1bac1e5077d5b6fa46eb85031ed4cc"
   }
 }
