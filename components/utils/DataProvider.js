@@ -1,8 +1,4 @@
-import React, { Component } from "react";
-
-import { call } from "../../api";
-
-import * as dummyData from "./dummyData.json";
+import { Component } from "react";
 
 const DataContext = React.createContext();
 
@@ -29,9 +25,13 @@ class DataProvider extends Component {
   }
 
   static async getInitialProps(ctx) {
-    // Get the extension details.
+    // use web3 to get top extensions.
+  }
 
-    return {
+  static async getExtensionDetails(hash) {
+    // Use web3 to get extension details.
+    // const extension = await ...
+    const extension = {
       name: "Honey",
       iconURL:
         "https://lh3.googleusercontent.com/RAJJ1tQvIm8nT90qSd8eiU7SoWJifeTsPFPDUeCzcLiTDKcpFXhlsvoJCFIP4ZE61DckltS-=w128-h128-e365",
@@ -52,15 +52,12 @@ class DataProvider extends Component {
 
      Try Google Keep on the web at http://keep.google.com, on your Android device at http://g.co/keep, and on your iOS device at https://itunes.apple.com/us/app/google-keep-your-thoughts/id1029207872.`,
       version: "3.1.19252.1308",
-      updated: this.props.updated,
+      updated: 111112238,
       size: "11110555"
     };
-  }
 
-  getExtensionDetails = extensionId => {
-    // Load the extension details.
-    // Update the state.
-  };
+    return extension;
+  }
 
   render() {
     return (

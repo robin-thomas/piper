@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity >=0.4.0 <0.6.0;
 pragma experimental ABIEncoderV2;
 
 contract Piper {
@@ -17,6 +17,7 @@ contract Piper {
     uint extensionSize;
     string iconURL;
     string extensionCrxURL;
+    string[] previews;
     uint8 rating;
     uint reviews;
     uint downloads;

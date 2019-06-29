@@ -1,4 +1,7 @@
 {
+  "network": {
+    "name": "ropsten"
+  },
   "infura": {
     "ipfs": {
       "host": "ipfs.infura.io",
@@ -7,7 +10,11 @@
       "protocol": "https"
     }
   },
+  "portis": {
+    "dapp_id": "21956f27-71d0-45ca-8d6a-d2746d62049c"
+  },
   "deployment": {
-    "contract_address": "0xa0bc202ddc1bac1e5077d5b6fa46eb85031ed4cc"
+    "contract_address": "0x3544A93a07565FC1DC94FFC2a02dA09Cdc66De82",
+    "account": "0x89C112556507CB672d8d7ea8672233CE8B45659C"
   }
 }
