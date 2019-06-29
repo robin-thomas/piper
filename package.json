@@ -14,7 +14,8 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-slick": "0.24.0",
-    "react-star-ratings": "^2.3.0"
+    "react-star-ratings": "^2.3.0",
+    "truffle-hdwallet-provider": "^1.0.12"
   },
   "devDependencies": {
     "husky": "^2.3.0",
