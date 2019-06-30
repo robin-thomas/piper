@@ -47,7 +47,7 @@ const ExtensionDetails = forwardRef((props, ref) => {
       case "updated":
         return Formatter.formatDate(data);
 
-      case "extensionSize":
+      case "size":
         return Formatter.formatFileSize(data);
 
       default:
@@ -66,7 +66,7 @@ const ExtensionDetails = forwardRef((props, ref) => {
         editable: false,
         value: props.updated
       },
-      extensionSize: {
+      size: {
         editable: false,
         value: props.extensionSize
       }
@@ -88,7 +88,7 @@ const ExtensionDetails = forwardRef((props, ref) => {
               <MDBInput
                 type="text"
                 valueDefault={extensionDetails[key].value}
-                hint={`Enter ${key}`}
+                hint={`Extension ${key}`}
                 size="sm"
                 onChange={extensionDetails[key].handler}
                 disabled={disableTextFields_}
@@ -119,7 +119,7 @@ const ExtensionDetails = forwardRef((props, ref) => {
           {props.editable ? (
             <MDBInput
               type="textarea"
-              hint="Enter extension description"
+              hint="Extension description"
               valueDefault={overview_}
               rows="5"
               onInput={updateOverview}

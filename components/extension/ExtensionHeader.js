@@ -107,7 +107,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
                 <MDBInput
                   type="text"
                   valueDefault={name_}
-                  hint="Your Extension name"
+                  hint="Extension name"
                   onChange={updateName}
                   disabled={disableTextFields_}
                 />
@@ -127,7 +127,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
                     <MDBInput
                       type="text"
                       valueDefault={developer_}
-                      hint="Your website URL"
+                      hint="Developer URL"
                       size="sm"
                       onChange={updateDeveloper}
                       disabled={disableTextFields_}
@@ -192,7 +192,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
                     <MDBInput
                       type="text"
                       valueDefault={developerETH_}
-                      hint="Your ETH address"
+                      hint="Developer ETH address"
                       size="sm"
                       onChange={updateDeveloperETH}
                       disabled={disableTextFields_}
@@ -245,7 +245,9 @@ const ExtensionHeader = forwardRef((props, ref) => {
                     <Col>
                       <Button
                         variant="danger"
-                        onClick={props.parentReset}
+                        onClick={
+                          props.goBack ? props.goBack : props.parentReset
+                        }
                         disabled={disableCancelButton_}
                       >
                         Cancel

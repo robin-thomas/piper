@@ -37,7 +37,7 @@ const Header = () => {
             <Row>
               <Col>
                 <img src="/static/images/chrome.svg" />
-                <span>chrome web store</span>
+                <span>Piper | chrome web store</span>
               </Col>
               <DataConsumer>
                 {context => (

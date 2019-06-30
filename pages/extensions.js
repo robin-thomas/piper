@@ -5,6 +5,7 @@ import Extension from "../components/Extension";
 import PiperContract from "../components/utils/PiperContract";
 
 import Error from "next/error";
+import Router from "next/router";
 
 const Index = props => {
   if (props.err) {
@@ -32,7 +33,8 @@ Index.getInitialProps = async function({ query: { hash } }) {
       downloads: "0",
       extensionSize: "0",
       authorEditable: true,
-      editable: true
+      editable: true,
+      goBack: Router.back
     };
   }
 

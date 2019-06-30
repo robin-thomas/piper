@@ -104,6 +104,7 @@ const Extension = props => {
         updateExtensionCrx={updateExtensionCrx}
         ref={extensionHeaderRef}
         parentReset={reset}
+        goBack={props.goBack}
       />
       <ExtensionImageSlider
         images={[

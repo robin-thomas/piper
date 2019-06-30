@@ -18,9 +18,6 @@ export default () => (
         </Col>
         <Col>
           <Content />
-          <Link href="extensions?hash=1122334455" as="extensions/1122334455">
-            <a>Extensions</a>
-          </Link>
         </Col>
       </Row>
     </Container>
