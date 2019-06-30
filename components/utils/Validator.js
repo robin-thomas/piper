@@ -8,13 +8,19 @@ const Validator = {
       };
     }
 
+    if (_.isEmpty(extension.iconURL)) {
+      return {
+        err: "Extension icon is not upload"
+      };
+    }
+
     if (_.isEmpty(extension.developer)) {
       return {
         err: "Developer URL is missing"
       };
     }
 
-    if (_.isEmpty(extension.hash) && _.isEmpty(extension.extensionSize)) {
+    if (_.isEmpty(extension.extensionSize)) {
       return {
         err: "Extension CRX is not uploaded"
       };

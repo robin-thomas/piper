@@ -58,7 +58,7 @@ const ExtensionUpload = forwardRef((props, ref) => {
                 onClick={fakeUpload}
                 disabled={disableUploadCrxButton_}
               >
-                Upload .crx file
+                Upload .crx
               </Button>
             </div>
           ) : null}

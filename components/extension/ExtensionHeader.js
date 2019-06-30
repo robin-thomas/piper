@@ -63,6 +63,25 @@ const ExtensionHeader = forwardRef((props, ref) => {
     setDeveloperETH(e.target.value);
   };
 
+  const fakeUploadIcon = e => {
+    e.preventDefault();
+    document.getElementById("extension-header-icon-file").click();
+  };
+
+  const uploadIcon = e => {
+    const file = e.target.files[0];
+    if (file.size > 1048576 /* 1MB */) {
+      alert("Icon size should be less than 1MB!");
+      return;
+    }
+
+    const r = new FileReader();
+    r.onload = result => {
+      setIconURL(result.target.result);
+    };
+    r.readAsDataURL(file);
+  };
+
   useImperativeHandle(ref, () => ({
     reset() {
       extensionCategoryRef.current.reset();
@@ -96,9 +115,31 @@ const ExtensionHeader = forwardRef((props, ref) => {
       <Row>
         <Col>&nbsp;</Col>
       </Row>
-      <Row className="extension-header" noGutters="true">
-        <Col md="1" xs="2">
-          <img src={iconURL_} />
+      <Row className="extension-header">
+        <Col md="auto" xs="4" className="text-right">
+          <Row>
+            <Col>
+              <img
+                className="extension-header-icon"
+                src={iconURL_ ? iconURL_ : "/static/images/camera.svg"}
+                title="Extension Icon"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <input
+                type="file"
+                hidden
+                id="extension-header-icon-file"
+                onChange={uploadIcon}
+                accept="image/*"
+              />
+              <Button variant="dark" onClick={fakeUploadIcon}>
+                Upload Icon
+              </Button>
+            </Col>
+          </Row>
         </Col>
         <Col md="8" xs="10" className="extension-header-details">
           <Row>
@@ -119,10 +160,10 @@ const ExtensionHeader = forwardRef((props, ref) => {
           <Row>
             <Col className="extension-header-author">
               <Row>
-                <Col md="2" className="align-self-center pr-0">
+                <Col md="2" xs="4" className="align-self-center pr-0">
                   <span>Offered by:&nbsp;</span>
                 </Col>
-                <Col md="10" className="pl-0">
+                <Col md="10" xs="8" className="pl-0">
                   {props.editable ? (
                     <MDBInput
                       type="text"
@@ -283,6 +324,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
 
         .extension-header img {
           width: 60px;
+          height: 60px;
         }
 
         .extension-header .extension-header-details > .row:first-child {

@@ -26,8 +26,8 @@ Index.getInitialProps = async function({ query: { hash } }) {
   // Create a new extension.
   if (hash === "new") {
     return {
-      iconURL:
-        "https://lh3.googleusercontent.com/RAJJ1tQvIm8nT90qSd8eiU7SoWJifeTsPFPDUeCzcLiTDKcpFXhlsvoJCFIP4ZE61DckltS-=w128-h128-e365",
+      // iconURL:
+      // "https://lh3.googleusercontent.com/RAJJ1tQvIm8nT90qSd8eiU7SoWJifeTsPFPDUeCzcLiTDKcpFXhlsvoJCFIP4ZE61DckltS-=w128-h128-e365",
       rating: 0,
       reviews: "0",
       downloads: "0",

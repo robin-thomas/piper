@@ -18,7 +18,7 @@ const Formatter = {
   },
 
   formatDate: timestamp => {
-    if (timestamp === null) {
+    if (timestamp === undefined) {
       return null;
     }
 

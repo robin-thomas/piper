@@ -43,6 +43,7 @@ const Header = () => {
                 {context => (
                   <Col
                     md="auto"
+                    xs="12"
                     className="pl-0 align-self-center sign-in text-right"
                     onClick={() => signIn(context)}
                   >
