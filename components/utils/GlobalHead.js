@@ -58,8 +58,8 @@ const GlobalHead = props => (
       }
 
       .md-form {
-        margin-bottom: 0px;
-        margin-top: 0px;
+        margin-bottom: 0px !important;
+        margin-top: 0px !important;
       }
 
       .btn {
