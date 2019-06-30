@@ -34,7 +34,11 @@ Index.getInitialProps = async function({ query: { hash } }) {
       extensionSize: "0",
       authorEditable: true,
       editable: true,
-      goBack: Router.back
+      goBack: Router.back,
+      images: [
+        "https://lh3.googleusercontent.com/YemW9Jy9G0HvL3XcdvR5UcFbULGXS1n4QTf2BjROzdXvqjPnycrZeMVy59kkh-3NpQkljlPyiA=w640-h400-e365",
+        "https://lh3.googleusercontent.com/AREyFzev3wVPpGJf0edj0HBFGRD7lj_XVw35c1jZ0JdPATsjrx0XXKaibJMAchPJJzdueJIYHA=w640-h400-e365"
+      ]
     };
   }
 

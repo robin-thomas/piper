@@ -10,6 +10,8 @@ import ExtensionHeader from "./extension/ExtensionHeader";
 import ExtensionDetails from "./extension/ExtensionDetails";
 import ExtensionImageSlider from "./extension/ExtensionImageSlider";
 
+import Validator from "./utils/Validator";
+
 import IPFS from "./utils/IPFS";
 
 const Extension = props => {
@@ -44,11 +46,34 @@ const Extension = props => {
     if (updated) {
       disable_(true);
 
-      // Upload the extension.crx to IPFS (only if updated).
-      let hash = props.hash;
+      // Update the last updated time.
+      const updatedTime = moment()
+        .local()
+        .valueOf();
+
+      // Create the extension object.
+      const extensionHeaderDetails = extensionHeaderRef.current.details();
+      const extensionAdditionalDetails = extensionDetailsRef.current.details();
+      const extension = {
+        hash: props.hash,
+        ...extensionHeaderDetails,
+        ...extensionAdditionalDetails,
+        updated: updatedTime,
+        extensionSize: extensionSize_
+      };
+
+      // Validate this object.
+      const { err, result } = Validator.validateExtension(extension);
+      if (err) {
+        alert(err);
+        disable_(false);
+        return;
+      }
+
+      // Upload the extension.crx to IPFS (only if updated & validation passed).
       if (extensionSize_ !== props.extensionSize) {
         try {
-          hash = await IPFS.uploadBuffer(extensionCrx_);
+          extension.hash = await IPFS.uploadBuffer(extensionCrx_);
           console.log(`https://ipfs.infura.io/ipfs/${hash}`);
         } catch (err) {
           console.log(err);
@@ -60,24 +85,10 @@ const Extension = props => {
         }
       }
 
-      // Update the last updated time.
-      const updatedTime = moment()
-        .local()
-        .valueOf();
+      console.log(extension);
       setUpdated(updatedTime);
 
-      // Create the extension object.
-      const extensionHeaderDetails = extensionHeaderRef.current.details();
-      const extensionAdditionalDetails = extensionDetailsRef.current.details();
-      const extension = {
-        hash,
-        ...extensionHeaderDetails,
-        ...extensionAdditionalDetails,
-        updated: updatedTime,
-        extensionSize: extensionSize_
-      };
-
-      console.log(extension);
+      // TODO: upload it to the contract.
 
       disable_(false);
     }
@@ -106,12 +117,7 @@ const Extension = props => {
         parentReset={reset}
         goBack={props.goBack}
       />
-      <ExtensionImageSlider
-        images={[
-          "https://lh3.googleusercontent.com/YemW9Jy9G0HvL3XcdvR5UcFbULGXS1n4QTf2BjROzdXvqjPnycrZeMVy59kkh-3NpQkljlPyiA=w640-h400-e365",
-          "https://lh3.googleusercontent.com/AREyFzev3wVPpGJf0edj0HBFGRD7lj_XVw35c1jZ0JdPATsjrx0XXKaibJMAchPJJzdueJIYHA=w640-h400-e365"
-        ]}
-      />
+      <ExtensionImageSlider images={props.images} />
       <ExtensionDetails
         editable={editable_}
         version={props.version}
