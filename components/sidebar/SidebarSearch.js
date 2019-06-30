@@ -14,6 +14,10 @@ const SidebarSearch = props => (
         margin-bottom: 0 !important;
         margin-top: 0 !important;
       }
+
+      .sidebar-search-item label.active {
+        background: #e8eaed !important;
+      }
     `}</style>
   </div>
 );
