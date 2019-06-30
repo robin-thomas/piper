@@ -1,14 +1,26 @@
 import Link from "next/link";
 
+import { Container, Row, Col } from "react-bootstrap";
+
 import GlobalHead from "../components/utils/GlobalHead";
 import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 
 export default () => (
   <div>
     <GlobalHead title="Piper | Decentralized Chromium web store" />
     <Header />
-    <Link href="extensions?hash=1122334455" as="extensions/1122334455">
-      <a>Extensions</a>
-    </Link>
+    <Container>
+      <Row>
+        <Col md="3">
+          <Sidebar />
+        </Col>
+        <Col>
+          <Link href="extensions?hash=1122334455" as="extensions/1122334455">
+            <a>Extensions</a>
+          </Link>
+        </Col>
+      </Row>
+    </Container>
   </div>
 );
