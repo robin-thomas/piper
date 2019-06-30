@@ -127,7 +127,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
                     <MDBInput
                       type="text"
                       valueDefault={developer_}
-                      hint="Enter developer URL"
+                      hint="Your website URL"
                       size="sm"
                       onChange={updateDeveloper}
                       disabled={disableTextFields_}

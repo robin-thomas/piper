@@ -119,6 +119,7 @@ const ExtensionDetails = forwardRef((props, ref) => {
           {props.editable ? (
             <MDBInput
               type="textarea"
+              hint="Enter extension description"
               valueDefault={overview_}
               rows="5"
               onInput={updateOverview}

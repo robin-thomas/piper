@@ -18,6 +18,10 @@ const Formatter = {
   },
 
   formatDate: timestamp => {
+    if (timestamp === undefined) {
+      return null;
+    }
+
     return moment(timestamp)
       .local()
       .format("MMM DD, YYYY");

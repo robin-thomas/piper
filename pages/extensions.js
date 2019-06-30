@@ -22,12 +22,19 @@ const Index = props => {
 };
 
 Index.getInitialProps = async function({ query: { hash } }) {
-  // const key = `piper_extension_${hash}`;
-  //
-  // const value = window.localStorage.getItem(key);
-  // if (value !== null && value.updated !== undefined && value.updated >= 11233) {
-  //   return value;
-  // }
+  // Create a new extension.
+  if (hash === "new") {
+    return {
+      iconURL:
+        "https://lh3.googleusercontent.com/RAJJ1tQvIm8nT90qSd8eiU7SoWJifeTsPFPDUeCzcLiTDKcpFXhlsvoJCFIP4ZE61DckltS-=w128-h128-e365",
+      rating: 0,
+      reviews: "0",
+      downloads: "0",
+      extensionSize: "0",
+      authorEditable: true,
+      editable: true
+    };
+  }
 
   let extension = {};
   try {

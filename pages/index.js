@@ -5,6 +5,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import GlobalHead from "../components/utils/GlobalHead";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
+import Content from "../components/Content";
 
 export default () => (
   <div>
@@ -16,6 +17,7 @@ export default () => (
           <Sidebar />
         </Col>
         <Col>
+          <Content />
           <Link href="extensions?hash=1122334455" as="extensions/1122334455">
             <a>Extensions</a>
           </Link>

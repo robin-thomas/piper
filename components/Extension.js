@@ -16,7 +16,7 @@ const Extension = props => {
   const extensionHeaderRef = useRef(null);
   const extensionDetailsRef = useRef(null);
 
-  const [editable_, setEditable] = useState(false);
+  const [editable_, setEditable] = useState(props.editable ? true : false);
   const [updated_, setUpdated] = useState(props.updated);
   const [extensionSize_, setExtensionSize] = useState(props.extensionSize);
   const [extensionCrx_, setExtensionCrx] = useState(null);
@@ -116,16 +116,7 @@ const Extension = props => {
         version={props.version}
         updated={updated_}
         extensionSize={extensionSize_}
-        overview={`Save to Google Keep in a single click!
-       Found a webpage, image, or quote that you want to save for later? With the Google Keep Chrome Extension, easily save the things  you care about  to Keep and have them synced across all of the platforms that you use — including web, Android, iOS, and Wear. Take notes for additional detail and add labels to quickly categorize your note for later retrieval.
-
-       Features:
-        • Save URLs, text, and images
-        • Take notes on saved content
-        • Add labels to your notes
-        • Automatically saves to Google Keep
-
-       Try Google Keep on the web at http://keep.google.com, on your Android device at http://g.co/keep, and on your iOS device at https://itunes.apple.com/us/app/google-keep-your-thoughts/id1029207872.`}
+        overview={props.overview}
         ref={extensionDetailsRef}
       />
     </Container>

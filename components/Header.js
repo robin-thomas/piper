@@ -2,24 +2,28 @@ import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
+import { DataConsumer } from "./utils/DataProvider";
+
 import { Container, Row, Col } from "react-bootstrap";
 
 import { PiperWeb3 } from "./utils/PiperContract";
 
 const Header = () => {
-  const [email_, setEmail] = useState("Sign In");
+  const signIn = ctx => {
+    if (ctx.email === null || ctx.email !== "Sign In") {
+      return;
+    }
 
-  const signIn = e => {
-    e.preventDefault();
-
-    setEmail(null);
+    ctx.setEmail(null);
 
     const { _, portis } = PiperWeb3.getWeb3();
     portis.onLogin((walletAddress, email) => {
-      setEmail(email);
+      ctx.setLoggedIn(true);
+      ctx.setEmail(email);
     });
     portis.onLogout(() => {
-      setEmail("Sign In");
+      ctx.setLoggedIn(false);
+      ctx.setEmail("Sign In");
     });
 
     portis.showPortis();
@@ -35,24 +39,28 @@ const Header = () => {
                 <img src="/static/images/chrome.svg" />
                 <span>chrome web store</span>
               </Col>
-              <Col
-                md="auto"
-                className="pl-0 align-self-center sign-in text-right"
-                onClick={signIn}
-              >
-                <img
-                  src="/static/images/settings.svg"
-                  style={{ width: "20px" }}
-                />
-                {email_ === null ? (
-                  <img
-                    src="/static/images/loading.svg"
-                    style={{ width: "20px" }}
-                  />
-                ) : (
-                  <span>{email_}</span>
+              <DataConsumer>
+                {context => (
+                  <Col
+                    md="auto"
+                    className="pl-0 align-self-center sign-in text-right"
+                    onClick={() => signIn(context)}
+                  >
+                    <img
+                      src="/static/images/settings.svg"
+                      style={{ width: "20px" }}
+                    />
+                    {context.email === null ? (
+                      <img
+                        src="/static/images/loading.svg"
+                        style={{ width: "20px" }}
+                      />
+                    ) : (
+                      <span>{context.email}</span>
+                    )}
+                  </Col>
                 )}
-              </Col>
+              </DataConsumer>
             </Row>
           </Container>
         </Col>
