@@ -3,7 +3,7 @@ import { useState, forwardRef, useImperativeHandle } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
 const ExtensionCategory = forwardRef(({ category, editable }, ref) => {
-  const [category_, setCategory] = useState(category);
+  const [category_, setCategory] = useState(category ? category : "All");
   const [disableTextFields_, disableTextFields] = useState(false);
 
   const categories = [

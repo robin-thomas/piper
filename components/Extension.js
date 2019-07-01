@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Router from "next/router";
 
 import { Container } from "react-bootstrap";
 
@@ -13,6 +14,8 @@ import ExtensionImageSlider from "./extension/ExtensionImageSlider";
 import Validator from "./utils/Validator";
 
 import IPFS from "./utils/IPFS";
+
+import { PiperWeb3 } from "./utils/PiperContract";
 
 const Extension = props => {
   const extensionHeaderRef = useRef(null);
@@ -54,41 +57,76 @@ const Extension = props => {
       // Create the extension object.
       const extensionHeaderDetails = extensionHeaderRef.current.details();
       const extensionAdditionalDetails = extensionDetailsRef.current.details();
-      const extension = {
+      let extension = {
         hash: props.hash,
+        rating: props.rating,
+        downloads: props.downloads,
+        reviews: props.reviews,
         ...extensionHeaderDetails,
         ...extensionAdditionalDetails,
         updated: updatedTime,
-        extensionSize: extensionSize_
+        extensionSize: extensionSize_,
+        isExtension: true
       };
 
       // Validate this object.
-      const { err, result } = Validator.validateExtension(extension);
-      if (err) {
-        alert(err);
+      // const { err, result } = Validator.validateExtension(extension);
+      // if (err) {
+      //   alert(err);
+      //   disable_(false);
+      //   return;
+      // }
+
+      // Upload the extension.crx to IPFS (only if updated & validation passed).
+      // if (extensionSize_ !== props.extensionSize) {
+      //   try {
+      //     extension.hash = await IPFS.uploadBuffer(extensionCrx_);
+      //     console.log(`https://ipfs.infura.io/ipfs/${hash}`);
+      //   } catch (err) {
+      //     console.log(err);
+      //
+      //     alert("Failed to update the extension!");
+      //
+      //     disable_(false);
+      //     return;
+      //   }
+      // }
+      //
+      console.log(extension);
+      // setUpdated(updatedTime);
+
+      // upload it to the contract.
+      const { web3, _, contract } = PiperWeb3.getWeb3();
+      try {
+        extension.hash = "111";
+        extension.iconURL = "test icon URL";
+        extension.previews = ["image1", "image2"];
+        extension.extensionCrxURL = "url";
+
+        const account = "0x4eff2b8e8d5ff4d2c89f5f1e53ea4e8d2c33e24f"; //  TODO.
+
+        const fn = contract.methods.createNewExtension(
+          extension.hash,
+          extension
+        );
+        const signedTx = await PiperWeb3.getSignedTx(web3, account, fn);
+        console.log(signedTx);
+
+        const result = await web3.eth.sendSignedTransaction(signedTx);
+        console.log(result);
+      } catch (err) {
+        console.log(err);
+
+        alert("Failed to upload the extension!");
+
         disable_(false);
         return;
       }
 
-      // Upload the extension.crx to IPFS (only if updated & validation passed).
-      if (extensionSize_ !== props.extensionSize) {
-        try {
-          extension.hash = await IPFS.uploadBuffer(extensionCrx_);
-          console.log(`https://ipfs.infura.io/ipfs/${hash}`);
-        } catch (err) {
-          console.log(err);
-
-          alert("Failed to update the extension!");
-
-          disable_(false);
-          return;
-        }
-      }
-
-      console.log(extension);
-      setUpdated(updatedTime);
-
-      // TODO: upload it to the contract.
+      // Shallow redirect.
+      const href = `/extensions?hash=${extension.hash}`;
+      const as = `/extensions/${extension.hash}`;
+      Router.push(href, as, { shallow: true });
 
       disable_(false);
     }

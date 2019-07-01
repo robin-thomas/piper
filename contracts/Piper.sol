@@ -6,10 +6,9 @@ contract Piper {
   string name;
 
   struct Extension {
-    address owner;
     string hash;
     string developer;
-    address developerETH;
+    string developerETH;
     string name;
     string overview;
     string category;
@@ -22,37 +21,46 @@ contract Piper {
     uint reviews;
     uint downloads;
     uint updated;
+    bool isExtension;
   }
   mapping(string => Extension) extensions;
+  mapping(string => address) owners;
 
   constructor() public {
     owner = msg.sender;
     name = "Piper";
   }
 
-  function getExtensionByHash(string memory hash) public view returns(Extension memory) {
-    // Make sure the extension exists.
-    require(keccak256(bytes(extensions[hash].hash)) == keccak256(bytes(hash)));
-
-    return extensions[hash];
+  function isExtension(string memory _hash) public view returns(bool) {
+    return extensions[_hash].isExtension;
   }
 
-  function createNewExtension(string memory hash, Extension memory extension) public returns(bool) {
+  function getExtensionByHash(string memory _hash) public view returns(Extension memory) {
+    // Make sure the extension exists.
+    require(isExtension(_hash));
+
+    return extensions[_hash];
+  }
+
+  function createNewExtension(string memory _hash, Extension memory _extension) public returns(bool) {
     // Make sure that the extension doesnt exist.
-    require(keccak256(bytes(extensions[hash].hash)) != keccak256(bytes(hash)));
+    require(!isExtension(_hash));
 
     // Create new extension.
-    extensions[hash] = extension;
+    extensions[_hash] = _extension;
+    owners[_hash] = msg.sender;
 
     return true;
   }
 
-  function updateExtensionByHash(string memory hash, Extension memory extension) public returns(bool) {
+  function updateExtensionByHash(string memory _hash, Extension memory _extension) public returns(bool) {
     // Check if extension owner is the one trying to edit it.
-    require(msg.sender == extensions[hash].owner);
+    require(msg.sender == owners[_hash]);
+
+    Extension memory extension = extensions[_hash];
 
     // Update the extension.
-    extensions[hash] = extension;
+    extensions[_hash] = _extension;
 
     return true;
   }

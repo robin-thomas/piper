@@ -5,6 +5,7 @@ const DataContext = React.createContext();
 const DataProvider = props => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("Sign In");
+  const [address, setAddress] = useState(null);
 
   // static async getInitialProps(ctx) {
   //   // use web3 to get top extensions.
@@ -42,7 +43,9 @@ const DataProvider = props => {
   // }
 
   return (
-    <DataContext.Provider value={{ loggedIn, setLoggedIn, email, setEmail }}>
+    <DataContext.Provider
+      value={{ loggedIn, setLoggedIn, email, setEmail, address, setAddress }}
+    >
       {props.children}
     </DataContext.Provider>
   );

@@ -16,13 +16,43 @@ const PiperWeb3 = {
         scope: ["email"]
       });
 
+      const web3 = new Web3(portis.provider);
+
       return {
-        web3: new Web3(portis.provider),
-        portis: portis
+        web3,
+        portis,
+        contract: new web3.eth.Contract(
+          contract.abi,
+          config.deployment.contract_address
+        )
       };
     } else {
       return new Web3(provider);
     }
+  },
+
+  getSignedTx: async (web3, account, fn) => {
+    const fnABI = fn.encodeABI();
+
+    // const gasAmount = await fn.estimateGas({from: account});
+    // const estimatedGas = gasAmount.toString(16);
+
+    // const nonce_ = await web3.eth.getTransactionCount(account);
+    // const nonce = nonce_.toString(16);
+
+    const txParams = {
+      gasPrice: "0x09184e72a000",
+      gasLimit: 3000000,
+      to: config.deployment.contract_address,
+      data: fnABI,
+      from: account
+      // nonce: `0x${nonce}`
+    };
+
+    return await web3.currentProvider.send("eth_signTypedData", [
+      txParams,
+      account
+    ]);
   }
 };
 

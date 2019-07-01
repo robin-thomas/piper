@@ -20,10 +20,13 @@ const Header = () => {
     portis.onLogin((walletAddress, email) => {
       ctx.setLoggedIn(true);
       ctx.setEmail(email);
+      ctx.setAddress(walletAddress);
+      console.log(walletAddress);
     });
     portis.onLogout(() => {
       ctx.setLoggedIn(false);
       ctx.setEmail("Sign In");
+      ctx.setAddress(null);
     });
 
     portis.showPortis();
@@ -37,7 +40,11 @@ const Header = () => {
             <Row>
               <Col>
                 <img src="/static/images/chrome.svg" />
-                <span>Piper | chromium web store</span>
+                <Link href="../index">
+                  <a className="header-home-link" title="Piper">
+                    <span>Piper | chromium web store</span>
+                  </a>
+                </Link>
               </Col>
               <DataConsumer>
                 {context => (
@@ -76,6 +83,15 @@ const Header = () => {
           line-height: 1.75rem;
           color: #5f6368;
           letter-spacing: 0px;
+        }
+
+        .header-home-link {
+          text-decoration: none;
+          color: #5f6368;
+        }
+
+        .header-home-link:hover {
+          color: #5f6368;
         }
 
         .header-container img {
