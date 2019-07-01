@@ -16,10 +16,10 @@ const PiperWeb3 = {
         scope: ["email"]
       });
 
-      const web3 = new Web3(portis.provider);
+      const web3_ = new Web3(portis.provider);
 
       return {
-        web3,
+        web3: web3_,
         portis,
         contract: new web3.eth.Contract(
           contract.abi,
@@ -31,28 +31,20 @@ const PiperWeb3 = {
     }
   },
 
-  getSignedTx: async (web3, account, fn) => {
+  sendSignedTx: async (web3, portis, fn) => {
     const fnABI = fn.encodeABI();
 
-    // const gasAmount = await fn.estimateGas({from: account});
-    // const estimatedGas = gasAmount.toString(16);
+    try {
+      const accounts = await portis.provider.enable();
 
-    // const nonce_ = await web3.eth.getTransactionCount(account);
-    // const nonce = nonce_.toString(16);
-
-    const txParams = {
-      gasPrice: "0x09184e72a000",
-      gasLimit: 3000000,
-      to: config.deployment.contract_address,
-      data: fnABI,
-      from: account
-      // nonce: `0x${nonce}`
-    };
-
-    return await web3.currentProvider.send("eth_signTypedData", [
-      txParams,
-      account
-    ]);
+      return await web3.currentProvider.send("eth_sendTransaction", [{
+        from: accounts[0],
+        to: config.deployment.contract_address,
+        data: fnABI,
+      }]);
+    } catch (err) {
+      throw err;
+    }
   }
 };
 

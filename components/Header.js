@@ -10,13 +10,24 @@ import { PiperWeb3 } from "./utils/PiperContract";
 
 const Header = () => {
   const signIn = ctx => {
-    if (ctx.email === null || ctx.email !== "Sign In") {
+    if (ctx.email === null){
+      return;
+    }
+
+    const { _, portis } = PiperWeb3.getWeb3();
+    if (ctx.email !== "Sign In") {
+      const email = ctx.email;
+
+      ctx.setEmail(null);
+      portis.showPortis().then(() => {
+        ctx.setEmail(email);
+      });
+
       return;
     }
 
     ctx.setEmail(null);
 
-    const { _, portis } = PiperWeb3.getWeb3();
     portis.onLogin((walletAddress, email) => {
       ctx.setLoggedIn(true);
       ctx.setEmail(email);

@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { Container, Row, Col } from "react-bootstrap";
 
 import GlobalHead from "../components/utils/GlobalHead";

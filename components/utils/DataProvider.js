@@ -53,5 +53,5 @@ const DataProvider = props => {
 
 const DataConsumer = DataContext.Consumer;
 
-export default DataProvider;
 export { DataConsumer };
+export default DataProvider;
