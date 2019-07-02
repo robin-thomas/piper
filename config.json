@@ -1,6 +1,7 @@
 {
   "network": {
-    "name": "ropsten"
+    "name": "ropsten",
+    "network_id": "3"
   },
   "infura": {
     "ipfs": {
@@ -12,9 +13,5 @@
   },
   "portis": {
     "dapp_id": "21956f27-71d0-45ca-8d6a-d2746d62049c"
-  },
-  "deployment": {
-    "contract_address": "0x7f9E1FF1D750167F3c030Ac1f0a317d61bE7dCc8",
-    "account": "0x89C112556507CB672d8d7ea8672233CE8B45659C"
   }
 }

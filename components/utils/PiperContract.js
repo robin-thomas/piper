@@ -23,7 +23,7 @@ const PiperWeb3 = {
         portis,
         contract: new web3.eth.Contract(
           contract.abi,
-          config.deployment.contract_address
+          contract.networks[config.network.network_id].address
         )
       };
     } else {
@@ -37,11 +37,13 @@ const PiperWeb3 = {
     try {
       const accounts = await portis.provider.enable();
 
-      return await web3.currentProvider.send("eth_sendTransaction", [{
-        from: accounts[0],
-        to: config.deployment.contract_address,
-        data: fnABI,
-      }]);
+      return await web3.currentProvider.send("eth_sendTransaction", [
+        {
+          from: accounts[0],
+          to: contract.networks[config.network.network_id].address,
+          data: fnABI
+        }
+      ]);
     } catch (err) {
       throw err;
     }
@@ -51,7 +53,7 @@ const PiperWeb3 = {
 const web3 = new Web3(provider);
 const PiperContract = new web3.eth.Contract(
   contract.abi,
-  config.deployment.contract_address
+  contract.networks[config.network.network_id].address
 );
 
 export { PiperWeb3 };

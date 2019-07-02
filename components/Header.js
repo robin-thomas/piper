@@ -10,7 +10,7 @@ import { PiperWeb3 } from "./utils/PiperContract";
 
 const Header = () => {
   const signIn = ctx => {
-    if (ctx.email === null){
+    if (ctx.email === null) {
       return;
     }
 
