@@ -1,4 +1,4 @@
-pragma solidity >=0.4.0 <0.6.0;
+pragma solidity >=0.5.0 <0.6.0;
 pragma experimental ABIEncoderV2;
 
 contract Piper {
@@ -16,7 +16,6 @@ contract Piper {
     uint extensionSize;
     string iconURL;
     string extensionCrxURL;
-    string[] previews;
     uint8 rating;
     uint reviews;
     uint downloads;
@@ -42,6 +41,9 @@ contract Piper {
     return extensions[_hash];
   }
 
+  event CreateNewExtensionEvent(string hash, Extension extension);
+  event UpdateExtensionByHashEvent(string hash, Extension extension);
+
   function createNewExtension(string memory _hash, Extension memory _extension) public returns(bool) {
     // Make sure that the extension doesnt exist.
     require(!isExtension(_hash));
@@ -49,6 +51,8 @@ contract Piper {
     // Create new extension.
     extensions[_hash] = _extension;
     owners[_hash] = msg.sender;
+
+    emit CreateNewExtensionEvent(_hash, _extension);
 
     return true;
   }
@@ -61,6 +65,8 @@ contract Piper {
 
     // Update the extension.
     extensions[_hash] = _extension;
+
+    emit UpdateExtensionByHashEvent(_hash, _extension);
 
     return true;
   }

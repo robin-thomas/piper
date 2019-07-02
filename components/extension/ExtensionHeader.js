@@ -322,7 +322,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
           border-bottom: 2px solid #f1f3f4;
         }
 
-        .extension-header img {
+        .extension-header-icon {
           width: 60px;
           height: 60px;
         }

@@ -30,7 +30,9 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "export": "next export"
+    "export": "next export",
+    "deploy:truffle": "truffle deploy --network ropsten --reset all",
+    "init:graph": "graph init --network ropsten --abi build/contracts/Piper.json robin-thomas/piper"
   },
   "repository": {
     "type": "git",
