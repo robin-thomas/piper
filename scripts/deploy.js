@@ -1,8 +1,8 @@
 const { onExit } = require("@rauschma/stringio");
 const { spawn } = require("child_process");
 
-const config = require("./config.json");
-const contract = require("./build/contracts/Piper.json");
+const config = require("../config.json");
+const contract = require("../build/contracts/Piper.json");
 
 const args = process.argv.slice(2).join(" ");
 console.log(`RUNNING build with args: ${args}`);
