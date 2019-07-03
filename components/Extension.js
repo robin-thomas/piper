@@ -135,11 +135,11 @@ const Extension = props => {
       <ExtensionHeader
         name={props.name}
         iconURL={props.iconURL}
-        developer={props.developer}
+        developer={props.developer ? props.developer : ""}
         category={props.category}
-        downloads={props.downloads}
-        rating={props.rating}
-        reviews={props.reviews}
+        downloads={props.downloads ? props.downloads : "0"}
+        rating={props.rating ? props.rating : 0}
+        reviews={props.reviews ? props.reviews : "0"}
         network={props.network}
         developerETH={props.developerETH}
         editable={editable_}
@@ -149,9 +149,14 @@ const Extension = props => {
         updateExtensionCrx={updateExtensionCrx}
         ref={extensionHeaderRef}
         parentReset={reset}
-        goBack={props.goBack}
+        goBack={Router.back}
       />
-      <ExtensionImageSlider images={props.images} />
+      <ExtensionImageSlider
+        images={[
+          "https://lh3.googleusercontent.com/YemW9Jy9G0HvL3XcdvR5UcFbULGXS1n4QTf2BjROzdXvqjPnycrZeMVy59kkh-3NpQkljlPyiA=w640-h400-e365",
+          "https://lh3.googleusercontent.com/AREyFzev3wVPpGJf0edj0HBFGRD7lj_XVw35c1jZ0JdPATsjrx0XXKaibJMAchPJJzdueJIYHA=w640-h400-e365"
+        ]}
+      />
       <ExtensionDetails
         editable={editable_}
         version={props.version}

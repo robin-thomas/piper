@@ -6,6 +6,7 @@ import { Container, Row, Col, Button, Form, Spinner } from "react-bootstrap";
 import { MDBInput } from "mdbreact";
 import StarRatings from "react-star-ratings";
 
+import ExtensionChrome from "./ExtensionChrome";
 import ExtensionCategory from "./ExtensionCategory";
 import ExtensionUpload from "./ExtensionUpload";
 
@@ -140,6 +141,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
               </Button>
             </Col>
           </Row>
+          <ExtensionChrome />
         </Col>
         <Col md="8" xs="10" className="extension-header-details">
           <Row>
@@ -147,7 +149,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
               {props.editable ? (
                 <MDBInput
                   type="text"
-                  valueDefault={name_}
+                  valueDefault={name_ ? name_ : ""}
                   hint="Extension name"
                   onChange={updateName}
                   disabled={disableTextFields_}
@@ -232,7 +234,7 @@ const ExtensionHeader = forwardRef((props, ref) => {
                   {props.editable ? (
                     <MDBInput
                       type="text"
-                      valueDefault={developerETH_}
+                      valueDefault={developerETH_ ? developerETH_ : ""}
                       hint="Developer ETH address"
                       size="sm"
                       onChange={updateDeveloperETH}

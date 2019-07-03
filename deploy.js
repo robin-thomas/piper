@@ -1,6 +1,8 @@
+const { onExit } = require("@rauschma/stringio");
 const { spawn } = require("child_process");
 
 const config = require("./config.json");
+const contract = require("./build/contracts/Piper.json");
 
 const args = process.argv.slice(2).join(" ");
 console.log(`RUNNING build with args: ${args}`);
@@ -19,19 +21,25 @@ const truffle = () => {
   cmd.stderr.on("data", data => console.log(data.toString()));
 };
 
-const initGraph = () => {
-  const network = config.network.name;
-  const cmd = spawn("graph", [
-    "init",
-    "--network",
-    network,
-    "--abi",
-    "build/contracts/Piper.json",
-    "robin-thomas/piper"
-  ]);
+const initGraph = async () => {
+  const cmd = spawn(
+    "graph",
+    [
+      "init",
+      "--from-contract",
+      contract.networks[config.network.network_id].address,
+      "--network",
+      config.network.name,
+      "--abi",
+      "build/contracts/Piper.json",
+      "robin-thomas/piper"
+    ],
+    {
+      stdio: [process.stdin, process.stdout, process.stderr]
+    }
+  );
 
-  cmd.stdout.on("data", data => console.log(data.toString()));
-  cmd.stderr.on("data", data => console.log(data.toString()));
+  await onExit(cmd);
 };
 
 switch (args) {

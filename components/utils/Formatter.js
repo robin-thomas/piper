@@ -1,8 +1,9 @@
 import moment from "moment";
+import _ from "lodash";
 
 const Formatter = {
   formatText: data => {
-    if (data === undefined) {
+    if (_.isEmpty(data)) {
       return;
     }
 
@@ -18,7 +19,7 @@ const Formatter = {
   },
 
   formatDate: timestamp => {
-    if (timestamp === undefined) {
+    if (_.isEmpty(timestamp)) {
       return null;
     }
 
@@ -28,6 +29,10 @@ const Formatter = {
   },
 
   formatFileSize: bytes => {
+    if (_.isEmpty(bytes)) {
+      return 0;
+    }
+
     const size = ["B", "kB", "MB", "GB"];
     const factor = Math.floor((bytes.toString().length - 1) / 3);
     return (bytes / Math.pow(1024, factor)).toFixed(2) + size[factor];
