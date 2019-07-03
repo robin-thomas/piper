@@ -1,12 +1,11 @@
 import Portis from "@portis/web3";
 import Web3 from "web3";
 
-import * as keys from "../../keys.json";
 import * as config from "../../config.json";
 import * as contract from "../../build/contracts/Piper.json";
 
 const provider = new Web3.providers.HttpProvider(
-  `https://ropsten.infura.io/v3/${keys.infura.ropsten}`
+  `https://ropsten.infura.io/v3/aa055fbdf8474ec79929cbaff2328d45`
 );
 
 const PiperWeb3 = {
