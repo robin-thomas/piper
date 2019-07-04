@@ -44,7 +44,8 @@ const ExtensionHeader = props => {
     if (extension.hash === null) {
       try {
         extension.hash = await IPFS.uploadBuffer(ctx.currExt.crx);
-        console.log(`https://ipfs.infura.io/ipfs/${extension.hash}`);
+        extension.crx = `https://ipfs.infura.io/ipfs/${extension.hash}`;
+        console.log(extension.crx);
       } catch (err) {
         console.log(err);
 
