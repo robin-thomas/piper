@@ -1,27 +1,35 @@
 import Error from "next/error";
 
-import { useEffect, useContext } from "react";
+import { useContext } from "react";
 
 import GlobalHead from "../components/utils/GlobalHead";
 import Header from "../components/Header";
 import Extension from "../components/Extension";
 import { DataContext } from "../components/utils/DataProvider";
-import PiperContract from "../components/utils/PiperContract";
 
 const Index = props => {
   if (props.err) {
     return <Error statusCode={404} />;
   }
 
-  const context = useContext(DataContext);
-  context.setExtension(props);
+  const ctx = useContext(DataContext);
+  ctx.setExtension(props);
+
+  if (props.hash === "new") {
+    ctx.setNewExt(true);
+    ctx.setEditable(true);
+    ctx.setAuthorEditable(true);
+  } else if (props.owner && props.owner === ctx.address) {
+    ctx.setAuthorEditable(true);
+    ctx.setExtension(props);
+    ctx.setCurrExt(props);
+  }
 
   return (
     <div>
       <GlobalHead title="Piper | Decentralized Chromium web store" />
       <Header />
-      <Extension {...context.extension} />
-      />
+      <Extension />
     </div>
   );
 };
@@ -29,21 +37,27 @@ const Index = props => {
 Index.getInitialProps = async function({ query: { hash } }) {
   // Create a new extension.
   let extension = {
-    rating: 0,
-    reviews: "0",
-    downloads: "0",
-    extensionSize: "0",
-    authorEditable: true,
-    editable: true
+    hash: hash,
+    rating: null,
+    reviews: null,
+    downloads: null,
+    size: null
   };
 
   if (hash !== "new") {
     try {
-      extension = await PiperContract.methods.getExtensionByHash(hash).call();
+      const extensionWithOwner = await PiperContract.methods
+        .getExtensionByHash(hash)
+        .call();
 
-      if (extension === null) {
+      if (extensionWithOwner === null) {
         throw new Error(`Extension ${hash} cannot be found`);
       }
+
+      extension = {
+        ...extensionWithOwner.extension,
+        owner: extensionWithOwner.owner
+      };
     } catch (err) {
       extension = {
         err: true

@@ -2,6 +2,14 @@ import moment from "moment";
 import _ from "lodash";
 
 const Formatter = {
+  prettifyString: str => {
+    if (str === undefined) {
+      return "0";
+    } else {
+      return parseInt(str).toLocaleString();
+    }
+  },
+
   formatText: data => {
     if (_.isEmpty(data)) {
       return;

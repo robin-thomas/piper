@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { Row, Col, Button, Spinner } from "react-bootstrap";
 import {
   MDBInput,
   MDBModal,
@@ -8,36 +7,37 @@ import {
   MDBModalHeader,
   MDBModalFooter
 } from "mdbreact";
+import { Row, Col, Button, Spinner } from "react-bootstrap";
 
-import Chrome from "../utils/Chrome";
-// import Chrome from "chrome-web-store-item-property";
+import Chrome from "../../utils/Chrome";
+import { DataConsumer } from "../../utils/DataProvider";
+import SpinnerButton from "../../utils/SpinnerButton";
 
 const ExtensionChrome = props => {
   const [modal, setModal] = useState(false);
-  const [chromeLink, setChromeLink] = useState(
-    "nimelepbpejjlbmoobocpfnjhihnpked"
-  );
-  const [disableLoadButton_, disableLoadButton] = useState(false);
+  const [chromeLink, setChromeLink] = useState(null);
 
-  const load = async e => {
-    e.preventDefault();
-
-    if (chromeLink === null) {
-      alert("Please input a valid chrome extension id");
-      return;
-    }
-
-    disableLoadButton(true);
+  const load = async ctx => {
     try {
       const app = await Chrome.get(chromeLink);
       console.log(app);
+
+      ctx.setCurrExt({
+        ...ctx.currExt,
+        name: app.name,
+        developer: app.url,
+        version: app.version,
+        iconURL: app.image
+      });
+
+      setModal(!modal);
     } catch (err) {
-      alert(
+      console.log(err);
+
+      throw new Error(
         "Some error happened while trying to retrieve details from chrome web store"
       );
     }
-
-    disableLoadButton(false);
   };
 
   return (
@@ -67,27 +67,18 @@ const ExtensionChrome = props => {
             </Row>
           </MDBModalBody>
           <MDBModalFooter>
-            <Button
-              variant="outline-dark"
-              onClick={load}
-              disabled={disableLoadButton_}
-            >
-              <Spinner
-                animation={`${disableLoadButton_ ? "border" : null}`}
-                size="sm"
-                role="status"
-              />
-              <span
-                style={{
-                  display: `${disableLoadButton_ ? "none" : "inline"}`
-                }}
-              >
-                Load
-              </span>
-            </Button>
+            <DataConsumer>
+              {ctx => (
+                <SpinnerButton
+                  variant="outline-dark"
+                  text="Load"
+                  disabled={chromeLink === null}
+                  onClick={() => load(ctx)}
+                />
+              )}
+            </DataConsumer>
           </MDBModalFooter>
         </MDBModal>
-
         <Button variant="outline-dark" onClick={() => setModal(!modal)}>
           From Chrome
         </Button>

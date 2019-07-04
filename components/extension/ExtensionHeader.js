@@ -1,332 +1,200 @@
-import Link from "next/link";
+import Router from "next/router";
 
-import { useRef, useState, forwardRef, useImperativeHandle } from "react";
+import { Row, Col, Button } from "react-bootstrap";
 
-import { Container, Row, Col, Button, Form, Spinner } from "react-bootstrap";
-import { MDBInput } from "mdbreact";
-import StarRatings from "react-star-ratings";
+import ExtensionCategory from "./header/ExtensionCategory";
+import ExtensionChrome from "./header/ExtensionChrome";
+import ExtensionDeveloper from "./header/ExtensionDeveloper";
+import ExtensionDeveloperETH from "./header/ExtensionDeveloperETH";
+import ExtensionDownloads from "./header/ExtensionDownloads";
+import ExtensionIcon from "./header/ExtensionIcon";
+import ExtensionName from "./header/ExtensionName";
+import ExtensionRating from "./header/ExtensionRating";
+import ExtensionUpload from "./header/ExtensionUpload";
 
-import ExtensionChrome from "./ExtensionChrome";
-import ExtensionCategory from "./ExtensionCategory";
-import ExtensionUpload from "./ExtensionUpload";
+import { DataConsumer } from "../utils/DataProvider";
+import EmptyRow from "../utils/EmptyRow";
+import Formatter from "../utils/Formatter";
+import IPFS from "../utils/IPFS";
+import { PiperWeb3 } from "../utils/PiperContract";
+import SpinnerButton from "../utils/SpinnerButton";
+import TextInput from "../utils/TextInput";
+import Validator from "../utils/Validator";
 
-const prettifyString = str => {
-  if (str === undefined) {
-    return "0";
-  } else {
-    return parseInt(str).toLocaleString();
-  }
-};
-
-const ExtensionHeader = forwardRef((props, ref) => {
-  const extensionCategoryRef = useRef(null);
-  const extensionUploadRef = useRef(null);
-
-  const [name_, setName] = useState(props.name);
-  const [iconURL_, setIconURL] = useState(props.iconURL);
-  const [developer_, setDeveloper] = useState(props.developer);
-  const [developerETH_, setDeveloperETH] = useState(props.developerETH);
-  const [disableSaveButton_, disableSaveButton] = useState(false);
-  const [disableCancelButton_, disableCancelButton] = useState(false);
-  const [disableTextFields_, disableTextFields] = useState(false);
-
-  const save = e => {
+const ExtensionHeader = props => {
+  const save = async (e, ctx) => {
     e.preventDefault();
 
-    props.onEditExtension(false, true);
+    // // Update the last updated time.
+    // const updatedTime = moment()
+    //   .local()
+    //   .valueOf();
+    //
+    // // Create the extension object.
+    // let extension = {
+    //   hash: ctx.currExt.hash,
+    //   rating: ctx.currExt.rating,
+    //   downloads: ctx.currExt.downloads,
+    //   reviews: ctx.currExt.reviews,
+    //   ...extensionHeaderDetails,
+    //   ...extensionAdditionalDetails,
+    //   updated: updatedTime,
+    //   extensionSize: ctx.currExt.size,
+    //   isExtension: true
+    // };
+    //
+    // // Validate this object.
+    // // const { err, result } = Validator.validateExtension(extension);
+    // // if (err) {
+    // //   alert(err);
+    // //   return;
+    // // }
+    //
+    // // Upload the extension.crx to IPFS (only if updated & validation passed).
+    // // if (ctx.ext.size !== ctx.currExt.size) {
+    // //   try {
+    // //     extension.hash = await IPFS.uploadBuffer(ctx.currExt.crx);
+    // //     console.log(`https://ipfs.infura.io/ipfs/${hash}`);
+    // //   } catch (err) {
+    // //     console.log(err);
+    // //
+    // //     alert("Failed to update the extension!");
+    // //
+    // //     return;
+    // //   }
+    // // }
+    // //
+    //
+    // console.log(extension);
+    // // setUpdated(updatedTime);
+    //
+    // // upload it to the contract.
+    // const { web3, portis, contract } = PiperWeb3.getWeb3();
+    // try {
+    //   extension.hash = "111";
+    //   extension.iconURL = "test icon URL";
+    //   extension.extensionCrxURL = "url";
+    //
+    //   const fn = contract.methods.createNewExtension(
+    //     extension.hash,
+    //     extension
+    //   );
+    //
+    //   const response = await PiperWeb3.sendSignedTx(web3, portis, fn);
+    //   console.log(response);
+    // } catch (err) {
+    //   console.log(err);
+    //
+    //   alert("Failed to upload the extension!");
+    //
+    //   ctx.setEditable(true);
+    //   return;
+    // }
+    //
+    // ctx.setEditable(false);
+    //
+    // // Shallow redirect.
+    // const href = `/extensions?hash=${extension.hash}`;
+    // const as = `/extensions/${extension.hash}`;
+    // Router.push(href, as, { shallow: true });
   };
 
-  const disable_ = status => {
-    disableSaveButton(status);
-    disableCancelButton(status);
-    disableTextFields(status);
-
-    // Child components.
-    extensionUploadRef.current.disable(status);
-    extensionCategoryRef.current.disable(status);
+  const reset = ctx => {
+    ctx.setEditable(false);
+    ctx.setCurrExt(ctx.extension); // TODO: check whether needed.
   };
 
-  const updateName = e => {
-    e.preventDefault();
-
-    setName(e.target.value);
+  const back = ctx => {
+    Router.back();
+    ctx.setCurrExt(ctx.extension);
   };
-
-  const updateDeveloper = e => {
-    e.preventDefault();
-
-    setDeveloper(e.target.value);
-  };
-
-  const updateDeveloperETH = e => {
-    e.preventDefault();
-
-    setDeveloperETH(e.target.value);
-  };
-
-  const fakeUploadIcon = e => {
-    e.preventDefault();
-    document.getElementById("extension-header-icon-file").click();
-  };
-
-  const uploadIcon = e => {
-    const file = e.target.files[0];
-    if (file.size > 1048576 /* 1MB */) {
-      alert("Icon size should be less than 1MB!");
-      return;
-    }
-
-    const r = new FileReader();
-    r.onload = result => {
-      setIconURL(result.target.result);
-    };
-    r.readAsDataURL(file);
-  };
-
-  useImperativeHandle(ref, () => ({
-    reset() {
-      extensionCategoryRef.current.reset();
-      extensionUploadRef.current.reset();
-
-      setName(props.name);
-      setIconURL(props.iconURL);
-      setDeveloper(props.developer);
-      setDeveloperETH(props.developerETH);
-    },
-
-    disable(status) {
-      disable_(status);
-    },
-
-    details() {
-      const extensionCategoryDetails = extensionCategoryRef.current.details();
-
-      return {
-        name: name_,
-        iconURL: iconURL_,
-        developer: developer_,
-        developerETH: developerETH_,
-        ...extensionCategoryDetails
-      };
-    }
-  }));
 
   return (
     <div>
-      <Row>
-        <Col>&nbsp;</Col>
-      </Row>
+      <EmptyRow />
       <Row className="extension-header">
         <Col md="auto" xs="4" className="text-right">
-          <Row>
-            <Col>
-              <img
-                className="extension-header-icon"
-                src={iconURL_ ? iconURL_ : "/static/images/camera.svg"}
-                title="Extension Icon"
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <input
-                type="file"
-                hidden
-                id="extension-header-icon-file"
-                onChange={uploadIcon}
-                accept="image/*"
-              />
-              <Button variant="dark" onClick={fakeUploadIcon}>
-                Upload Icon
-              </Button>
-            </Col>
-          </Row>
+          <ExtensionIcon />
           <ExtensionChrome />
         </Col>
         <Col md="8" xs="10" className="extension-header-details">
-          <Row>
-            <Col className="extension-header-name">
-              {props.editable ? (
-                <MDBInput
-                  type="text"
-                  valueDefault={name_ ? name_ : ""}
-                  hint="Extension name"
-                  onChange={updateName}
-                  disabled={disableTextFields_}
-                />
-              ) : (
-                name_
-              )}
-            </Col>
-          </Row>
-          <Row>
-            <Col className="extension-header-author">
-              <Row>
-                <Col md="2" xs="4" className="align-self-center pr-0">
-                  <span>Offered by:&nbsp;</span>
-                </Col>
-                <Col md="10" xs="8" className="pl-0">
-                  {props.editable ? (
-                    <MDBInput
-                      type="text"
-                      valueDefault={developer_}
-                      hint="Developer URL"
-                      size="sm"
-                      onChange={updateDeveloper}
-                      disabled={disableTextFields_}
-                    />
-                  ) : (
-                    <Link href={developer_}>
-                      <a target="_blank">{developer_}</a>
-                    </Link>
-                  )}
-                </Col>
-              </Row>
-            </Col>
-          </Row>
+          <ExtensionName />
+          <ExtensionDeveloper />
           <Row className="extension-header-extra-details" noGutters="true">
             <Col md="auto" className="align-self-center">
               <Row>
-                <Col md="auto" className="align-self-center">
-                  <StarRatings
-                    rating={props.rating}
-                    starRatedColor="black"
-                    numberOfStars={5}
-                    name="rating"
-                    starDimension="15px"
-                    starSpacing="0"
-                  />
-                  &nbsp;
-                  <span className="align-text-top">
-                    {prettifyString(props.reviews)}
-                  </span>
-                </Col>
+                <ExtensionRating />
                 <Col
                   md="auto"
                   className="extension-header-extra-details-border px-0"
                 ></Col>
                 <Col md="auto" className="align-self-center">
-                  <ExtensionCategory
-                    ref={extensionCategoryRef}
-                    editable={props.editable}
-                    category={props.category}
-                  />
+                  <ExtensionCategory />
                 </Col>
                 <Col
                   md="auto"
                   className="extension-header-extra-details-border px-0"
                 ></Col>
-                <Col md="auto" className="align-self-center">
-                  <img
-                    src="/static/images/user.svg"
-                    style={{ width: "25px" }}
-                  />
-                  &nbsp;
-                  <span className="align-text-top">
-                    {prettifyString(props.downloads)} users
-                  </span>
-                </Col>
+                <ExtensionDownloads />
               </Row>
             </Col>
             <Col md="auto" className="ml-auto align-self-center">
-              <Row>
-                <Col md="auto">
-                  {props.editable ? (
-                    <MDBInput
-                      type="text"
-                      valueDefault={developerETH_ ? developerETH_ : ""}
-                      hint="Developer ETH address"
-                      size="sm"
-                      onChange={updateDeveloperETH}
-                      disabled={disableTextFields_}
-                    />
-                  ) : (
-                    <Button
-                      variant="outline-dark"
-                      href={`https://widget.kyber.network/v0.7.0/?type=pay&mode=tab&receiveAddr=${developerETH_}&receiveToken=ETH&network=${props.network}&lang=en&theme=theme-dark`}
-                      target="_blank"
-                    >
-                      Tip the Developer
-                    </Button>
-                  )}
-                </Col>
-              </Row>
+              <ExtensionDeveloperETH />
             </Col>
           </Row>
-          <Row>
-            <Col>&nbsp;</Col>
-          </Row>
+          <EmptyRow />
         </Col>
         <Col md="2" className="ml-auto text-right">
           <Row>
             <Col>
-              {props.editable ? (
-                <div>
-                  <Row>
-                    <Col>
-                      <Button
-                        variant="success"
-                        onClick={save}
-                        disabled={disableSaveButton_}
-                      >
-                        <Spinner
-                          animation={`${disableSaveButton_ ? "border" : null}`}
-                          size="sm"
-                          role="status"
-                        />
-                        <span
-                          style={{
-                            display: `${disableSaveButton_ ? "none" : "inline"}`
-                          }}
-                        >
-                          Save
-                        </span>
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Button
-                        variant="danger"
-                        onClick={
-                          props.goBack ? props.goBack : props.parentReset
-                        }
-                        disabled={disableCancelButton_}
-                      >
-                        Cancel
-                      </Button>
-                    </Col>
-                  </Row>
-                </div>
-              ) : props.authorEditable ? (
-                <Button
-                  variant="success"
-                  onClick={() => props.onEditExtension(true)}
-                >
-                  Edit
-                </Button>
-              ) : (
-                <Button variant="dark">Add to Chrome</Button>
-              )}
+              <DataConsumer>
+                {ctx =>
+                  ctx.editable === true ? (
+                    <div>
+                      <Row>
+                        <Col>
+                          <SpinnerButton
+                            variant="success"
+                            text="Save"
+                            onClick={e => save(e, ctx)}
+                          />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <Button
+                            variant="danger"
+                            onClick={
+                              ctx.newExt === true
+                                ? () => back(ctx)
+                                : () => reset(ctx)
+                            }
+                          >
+                            Cancel
+                          </Button>
+                        </Col>
+                      </Row>
+                    </div>
+                  ) : ctx.authorEditable === true ? (
+                    <Button
+                      variant="success"
+                      onClick={() => ctx.setEditable(true)}
+                    >
+                      Edit
+                    </Button>
+                  ) : (
+                    <Button variant="dark">Add to Chrome</Button>
+                  )
+                }
+              </DataConsumer>
             </Col>
           </Row>
-          <ExtensionUpload
-            ref={extensionUploadRef}
-            updateExtensionSize={props.updateExtensionSize}
-            updateExtensionCrx={props.updateExtensionCrx}
-            editable={props.editable}
-            disableParent={disable_}
-          />
+          <ExtensionUpload />
         </Col>
       </Row>
       <style jsx global>{`
         .extension-header {
           border-bottom: 2px solid #f1f3f4;
-        }
-
-        .extension-header-icon {
-          width: 60px;
-          height: 60px;
         }
 
         .extension-header .extension-header-details > .row:first-child {
@@ -335,30 +203,6 @@ const ExtensionHeader = forwardRef((props, ref) => {
 
         .extension-header .extension-header-details > .row:last-child {
           height: 25px;
-        }
-
-        .extension-header .extension-header-name {
-          font-size: 1.75rem;
-          font-weight: 400;
-          line-height: 2.25rem;
-          color: #202124;
-          text-transform: capitalize;
-        }
-
-        .extension-header .extension-header-author {
-          font-size: 0.875rem;
-          letter-spacing: 0.01785714em;
-          line-height: 1.25rem;
-          color: #3c4043;
-          font-weight: 400;
-        }
-
-        .extension-header-author > a {
-          letter-spacing: 0.01785714em;
-          font-size: 0.875rem;
-          font-weight: 500;
-          line-height: 1.25rem;
-          text-decoration: none;
         }
 
         .extension-header-extra-details-border {
@@ -374,6 +218,6 @@ const ExtensionHeader = forwardRef((props, ref) => {
       `}</style>
     </div>
   );
-});
+};
 
 export default ExtensionHeader;

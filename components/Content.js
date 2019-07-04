@@ -1,52 +1,26 @@
 import Link from "next/link";
 
-import { useState } from "react";
-
-import { Row, Col, Button, Spinner } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 import { DataConsumer } from "./utils/DataProvider";
+import SpinnerButton from "./utils/SpinnerButton";
 
-const Content = props => {
-  const [disableAddNewButton_, disableAddNewButton] = useState(false);
-
-  const save = e => {
-    disableAddNewButton(true);
-  };
-
-  return (
-    <Row>
+const Content = props => (
+  <Row>
+    <Col md="auto" className="ml-auto">
       <DataConsumer>
-        {context => (
-          <Col md="auto" className="ml-auto">
-            {context.loggedIn === true ? (
-              <Link href="extensions?hash=new" as="extensions/new">
-                <a>
-                  <Button
-                    variant="success"
-                    onClick={save}
-                    disabled={disableAddNewButton_}
-                  >
-                    <Spinner
-                      animation={`${disableAddNewButton_ ? "border" : null}`}
-                      size="sm"
-                      role="status"
-                    />
-                    <span
-                      style={{
-                        display: `${disableAddNewButton_ ? "none" : "inline"}`
-                      }}
-                    >
-                      Add New Extension
-                    </span>
-                  </Button>
-                </a>
-              </Link>
-            ) : null}
-          </Col>
-        )}
+        {ctx =>
+          ctx.loggedIn === true ? (
+            <Link href="extensions?hash=new" as="extensions/new">
+              <a>
+                <SpinnerButton variant="success" text="Add New Extension" />
+              </a>
+            </Link>
+          ) : null
+        }
       </DataConsumer>
-    </Row>
-  );
-};
+    </Col>
+  </Row>
+);
 
 export default Content;
