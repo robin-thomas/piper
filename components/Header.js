@@ -6,7 +6,7 @@ import { DataConsumer } from "./utils/DataProvider";
 
 import { Container, Row, Col } from "react-bootstrap";
 
-import { PiperWeb3 } from "./utils/PiperContract";
+import PiperContract from "./utils/PiperContract";
 
 const Header = () => {
   const signIn = ctx => {
@@ -14,7 +14,7 @@ const Header = () => {
       return;
     }
 
-    const { _, portis } = PiperWeb3.getWeb3();
+    const { portis } = PiperContract.getWeb3(true);
     if (ctx.email !== "Sign In") {
       const email = ctx.email;
 

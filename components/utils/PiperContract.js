@@ -4,29 +4,73 @@ import Web3 from "web3";
 import * as config from "../../config.json";
 import * as contract from "../../build/contracts/Piper.json";
 
-const provider = new Web3.providers.HttpProvider(
-  `https://ropsten.infura.io/v3/aa055fbdf8474ec79929cbaff2328d45`
-);
+const PortisWeb3 = {
+  portis: null,
+  web3: null,
+  contract: null,
 
-const PiperWeb3 = {
+  init: () => {
+    if (PortisWeb3.portis === null) {
+      PortisWeb3.portis = new Portis(
+        config.portis.dapp_id,
+        config.network.name,
+        {
+          scope: ["email"]
+        }
+      );
+
+      PortisWeb3.web3 = new Web3(PortisWeb3.portis.provider);
+
+      PortisWeb3.contract = new PortisWeb3.web3.eth.Contract(
+        contract.abi,
+        contract.networks[config.network.network_id].address
+      );
+    }
+  }
+};
+
+const InfuraWeb3 = {
+  web3: null,
+  contract: null,
+
+  init: () => {
+    if (InfuraWeb3.web3 === null) {
+      const provider = new Web3.providers.HttpProvider(
+        `https://ropsten.infura.io/v3/aa055fbdf8474ec79929cbaff2328d45`
+      );
+
+      InfuraWeb3.web3 = new Web3(provider);
+
+      InfuraWeb3.contract = new InfuraWeb3.web3.eth.Contract(
+        contract.abi,
+        contract.networks[config.network.network_id].address
+      );
+    }
+  }
+};
+
+const PiperContract = {
+  portis: null,
+  web3: null,
+  contract: null,
+
   getWeb3: (usePortis = true) => {
-    if (usePortis) {
-      const portis = new Portis(config.portis.dapp_id, config.network.name, {
-        scope: ["email"]
-      });
-
-      const web3_ = new Web3(portis.provider);
+    if (usePortis === true) {
+      PortisWeb3.init();
 
       return {
-        web3: web3_,
-        portis,
-        contract: new web3.eth.Contract(
-          contract.abi,
-          contract.networks[config.network.network_id].address
-        )
+        web3: PortisWeb3.web3,
+        portis: PortisWeb3.portis,
+        contract: PortisWeb3.contract
       };
     } else {
-      return new Web3(provider);
+      InfuraWeb3.init();
+
+      return {
+        web3: InfuraWeb3.web3,
+        portis: InfuraWeb3.portis,
+        contract: InfuraWeb3.contract
+      };
     }
   },
 
@@ -49,11 +93,4 @@ const PiperWeb3 = {
   }
 };
 
-const web3 = new Web3(provider);
-const PiperContract = new web3.eth.Contract(
-  contract.abi,
-  contract.networks[config.network.network_id].address
-);
-
-export { PiperWeb3 };
 export default PiperContract;

@@ -16,7 +16,7 @@ import { DataConsumer } from "../utils/DataProvider";
 import EmptyRow from "../utils/EmptyRow";
 import Formatter from "../utils/Formatter";
 import IPFS from "../utils/IPFS";
-import { PiperWeb3 } from "../utils/PiperContract";
+import PiperContract from "../utils/PiperContract";
 import SpinnerButton from "../utils/SpinnerButton";
 import TextInput from "../utils/TextInput";
 import Validator from "../utils/Validator";
@@ -69,7 +69,7 @@ const ExtensionHeader = props => {
     // // setUpdated(updatedTime);
     //
     // // upload it to the contract.
-    // const { web3, portis, contract } = PiperWeb3.getWeb3();
+    // const { web3, portis, contract } = PiperContract.getWeb3(true);
     // try {
     //   extension.hash = "111";
     //   extension.iconURL = "test icon URL";
