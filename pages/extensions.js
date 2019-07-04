@@ -2,10 +2,11 @@ import Error from "next/error";
 
 import { useContext } from "react";
 
-import GlobalHead from "../components/utils/GlobalHead";
-import Header from "../components/Header";
 import Extension from "../components/Extension";
+import Header from "../components/Header";
+import Cache from "../components/utils/Cache";
 import { DataContext } from "../components/utils/DataProvider";
+import GlobalHead from "../components/utils/GlobalHead";
 
 const Index = props => {
   if (props.err) {
@@ -48,20 +49,23 @@ Index.getInitialProps = async function({ query: { hash } }) {
 
   if (hash !== "new") {
     try {
-      // TODO: Add support for caching.
+      try {
+        // Load from the cache.
+        extension = Cache.get(hash);
+      } catch (err) {
+        const extensionWithOwner = await PiperContract.methods
+          .getExtensionByHash(hash)
+          .call();
 
-      const extensionWithOwner = await PiperContract.methods
-        .getExtensionByHash(hash)
-        .call();
+        if (extensionWithOwner === null) {
+          throw new Error(`Extension ${hash} cannot be found`);
+        }
 
-      if (extensionWithOwner === null) {
-        throw new Error(`Extension ${hash} cannot be found`);
+        extension = {
+          ...extensionWithOwner.extension,
+          owner: extensionWithOwner.owner
+        };
       }
-
-      extension = {
-        ...extensionWithOwner.extension,
-        owner: extensionWithOwner.owner
-      };
     } catch (err) {
       extension = {
         err: true
