@@ -20,7 +20,9 @@ const Index = props => {
     ctx.setEditable(true);
     ctx.setAuthorEditable(true);
   } else if (props.owner && props.owner === ctx.address) {
+    ctx.setNewExt(false);
     ctx.setAuthorEditable(true);
+
     ctx.setExtension(props);
     ctx.setCurrExt(props);
   }
@@ -46,6 +48,8 @@ Index.getInitialProps = async function({ query: { hash } }) {
 
   if (hash !== "new") {
     try {
+      // TODO: Add support for caching.
+
       const extensionWithOwner = await PiperContract.methods
         .getExtensionByHash(hash)
         .call();

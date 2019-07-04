@@ -34,7 +34,7 @@ const ExtensionUpload = props => {
         <Col>
           <DataConsumer>
             {ctx =>
-              ctx.editable === true ? (
+              ctx.editable === true && ctx.newExt === true ? (
                 <div>
                   <input
                     id="uploadExtension"

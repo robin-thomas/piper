@@ -22,81 +22,66 @@ import TextInput from "../utils/TextInput";
 import Validator from "../utils/Validator";
 
 const ExtensionHeader = props => {
-  const save = async (e, ctx) => {
-    e.preventDefault();
+  const save = async ctx => {
+    // Update the last updated time.
+    const updatedTime = moment()
+      .local()
+      .valueOf();
 
-    // // Update the last updated time.
-    // const updatedTime = moment()
-    //   .local()
-    //   .valueOf();
-    //
-    // // Create the extension object.
-    // let extension = {
-    //   hash: ctx.currExt.hash,
-    //   rating: ctx.currExt.rating,
-    //   downloads: ctx.currExt.downloads,
-    //   reviews: ctx.currExt.reviews,
-    //   ...extensionHeaderDetails,
-    //   ...extensionAdditionalDetails,
-    //   updated: updatedTime,
-    //   extensionSize: ctx.currExt.size,
-    //   isExtension: true
-    // };
-    //
-    // // Validate this object.
-    // // const { err, result } = Validator.validateExtension(extension);
-    // // if (err) {
-    // //   alert(err);
-    // //   return;
-    // // }
-    //
-    // // Upload the extension.crx to IPFS (only if updated & validation passed).
-    // // if (ctx.ext.size !== ctx.currExt.size) {
-    // //   try {
-    // //     extension.hash = await IPFS.uploadBuffer(ctx.currExt.crx);
-    // //     console.log(`https://ipfs.infura.io/ipfs/${hash}`);
-    // //   } catch (err) {
-    // //     console.log(err);
-    // //
-    // //     alert("Failed to update the extension!");
-    // //
-    // //     return;
-    // //   }
-    // // }
-    // //
-    //
-    // console.log(extension);
-    // // setUpdated(updatedTime);
-    //
-    // // upload it to the contract.
-    // const { web3, portis, contract } = PiperContract.getWeb3(true);
-    // try {
-    //   extension.hash = "111";
-    //   extension.iconURL = "test icon URL";
-    //   extension.extensionCrxURL = "url";
-    //
-    //   const fn = contract.methods.createNewExtension(
-    //     extension.hash,
-    //     extension
-    //   );
-    //
-    //   const response = await PiperWeb3.sendSignedTx(web3, portis, fn);
-    //   console.log(response);
-    // } catch (err) {
-    //   console.log(err);
-    //
-    //   alert("Failed to upload the extension!");
-    //
-    //   ctx.setEditable(true);
-    //   return;
-    // }
-    //
-    // ctx.setEditable(false);
-    //
-    // // Shallow redirect.
-    // const href = `/extensions?hash=${extension.hash}`;
-    // const as = `/extensions/${extension.hash}`;
-    // Router.push(href, as, { shallow: true });
+    // Get the extension object.
+    let extension = ctx.currExt;
+    extension.updated = updatedTime;
+    // TODO: might have to remove fields not required.
+
+    // Validate this object.
+    const { err, result } = Validator.validateExtension(extension);
+    if (err) {
+      alert(err);
+      return;
+    }
+
+    // Upload the extension.crx to IPFS (only if updated & validation passed).
+    if (extension.hash === null) {
+      try {
+        extension.hash = await IPFS.uploadBuffer(ctx.currExt.crx);
+        console.log(`https://ipfs.infura.io/ipfs/${extension.hash}`);
+      } catch (err) {
+        console.log(err);
+
+        alert("Failed to update the extension!");
+
+        return;
+      }
+    }
+
+    console.log(extension);
+    setUpdated(updatedTime);
+
+    // upload it to the contract.
+    const { web3, portis, contract } = PiperContract.getWeb3(true);
+    try {
+      // extension.hash = "111";
+      // extension.iconURL = "test icon URL";
+      // extension.extensionCrxURL = "url";
+
+      const fn = contract.methods.createNewExtension(extension.hash, extension);
+
+      const response = await PiperContract.sendSignedTx(web3, portis, fn);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+
+      alert("Failed to upload the extension!");
+
+      return;
+    }
+
+    ctx.setEditable(false);
+
+    // Shallow redirect.
+    const href = `/extensions?hash=${extension.hash}`;
+    const as = `/extensions/${extension.hash}`;
+    Router.push(href, as, { shallow: true });
   };
 
   const reset = ctx => {
@@ -156,7 +141,7 @@ const ExtensionHeader = props => {
                           <SpinnerButton
                             variant="success"
                             text="Save"
-                            onClick={e => save(e, ctx)}
+                            onClick={() => save(ctx)}
                           />
                         </Col>
                       </Row>
