@@ -32,7 +32,7 @@ const ExtensionHeader = props => {
       .valueOf();
 
     // Get the extension object.
-    let extension = ctx.currExt;
+    let extension = { ...ctx.currExt };
     extension.updated = updatedTime;
     extension.category =
       extension.category === undefined ? "All" : extension.category;
@@ -42,24 +42,24 @@ const ExtensionHeader = props => {
       extension.reviews === undefined ? 0 : parseInt(extension.reviews);
     extension.downloads =
       extension.downloads === undefined ? 0 : parseInt(extension.downloads);
+    extension.developerETH = "eth";
+
+    console.log(extension);
 
     // Validate this object.
-    const { error } = Validator.validateExtension(extension);
+    const { error } = Validator.validateExtension(extension, ctx.extension);
     if (error) {
       console.log(error);
       throw new Error(error);
     }
 
     // Upload the extension.crx to IPFS (only if updated & validation passed).
-    if (
-      !_.isEmpty(ctx.currExt.size) &&
-      ctx.currExt.size !== ctx.extension.size
-    ) {
+    if (_.isEmpty(extension.hash) || ctx.currExt.size !== ctx.extension.size) {
       try {
         const hash_ = await IPFS.uploadBuffer(ctx.currExt.crx);
         extension.crx = `https://ipfs.infura.io/ipfs/${hash_}`;
 
-        if (_isEmpty(extension.hash)) {
+        if (_.isEmpty(extension.hash)) {
           extension.hash = hash_;
         }
       } catch (err) {
@@ -67,11 +67,6 @@ const ExtensionHeader = props => {
 
         throw new Error("Failed to upload the extension!");
       }
-    } else {
-      extension.hash = "11111";
-      extension.developerETH = "eth";
-      extension.size = 0;
-      extension.crx = "crx";
     }
 
     console.log(extension);
@@ -81,8 +76,10 @@ const ExtensionHeader = props => {
     const { web3, portis, contract } = PiperContract.getWeb3(true);
     try {
       const fn = contract.methods.createNewExtension(extension.hash, extension);
-      const response = await PiperContract.sendSignedTx(web3, portis, fn);
-      console.log(response);
+      const txHash = await PiperContract.sendSignedTx(web3, portis, fn);
+      console.log(txHash);
+      const receipt = await PiperContract.getTransactionReceipt(web3, txHash);
+      console.log(receipt);
     } catch (err) {
       console.log(err);
 
@@ -101,12 +98,12 @@ const ExtensionHeader = props => {
 
   const reset = ctx => {
     ctx.setEditable(false);
-    ctx.setCurrExt(ctx.extension); // TODO: check whether needed.
+    ctx.setCurrExt({ ...ctx.extension }); // TODO: check whether needed.
   };
 
   const back = ctx => {
     Router.back();
-    ctx.setCurrExt(ctx.extension);
+    ctx.setCurrExt({ ...ctx.extension });
   };
 
   return (
@@ -171,6 +168,7 @@ const ExtensionHeader = props => {
                                 ? () => back(ctx)
                                 : () => reset(ctx)
                             }
+                            disabled={ctx.textDisabled}
                           >
                             Cancel
                           </Button>
@@ -181,6 +179,7 @@ const ExtensionHeader = props => {
                     <Button
                       variant="success"
                       onClick={() => ctx.setEditable(true)}
+                      disabled={ctx.textDisabled}
                     >
                       Edit
                     </Button>

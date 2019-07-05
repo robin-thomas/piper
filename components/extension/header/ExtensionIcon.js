@@ -54,7 +54,11 @@ const ExtensionIcon = props => {
                   accept="image/*"
                 />
                 {ctx.editable === true ? (
-                  <Button variant="dark" onClick={fakeUploadIcon}>
+                  <Button
+                    variant="dark"
+                    onClick={fakeUploadIcon}
+                    disabled={ctx.textDisabled}
+                  >
                     Upload Icon
                   </Button>
                 ) : null}

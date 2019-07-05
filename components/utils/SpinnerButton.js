@@ -5,7 +5,7 @@ import { useState, useContext } from "react";
 import _ from "lodash";
 import { Button, Spinner } from "react-bootstrap";
 
-import { DataContext } from "./DataProvider";
+import { DataContext, DataConsumer } from "./DataProvider";
 
 const SpinnerButton = ({ text, onClick, variant }) => {
   const [disabled, setDisabled] = useState(false);
@@ -47,20 +47,28 @@ const SpinnerButton = ({ text, onClick, variant }) => {
   };
 
   return (
-    <Button variant={variant} onClick={click} disabled={disabled}>
-      <Spinner
-        animation={`${disabled ? "border" : null}`}
-        size="sm"
-        role="status"
-      />
-      <span
-        style={{
-          display: `${disabled ? "none" : "inline"}`
-        }}
-      >
-        {text}
-      </span>
-    </Button>
+    <DataConsumer>
+      {ctx => (
+        <Button
+          variant={variant}
+          onClick={click}
+          disabled={disabled || ctx.textDisabled}
+        >
+          <Spinner
+            animation={`${disabled ? "border" : null}`}
+            size="sm"
+            role="status"
+          />
+          <span
+            style={{
+              display: `${disabled ? "none" : "inline"}`
+            }}
+          >
+            {text}
+          </span>
+        </Button>
+      )}
+    </DataConsumer>
   );
 };
 

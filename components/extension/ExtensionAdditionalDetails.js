@@ -7,12 +7,15 @@ import TextInput from "../utils/TextInput";
 
 const AdditionalDetails = ({ name, value }) => {
   const format = (name, data) => {
+    // TODO: figure out why its called so much.
     switch (name) {
       case "updated":
         return Formatter.formatDate(data);
+        break;
 
       case "size":
         return Formatter.formatFileSize(data);
+        break;
 
       default:
         return data;
@@ -45,7 +48,7 @@ const AdditionalDetails = ({ name, value }) => {
               )}
             </DataConsumer>
           ) : (
-            format(name, value)
+            <span>{format(name, value)}</span>
           )}
         </Col>
       </Row>

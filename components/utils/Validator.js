@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 
 const Validator = {
-  validateExtension: extension => {
+  validateExtension: (extension, prevExtension) => {
     if (_.isEmpty(extension.name)) {
       return {
         error: "Extension name is missing!"
@@ -20,11 +20,11 @@ const Validator = {
       };
     }
 
-    // if (_.isEmpty(extension.size)) {
-    //   return {
-    //     error: "Extension CRX is not uploaded!"
-    //   };
-    // }
+    if (isNaN(extension.size) || parseInt(extension.size) <= 0) {
+      return {
+        error: "Extension CRX is not uploaded!"
+      };
+    }
 
     if (_.isEmpty(extension.overview)) {
       return {
@@ -35,6 +35,16 @@ const Validator = {
     if (_.isEmpty(extension.version)) {
       return {
         error: "Extension version is missing!"
+      };
+    }
+
+    if (
+      !_.isEmpty(extension.hash) &&
+      extension.version === prevExtension.version &&
+      extension.size !== prevExtension.size
+    ) {
+      return {
+        error: "Cannot modify CRX file without changing the version!"
       };
     }
 

@@ -63,7 +63,7 @@ const GlobalHead = props => (
       }
 
       .btn {
-        margin: 0.375rem 0;
+        margin: 0.375rem 0 !important;
       }
     `}</style>
   </div>

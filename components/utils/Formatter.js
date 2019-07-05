@@ -1,9 +1,8 @@
 import moment from "moment";
-import _ from "lodash";
 
 const Formatter = {
   prettifyString: str => {
-    if (str === undefined) {
+    if (str === undefined || str === null) {
       return "0";
     } else {
       return parseInt(str).toLocaleString();
@@ -11,7 +10,7 @@ const Formatter = {
   },
 
   formatText: data => {
-    if (_.isEmpty(data)) {
+    if (data === null || data === undefined) {
       return;
     }
 
@@ -27,23 +26,27 @@ const Formatter = {
   },
 
   formatDate: timestamp => {
-    if (_.isEmpty(timestamp)) {
+    if (timestamp === null || timestamp === undefined) {
       return null;
     }
 
-    return moment(timestamp)
-      .local()
-      .format("MMM DD, YYYY");
+    try {
+      return moment(timestamp)
+        .local()
+        .format("MMM DD, YYYY");
+    } catch (err) {
+      return null;
+    }
   },
 
   formatFileSize: bytes => {
-    if (_.isEmpty(bytes)) {
+    try {
+      const size = ["B", "kB", "MB", "GB"];
+      const factor = Math.floor((bytes.toString().length - 1) / 3);
+      return (bytes / Math.pow(1024, factor)).toFixed(2) + size[factor];
+    } catch (err) {
       return 0;
     }
-
-    const size = ["B", "kB", "MB", "GB"];
-    const factor = Math.floor((bytes.toString().length - 1) / 3);
-    return (bytes / Math.pow(1024, factor)).toFixed(2) + size[factor];
   }
 };
 

@@ -22,6 +22,7 @@ const ExtensionDeveloperETH = props => (
               onChange={e =>
                 ctx.setCurrExt({ ...ctx.currExt, developerETH: e.target.value })
               }
+              disabled={ctx.textDisabled}
             />
           ) : (
             <Button

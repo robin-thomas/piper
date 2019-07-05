@@ -61,7 +61,7 @@ const ExtensionDetails = props => (
                 <AdditionalDetails
                   name="size"
                   value={
-                    ctx.currExt && ctx.currExt.size ? ctx.currExt.updated : null
+                    ctx.currExt && ctx.currExt.size ? ctx.currExt.size : null
                   }
                 />
               </Col>

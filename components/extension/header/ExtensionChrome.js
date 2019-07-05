@@ -57,12 +57,17 @@ const ExtensionChrome = props => {
                 https://chrome.google.com/webstore/detail/extension_name/
               </Col>
               <Col>
-                <MDBInput
-                  type="text"
-                  valueDefault={chromeLink ? chromeLink : ""}
-                  size="sm"
-                  onChange={e => setChromeLink(e.target.value)}
-                />
+                <DataConsumer>
+                  {ctx => (
+                    <MDBInput
+                      type="text"
+                      valueDefault={chromeLink ? chromeLink : ""}
+                      size="sm"
+                      onChange={e => setChromeLink(e.target.value)}
+                      disabled={ctx.textDisabled}
+                    />
+                  )}
+                </DataConsumer>
               </Col>
             </Row>
           </MDBModalBody>
@@ -79,9 +84,17 @@ const ExtensionChrome = props => {
             </DataConsumer>
           </MDBModalFooter>
         </MDBModal>
-        <Button variant="outline-dark" onClick={() => setModal(!modal)}>
-          From Chrome
-        </Button>
+        <DataConsumer>
+          {ctx => (
+            <Button
+              variant="outline-dark"
+              onClick={() => setModal(!modal)}
+              disabled={ctx.textDisabled}
+            >
+              From Chrome
+            </Button>
+          )}
+        </DataConsumer>
       </Col>
     </Row>
   );

@@ -90,6 +90,43 @@ const PiperContract = {
     } catch (err) {
       throw err;
     }
+  },
+
+  getTransactionReceipt: async (web3, txHash) => {
+    const sleep = ms => {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    };
+
+    const transactionReceipt = () => {
+      return new Promise((resolve, reject) => {
+        web3.eth.getTransactionReceipt(txHash, async (error, receipt) => {
+          if (error) {
+            reject(error);
+          } else if (receipt === null) {
+            await sleep(1000);
+            try {
+              resolve(await transactionReceipt());
+            } catch (error) {
+              reject(error);
+            }
+          } else {
+            resolve(receipt);
+          }
+        });
+      });
+    };
+
+    if (Array.isArray(txHash)) {
+      return Promise.all(
+        txHash.map(oneTxHash =>
+          PiperContract.getTransactionReceipt(web3, oneTxHash)
+        )
+      );
+    } else if (typeof txHash === "string") {
+      return await transactionReceipt();
+    } else {
+      throw new Error("Invalid Type: " + txHash);
+    }
   }
 };
 

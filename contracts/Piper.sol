@@ -47,41 +47,49 @@ contract Piper {
     return hasExtension[_hash] == true;
   }
 
-  function getExtensionByHash(string memory _hash) public view returns(ExtensionWithOwner memory) {
-    // Make sure the extension exists.
-    require(isExtension(_hash));
-
-    return extensions[_hash];
-  }
-
   event CreateNewExtensionEvent(string hash, ExtensionWithOwner extension);
   event UpdateExtensionByHashEvent(string hash, ExtensionWithOwner extension);
   event CreateNewExtensionVersionEvent(string hash, ExtensionVersion version);
 
   function createNewExtension(string memory _hash, Extension memory _extension) public returns(bool) {
-    // Make sure that the extension doesnt exist.
-    require(!isExtension(_hash));
+    // Creating a new extension.
+    if (!isExtension(_hash)) {
+      // Create new extension.
+      extensions[_hash].extension = _extension;
+      extensions[_hash].owner = msg.sender;
+      hasExtension[_hash] = true;
 
-    // Create new extension.
-    extensions[_hash].extension = _extension;
-    extensions[_hash].owner = msg.sender;
-    hasExtension[_hash] = true;
+      emit CreateNewExtensionEvent(_hash, extensions[_hash]);
 
-    emit CreateNewExtensionEvent(_hash, extensions[_hash]);
+      return true;
+    } else {
+      // Updating the extension.
 
-    return true;
-  }
+      // Check if extension owner is the one trying to edit it.
+      require(msg.sender == extensions[_hash].owner);
 
-  function updateExtensionByHash(string memory _hash, Extension memory _extension) public returns(bool) {
-    // Check if extension owner is the one trying to edit it.
-    require(isExtension(_hash));
-    require(msg.sender == extensions[_hash].owner);
+      // Check whether they are updating the version.
+      if (keccak256(bytes(_extension.crx)) != keccak256(bytes(extensions[_hash].extension.crx))) {
+        require(keccak256(bytes(_extension.version)) != keccak256(bytes(extensions[_hash].extension.version)));
 
-    // Check whether they are updating the version.
-    if (keccak256(bytes(_extension.crx)) != keccak256(bytes(extensions[_hash].extension.crx))) {
-      ExtensionVersion memory _extensionVersion = ExtensionVersion(_extension.version, _extension.crx, _extension.updated);
-      versions[_hash].push(_extensionVersion);
+        ExtensionVersion memory _extensionVersion = ExtensionVersion(_extension.version, _extension.crx, _extension.updated);
+        versions[_hash].push(_extensionVersion);
 
+        extensions[_hash].extension.developer = _extension.developer;
+        extensions[_hash].extension.developerETH = _extension.developerETH;
+        extensions[_hash].extension.name = _extension.name;
+        extensions[_hash].extension.overview = _extension.overview;
+        extensions[_hash].extension.category = _extension.category;
+        extensions[_hash].extension.size = _extension.size;
+        extensions[_hash].extension.iconURL = _extension.iconURL;
+        extensions[_hash].extension.updated = _extension.updated;
+
+        emit CreateNewExtensionVersionEvent(_hash, _extensionVersion);
+
+        return true;
+      }
+
+      // Update the extension.
       extensions[_hash].extension.developer = _extension.developer;
       extensions[_hash].extension.developerETH = _extension.developerETH;
       extensions[_hash].extension.name = _extension.name;
@@ -90,26 +98,12 @@ contract Piper {
       extensions[_hash].extension.size = _extension.size;
       extensions[_hash].extension.iconURL = _extension.iconURL;
       extensions[_hash].extension.updated = _extension.updated;
+      extensions[_hash].extension.version = _extension.version;
+      extensions[_hash].extension.crx = _extension.crx;
 
-      emit CreateNewExtensionVersionEvent(_hash, _extensionVersion);
+      emit UpdateExtensionByHashEvent(_hash, extensions[_hash]);
 
       return true;
     }
-
-    // Update the extension.
-    extensions[_hash].extension.developer = _extension.developer;
-    extensions[_hash].extension.developerETH = _extension.developerETH;
-    extensions[_hash].extension.name = _extension.name;
-    extensions[_hash].extension.overview = _extension.overview;
-    extensions[_hash].extension.category = _extension.category;
-    extensions[_hash].extension.size = _extension.size;
-    extensions[_hash].extension.iconURL = _extension.iconURL;
-    extensions[_hash].extension.updated = _extension.updated;
-    extensions[_hash].extension.version = _extension.version;
-    extensions[_hash].extension.crx = _extension.crx;
-
-    emit UpdateExtensionByHashEvent(_hash, extensions[_hash]);
-
-    return true;
   }
 }

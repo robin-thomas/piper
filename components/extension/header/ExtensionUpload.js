@@ -1,32 +1,47 @@
+import Router from "next/router";
+
+import { useContext } from "react";
+
 import { MDBProgress } from "mdbreact";
 import { Row, Col } from "react-bootstrap";
 
-import { DataConsumer } from "../../utils/DataProvider";
+import { DataConsumer, DataContext } from "../../utils/DataProvider";
 import SpinnerButton from "../../utils/SpinnerButton";
 
 const ExtensionUpload = props => {
-  const fakeUpload = e => {
-    e.preventDefault();
+  const fakeUpload = async ctx => {
     document.getElementById("uploadExtension").click();
   };
 
   const uploadExtension = (e, ctx) => {
-    ctx.setTextDisabled(true);
+    return new Promise((resolve, reject) => {
+      ctx.setExtUploadProgress(0);
 
-    const r = new FileReader();
-    r.onload = () => {
-      ctx.setCurrExt({
-        ...ctx.currExt,
-        size: r.result.byteLength,
-        crx: Buffer.from(r.result)
-      });
-      ctx.setTextDisabled(false);
-    };
-    r.onprogress = async data => {
-      ctx.setExtUploadProgress(parseInt((data.loaded / data.total) * 100));
-    };
-    r.readAsArrayBuffer(e.target.files[0]);
+      const file = e.target.files[0];
+
+      const r = new FileReader();
+      r.onload = () => {
+        ctx.setCurrExt({
+          ...ctx.currExt,
+          size: r.result.byteLength,
+          crx: Buffer.from(r.result)
+        });
+
+        document.getElementById("uploadExtension").value = "";
+        resolve(null);
+      };
+      r.onprogress = async data => {
+        ctx.setExtUploadProgress(parseInt((data.loaded / data.total) * 100));
+      };
+      r.readAsArrayBuffer(file);
+    });
   };
+
+  // Reset the progress.
+  const ctx_ = useContext(DataContext);
+  Router.events.on("routeChangeComplete", url => {
+    ctx_.setExtUploadProgress(0);
+  });
 
   return (
     <div>
@@ -34,7 +49,7 @@ const ExtensionUpload = props => {
         <Col>
           <DataConsumer>
             {ctx =>
-              ctx.editable === true && ctx.newExt == true ? (
+              ctx.editable === true ? (
                 <div>
                   <input
                     id="uploadExtension"
@@ -46,7 +61,7 @@ const ExtensionUpload = props => {
                   <SpinnerButton
                     variant="dark"
                     text="Upload .crx"
-                    onClick={fakeUpload}
+                    onClick={() => fakeUpload(ctx)}
                   />
                 </div>
               ) : null
@@ -58,10 +73,11 @@ const ExtensionUpload = props => {
         <Col>
           <DataConsumer>
             {ctx =>
-              ctx.editable === true && ctx.newExt == true ? (
+              ctx.editable === true ? (
                 <MDBProgress
                   className="my-1"
                   material
+                  animated
                   value={ctx.extUploadProgress}
                   color="dark"
                   height="3px"
