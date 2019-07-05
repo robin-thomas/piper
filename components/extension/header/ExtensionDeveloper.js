@@ -24,6 +24,7 @@ const ExtensionDeveloper = props => (
                   ctx.setCurrExt({ ...ctx.currExt, developer: e.target.value })
                 }
                 size="sm"
+                class="text-right"
               />
             )}
           </DataConsumer>

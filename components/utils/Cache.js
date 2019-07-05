@@ -8,17 +8,15 @@ const Cache = {
     if (val === null) {
       throw new Error("Not found in the cache");
     }
+
+    return val;
   },
 
   set: (hash, extension, owner) => {
     const key = `${config.name}_${config.version}_extension_${hash}`;
-    const val = localStorage.setItem(
-      key,
-      JSON.stringify({
-        ...extension,
-        owner
-      })
-    );
+    const val = JSON.stringify({ extension, owner });
+
+    localStorage.setItem(key, val);
   }
 };
 

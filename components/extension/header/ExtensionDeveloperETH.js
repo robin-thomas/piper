@@ -25,7 +25,7 @@ const ExtensionDeveloperETH = props => (
             />
           ) : (
             <Button
-              variant="outline-dark"
+              variant="dark"
               href={`https://widget.kyber.network/v0.7.0/?type=pay&mode=tab&receiveAddr=${
                 ctx.currExt && ctx.currExt.developerETH
                   ? ctx.currExt.developerETH
@@ -34,6 +34,7 @@ const ExtensionDeveloperETH = props => (
                 config.network.name
               }&lang=en&theme=theme-dark`}
               target="_blank"
+              size="sm"
             >
               Tip the Developer
             </Button>

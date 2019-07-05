@@ -2,7 +2,7 @@ import App, { Container } from "next/app";
 
 import DataProvider from "../components/utils/DataProvider";
 
-class Piper extends App {
+export default class Piper extends App {
   render() {
     const { Component, pageProps } = this.props;
 
@@ -15,5 +15,3 @@ class Piper extends App {
     );
   }
 }
-
-export default Piper;

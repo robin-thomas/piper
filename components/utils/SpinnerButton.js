@@ -1,5 +1,8 @@
+import Router from "next/router";
+
 import { useState, useContext } from "react";
 
+import _ from "lodash";
 import { Button, Spinner } from "react-bootstrap";
 
 import { DataContext } from "./DataProvider";
@@ -17,16 +20,30 @@ const SpinnerButton = ({ text, onClick, variant }) => {
     setDisabled(true);
     ctx.setTextDisabled(true);
 
+    let res = null;
     try {
       if (onClick) {
-        await onClick();
+        res = await onClick();
       }
     } catch (err) {
       alert(err.message);
+
+      if (onClick) {
+        setDisabled(false);
+      }
+      ctx.setTextDisabled(false);
+
+      return;
     }
 
-    setDisabled(false);
+    if (onClick) {
+      setDisabled(false);
+    }
     ctx.setTextDisabled(false);
+
+    if (!_.isEmpty(res) && res.redirect) {
+      Router.push(res.redirect.href, res.redirect.as);
+    }
   };
 
   return (

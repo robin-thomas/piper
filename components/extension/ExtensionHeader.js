@@ -1,5 +1,7 @@
 import Router from "next/router";
 
+import _ from "lodash";
+import moment from "moment";
 import { Row, Col, Button } from "react-bootstrap";
 
 import ExtensionCategory from "./header/ExtensionCategory";
@@ -12,6 +14,7 @@ import ExtensionName from "./header/ExtensionName";
 import ExtensionRating from "./header/ExtensionRating";
 import ExtensionUpload from "./header/ExtensionUpload";
 
+import Cache from "../utils/Cache";
 import { DataConsumer } from "../utils/DataProvider";
 import EmptyRow from "../utils/EmptyRow";
 import Formatter from "../utils/Formatter";
@@ -31,58 +34,69 @@ const ExtensionHeader = props => {
     // Get the extension object.
     let extension = ctx.currExt;
     extension.updated = updatedTime;
-    // TODO: might have to remove fields not required.
+    extension.category =
+      extension.category === undefined ? "All" : extension.category;
+    extension.rating =
+      extension.rating === undefined ? 0 : parseInt(extension.rating);
+    extension.reviews =
+      extension.reviews === undefined ? 0 : parseInt(extension.reviews);
+    extension.downloads =
+      extension.downloads === undefined ? 0 : parseInt(extension.downloads);
 
     // Validate this object.
-    const { err, result } = Validator.validateExtension(extension);
-    if (err) {
-      alert(err);
-      return;
+    const { error } = Validator.validateExtension(extension);
+    if (error) {
+      console.log(error);
+      throw new Error(error);
     }
 
     // Upload the extension.crx to IPFS (only if updated & validation passed).
-    if (extension.hash === null) {
+    if (
+      !_.isEmpty(ctx.currExt.size) &&
+      ctx.currExt.size !== ctx.extension.size
+    ) {
       try {
-        extension.hash = await IPFS.uploadBuffer(ctx.currExt.crx);
-        extension.crx = `https://ipfs.infura.io/ipfs/${extension.hash}`;
-        console.log(extension.crx);
+        const hash_ = await IPFS.uploadBuffer(ctx.currExt.crx);
+        extension.crx = `https://ipfs.infura.io/ipfs/${hash_}`;
+
+        if (_isEmpty(extension.hash)) {
+          extension.hash = hash_;
+        }
       } catch (err) {
         console.log(err);
 
-        alert("Failed to update the extension!");
-
-        return;
+        throw new Error("Failed to upload the extension!");
       }
+    } else {
+      extension.hash = "11111";
+      extension.developerETH = "eth";
+      extension.size = 0;
+      extension.crx = "crx";
     }
 
     console.log(extension);
-    setUpdated(updatedTime);
+    ctx.setCurrExt({ ...ctx.currExt, updated: updatedTime });
 
     // upload it to the contract.
     const { web3, portis, contract } = PiperContract.getWeb3(true);
     try {
-      // extension.hash = "111";
-      // extension.iconURL = "test icon URL";
-      // extension.extensionCrxURL = "url";
-
       const fn = contract.methods.createNewExtension(extension.hash, extension);
-
       const response = await PiperContract.sendSignedTx(web3, portis, fn);
       console.log(response);
     } catch (err) {
       console.log(err);
 
-      alert("Failed to upload the extension!");
-
-      return;
+      throw new Error("Failed to update the extension!");
     }
 
-    ctx.setEditable(false);
+    Cache.set(extension.hash, extension, ctx.address);
 
-    // Shallow redirect.
-    const href = `/extensions?hash=${extension.hash}`;
-    const as = `/extensions/${extension.hash}`;
-    Router.push(href, as, { shallow: true });
+    return {
+      redirect: {
+        href: `/extensions?hash=${extension.hash}`,
+        as: `/extensions/${extension.hash}`
+      }
+    };
   };
 
   const reset = ctx => {
@@ -101,7 +115,9 @@ const ExtensionHeader = props => {
       <Row className="extension-header">
         <Col md="auto" xs="4" className="text-right">
           <ExtensionIcon />
-          <ExtensionChrome />
+          <DataConsumer>
+            {ctx => (ctx.editable === true ? <ExtensionChrome /> : null)}
+          </DataConsumer>
         </Col>
         <Col md="8" xs="10" className="extension-header-details">
           <ExtensionName />
@@ -130,7 +146,7 @@ const ExtensionHeader = props => {
           </Row>
           <EmptyRow />
         </Col>
-        <Col md="2" className="ml-auto text-right">
+        <Col md="auto" className="ml-auto text-right">
           <Row>
             <Col>
               <DataConsumer>

@@ -45,18 +45,22 @@ const ExtensionIcon = props => {
         <Col>
           <DataConsumer>
             {ctx => (
-              <input
-                type="file"
-                hidden
-                id="extension-header-icon-file"
-                onChange={e => uploadIcon(e, ctx)}
-                accept="image/*"
-              />
+              <div>
+                <input
+                  type="file"
+                  hidden
+                  id="extension-header-icon-file"
+                  onChange={e => uploadIcon(e, ctx)}
+                  accept="image/*"
+                />
+                {ctx.editable === true ? (
+                  <Button variant="dark" onClick={fakeUploadIcon}>
+                    Upload Icon
+                  </Button>
+                ) : null}
+              </div>
             )}
           </DataConsumer>
-          <Button variant="dark" onClick={fakeUploadIcon}>
-            Upload Icon
-          </Button>
         </Col>
       </Row>
       <style jsx global>{`

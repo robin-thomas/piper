@@ -1,6 +1,6 @@
 import Error from "next/error";
 
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import Extension from "../components/Extension";
 import Header from "../components/Header";
@@ -14,19 +14,32 @@ const Index = props => {
   }
 
   const ctx = useContext(DataContext);
-  ctx.setExtension(props);
 
-  if (props.hash === "new") {
-    ctx.setNewExt(true);
-    ctx.setEditable(true);
-    ctx.setAuthorEditable(true);
-  } else if (props.owner && props.owner === ctx.address) {
-    ctx.setNewExt(false);
-    ctx.setAuthorEditable(true);
+  const selectPage = (hash, ctx, extension, owner) => {
+    if (hash === "new") {
+      ctx.setNewExt(true);
+      ctx.setEditable(true);
+      ctx.setAuthorEditable(true);
+    } else if (owner && owner === ctx.address) {
+      ctx.setNewExt(false);
+      ctx.setAuthorEditable(true);
+      ctx.setEditable(false);
 
-    ctx.setExtension(props);
-    ctx.setCurrExt(props);
-  }
+      ctx.setExtension({ ...extension });
+      ctx.setCurrExt({ ...extension });
+    } else {
+      ctx.setNewExt(false);
+      ctx.setAuthorEditable(false);
+      ctx.setEditable(false);
+
+      ctx.setCurrExt({ ...extension });
+      ctx.setExtension({ ...extension });
+    }
+  };
+
+  useEffect(() => selectPage(props.hash, ctx, props.extension, props.owner), [
+    props.hash
+  ]);
 
   return (
     <div>
@@ -40,11 +53,7 @@ const Index = props => {
 Index.getInitialProps = async function({ query: { hash } }) {
   // Create a new extension.
   let extension = {
-    hash: hash,
-    rating: null,
-    reviews: null,
-    downloads: null,
-    size: null
+    hash: hash
   };
 
   if (hash !== "new") {
@@ -53,18 +62,11 @@ Index.getInitialProps = async function({ query: { hash } }) {
         // Load from the cache.
         extension = Cache.get(hash);
       } catch (err) {
-        const extensionWithOwner = await PiperContract.methods
-          .getExtensionByHash(hash)
-          .call();
+        extension = await PiperContract.methods.getExtensionByHash(hash).call();
 
-        if (extensionWithOwner === null) {
+        if (extension === null) {
           throw new Error(`Extension ${hash} cannot be found`);
         }
-
-        extension = {
-          ...extensionWithOwner.extension,
-          owner: extensionWithOwner.owner
-        };
       }
     } catch (err) {
       extension = {

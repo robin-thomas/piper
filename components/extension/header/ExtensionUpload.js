@@ -34,7 +34,7 @@ const ExtensionUpload = props => {
         <Col>
           <DataConsumer>
             {ctx =>
-              ctx.editable === true && ctx.newExt === true ? (
+              ctx.editable === true && ctx.newExt == true ? (
                 <div>
                   <input
                     id="uploadExtension"
@@ -58,9 +58,9 @@ const ExtensionUpload = props => {
         <Col>
           <DataConsumer>
             {ctx =>
-              ctx.editable === true ? (
+              ctx.editable === true && ctx.newExt == true ? (
                 <MDBProgress
-                  className="my-2"
+                  className="my-1"
                   material
                   value={ctx.extUploadProgress}
                   color="dark"
