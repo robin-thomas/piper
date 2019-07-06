@@ -44,8 +44,6 @@ const ExtensionHeader = props => {
       extension.downloads === undefined ? 0 : parseInt(extension.downloads);
     extension.developerETH = "eth";
 
-    console.log(extension);
-
     // Validate this object.
     const { error } = Validator.validateExtension(extension, ctx.extension);
     if (error) {

@@ -13,5 +13,9 @@
   },
   "portis": {
     "dapp_id": "21956f27-71d0-45ca-8d6a-d2746d62049c"
+  },
+  "graph": {
+    "api": "https://api.thegraph.com/subgraphs/name/robin-thomas/piper",
+    "subscription": "wss://api.thegraph.com/subgraphs/name/robin-thomas/piper"
   }
 }
