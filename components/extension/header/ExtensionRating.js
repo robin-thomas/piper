@@ -4,12 +4,12 @@ import StarRatings from "react-star-ratings";
 import { DataConsumer } from "../../utils/DataProvider";
 import Formatter from "../../utils/Formatter";
 
-const ExtensionRating = () => (
+const ExtensionRating = ({ rating }) => (
   <DataConsumer>
     {ctx => (
       <Col md="auto" className="align-self-center">
         <StarRatings
-          rating={ctx.currExt && ctx.currExt.rating ? ctx.currExt.rating : 0}
+          rating={rating}
           starRatedColor="black"
           numberOfStars={5}
           name="rating"
@@ -18,9 +18,7 @@ const ExtensionRating = () => (
         />
         &nbsp;
         <span className="align-text-top">
-          {Formatter.prettifyString(
-            ctx.currExt && ctx.currExt.rating ? ctx.currExt.rating : "0"
-          )}
+          {Formatter.prettifyString(rating)}
         </span>
       </Col>
     )}

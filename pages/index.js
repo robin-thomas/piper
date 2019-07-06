@@ -15,7 +15,7 @@ const Index = ({ extensions }) => (
         <Col md="3">
           <Sidebar />
         </Col>
-        <Col>
+        <Col md="9">
           <Content extensions={extensions} />
         </Col>
       </Row>

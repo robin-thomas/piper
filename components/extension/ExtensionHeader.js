@@ -120,7 +120,17 @@ const ExtensionHeader = props => {
           <Row className="extension-header-extra-details" noGutters="true">
             <Col md="auto" className="align-self-center">
               <Row>
-                <ExtensionRating />
+                <DataConsumer>
+                  {ctx => (
+                    <ExtensionRating
+                      rating={
+                        ctx.currExt && ctx.currExt.rating
+                          ? ctx.currExt.rating
+                          : 0
+                      }
+                    />
+                  )}
+                </DataConsumer>
                 <Col
                   md="auto"
                   className="extension-header-extra-details-border px-0"

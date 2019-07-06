@@ -1,7 +1,7 @@
 import { gql } from "apollo-boost";
 
 const GET_EXTENSIONS = gql`
-  query Extensions($skip: String!) {
+  query Extensions($skip: Int!) {
     extensions(orderBy: updated, orderDirection: desc, first: 10, skip: $skip) {
       hash
       developer

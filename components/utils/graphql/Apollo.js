@@ -28,7 +28,7 @@ const Apollo = {
         variables: args
       });
 
-      return result.data;
+      return result.data.extensions;
     } catch (err) {
       throw new Error(err.message);
     }
