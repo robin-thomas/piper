@@ -5,7 +5,7 @@ contract Piper {
   address owner;
   string name;
 
-  struct Extension {
+  struct Extension_ {
     string hash;
     string developer;
     string developerETH;
@@ -23,20 +23,12 @@ contract Piper {
   }
 
   struct ExtensionWithOwner {
-    Extension extension;
+    Extension_ extension;
     address owner;
   }
 
   mapping(string => ExtensionWithOwner) extensions;
   mapping(string => bool) hasExtension;
-
-  struct ExtensionVersion {
-    string version;
-    string crx;
-    uint created;
-  }
-
-  mapping(string => ExtensionVersion[]) versions;
 
   constructor() public {
     owner = msg.sender;
@@ -47,11 +39,11 @@ contract Piper {
     return hasExtension[_hash] == true;
   }
 
-  event CreateNewExtensionEvent(string hash, ExtensionWithOwner extension);
-  event UpdateExtensionByHashEvent(string hash, ExtensionWithOwner extension);
-  event CreateNewExtensionVersionEvent(string hash, ExtensionVersion version);
+  event Extension(ExtensionWithOwner);
+  event ExtensionVersion(string hash, string version, string crx);
+  event ExtensionReview(string hash, string review, uint rating);
 
-  function createNewExtension(string memory _hash, Extension memory _extension) public returns(bool) {
+  function createNewExtension(string memory _hash, Extension_ memory _extension) public returns(bool) {
     // Creating a new extension.
     if (!isExtension(_hash)) {
       // Create new extension.
@@ -59,7 +51,7 @@ contract Piper {
       extensions[_hash].owner = msg.sender;
       hasExtension[_hash] = true;
 
-      emit CreateNewExtensionEvent(_hash, extensions[_hash]);
+      emit Extension(extensions[_hash]);
 
       return true;
     } else {
@@ -72,9 +64,7 @@ contract Piper {
       if (keccak256(bytes(_extension.crx)) != keccak256(bytes(extensions[_hash].extension.crx))) {
         require(keccak256(bytes(_extension.version)) != keccak256(bytes(extensions[_hash].extension.version)));
 
-        ExtensionVersion memory _extensionVersion = ExtensionVersion(_extension.version, _extension.crx, _extension.updated);
-        versions[_hash].push(_extensionVersion);
-
+        // Update the extension.
         extensions[_hash].extension.developer = _extension.developer;
         extensions[_hash].extension.developerETH = _extension.developerETH;
         extensions[_hash].extension.name = _extension.name;
@@ -83,8 +73,12 @@ contract Piper {
         extensions[_hash].extension.size = _extension.size;
         extensions[_hash].extension.iconURL = _extension.iconURL;
         extensions[_hash].extension.updated = _extension.updated;
+        extensions[_hash].extension.version = _extension.version;
+        extensions[_hash].extension.crx = _extension.crx;
+        extensions[_hash].owner = msg.sender;
 
-        emit CreateNewExtensionVersionEvent(_hash, _extensionVersion);
+        emit Extension(extensions[_hash]);
+        emit ExtensionVersion(_hash, _extension.version, _extension.crx);
 
         return true;
       }
@@ -100,10 +94,19 @@ contract Piper {
       extensions[_hash].extension.updated = _extension.updated;
       extensions[_hash].extension.version = _extension.version;
       extensions[_hash].extension.crx = _extension.crx;
+      extensions[_hash].owner = msg.sender;
 
-      emit UpdateExtensionByHashEvent(_hash, extensions[_hash]);
+      emit Extension(extensions[_hash]);
 
       return true;
     }
+  }
+
+  function addReview(string memory _hash, string memory _review, uint _rating) public returns(bool) {
+    require (isExtension(_hash));
+
+    emit ExtensionReview(_hash, _review, _rating);
+
+    return true;
   }
 }
