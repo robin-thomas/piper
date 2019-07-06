@@ -5,7 +5,8 @@ import config from "../../../config.json";
 import {
   GET_EXTENSIONS,
   GET_EXTENSION_VERSIONS,
-  GET_EXTENSION_REVIEWS
+  GET_EXTENSION_REVIEWS,
+  SEARCH_EXTENSIONS
 } from "./Query";
 
 const Apollo = {
@@ -49,6 +50,14 @@ const Apollo = {
   getExtensionReviews: async hash => {
     return await Apollo.execQuery(GET_EXTENSION_REVIEWS, {
       hash: hash
+    });
+  },
+
+  searchExtensions: async (category, name, rating) => {
+    return await Apollo.execQuery(SEARCH_EXTENSIONS, {
+      category: category,
+      name: name,
+      rating: rating
     });
   }
 };

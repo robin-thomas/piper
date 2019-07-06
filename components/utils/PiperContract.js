@@ -84,7 +84,9 @@ const PiperContract = {
         {
           from: accounts[0],
           to: contract.networks[config.network.network_id].address,
-          data: fnABI
+          data: fnABI,
+          gas: 8000000,
+          gasPrice: web3.utils.toHex(web3.utils.toWei("80", "Gwei"))
         }
       ]);
     } catch (err) {

@@ -9,28 +9,11 @@ const ExtensionDeveloperETH = props => (
     <Col md="auto">
       <DataConsumer>
         {ctx =>
-          ctx.editable === true ? (
-            <MDBInput
-              type="text"
-              valueDefault={
-                ctx.currExt && ctx.currExt.developerETH
-                  ? ctx.currExt.developerETH
-                  : ""
-              }
-              hint="Developer ETH address"
-              size="sm"
-              onChange={e =>
-                ctx.setCurrExt({ ...ctx.currExt, developerETH: e.target.value })
-              }
-              disabled={ctx.textDisabled}
-            />
-          ) : (
+          ctx.editable !== true ? (
             <Button
               variant="dark"
               href={`https://widget.kyber.network/v0.7.0/?type=pay&mode=tab&receiveAddr=${
-                ctx.currExt && ctx.currExt.developerETH
-                  ? ctx.currExt.developerETH
-                  : ""
+                ctx.currExt && ctx.currExt.owner ? ctx.currExt.owner : ""
               }&receiveToken=ETH&network=${
                 config.network.name
               }&lang=en&theme=theme-dark`}
@@ -39,7 +22,7 @@ const ExtensionDeveloperETH = props => (
             >
               Tip the Developer
             </Button>
-          )
+          ) : null
         }
       </DataConsumer>
     </Col>

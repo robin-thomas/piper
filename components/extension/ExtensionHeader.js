@@ -29,20 +29,13 @@ const ExtensionHeader = props => {
     // Update the last updated time.
     const updatedTime = moment()
       .local()
-      .valueOf();
+      .unix();
 
     // Get the extension object.
     let extension = { ...ctx.currExt };
     extension.updated = updatedTime;
     extension.category =
       extension.category === undefined ? "All" : extension.category;
-    extension.rating =
-      extension.rating === undefined ? 0 : parseInt(extension.rating);
-    extension.reviews =
-      extension.reviews === undefined ? 0 : parseInt(extension.reviews);
-    extension.downloads =
-      extension.downloads === undefined ? 0 : parseInt(extension.downloads);
-    extension.developerETH = "eth";
 
     // Validate this object.
     const { error } = Validator.validateExtension(extension, ctx.extension);
@@ -55,7 +48,8 @@ const ExtensionHeader = props => {
     if (_.isEmpty(extension.hash) || ctx.currExt.size !== ctx.extension.size) {
       try {
         const hash_ = await IPFS.uploadBuffer(ctx.currExt.crx);
-        extension.crx = `https://ipfs.infura.io/ipfs/${hash_}`;
+        // extension.crx = `https://ipfs.infura.io/ipfs/${hash_}`;
+        extension.crx = hash_;
 
         if (_.isEmpty(extension.hash)) {
           extension.hash = hash_;
@@ -67,13 +61,26 @@ const ExtensionHeader = props => {
       }
     }
 
+    // iconURL is updated.
+    if (/^data:.+\/(.+);base64,(.*)$/.test(extension.iconURL)) {
+      try {
+        extension.iconURL = await IPFS.uploadBuffer(
+          new Buffer(extension.iconURL.split(","), "base64")
+        );
+      } catch (err) {
+        console.log(err);
+
+        throw new Error("Failed to upload the extension icon!");
+      }
+    }
+
     console.log(extension);
     ctx.setCurrExt({ ...ctx.currExt, updated: updatedTime });
 
     // upload it to the contract.
     const { web3, portis, contract } = PiperContract.getWeb3(true);
     try {
-      const fn = contract.methods.createNewExtension(extension.hash, extension);
+      const fn = contract.methods.createNewExtension(extension);
       const txHash = await PiperContract.sendSignedTx(web3, portis, fn);
       console.log(txHash);
       const receipt = await PiperContract.getTransactionReceipt(web3, txHash);

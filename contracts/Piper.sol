@@ -2,111 +2,60 @@ pragma solidity >=0.5.0 <0.6.0;
 pragma experimental ABIEncoderV2;
 
 contract Piper {
-  address owner;
-  string name;
-
   struct Extension_ {
-    string hash;
-    string developer;
-    string developerETH;
-    string name;
-    string overview;
-    string category;
+    uint32 updated;
+    uint32 size;
     string version;
-    uint size;
-    string iconURL;
+    string category;
+    string name;
+    string hash;
     string crx;
-    uint8 rating;
-    uint reviews;
-    uint downloads;
-    uint updated;
+    string iconURL;
+    string developer;
+    string overview;
   }
 
-  struct ExtensionWithOwner {
-    Extension_ extension;
-    address owner;
-  }
-
-  mapping(string => ExtensionWithOwner) extensions;
+  mapping(string => string) versions;
+  mapping(string => address) developer;
   mapping(string => bool) hasExtension;
-
-  constructor() public {
-    owner = msg.sender;
-    name = "Piper";
-  }
 
   function isExtension(string memory _hash) public view returns(bool) {
     return hasExtension[_hash] == true;
   }
 
-  event Extension(ExtensionWithOwner);
+  event Extension(address, Extension_);
   event ExtensionVersion(string hash, string version, string crx);
-  event ExtensionReview(string hash, string review, uint rating);
+  event ExtensionReview(uint32 rating, string review, string hash);
 
-  function createNewExtension(string memory _hash, Extension_ memory _extension) public returns(bool) {
+  function createNewExtension(Extension_ memory _extension) public {
     // Creating a new extension.
-    if (!isExtension(_hash)) {
+    if (!isExtension(_extension.hash)) {
       // Create new extension.
-      extensions[_hash].extension = _extension;
-      extensions[_hash].owner = msg.sender;
-      hasExtension[_hash] = true;
+      versions[_extension.hash] = _extension.version;
+      developer[_extension.hash] = msg.sender;
+      hasExtension[_extension.hash] = true;
 
-      emit Extension(extensions[_hash]);
-
-      return true;
+      emit Extension(msg.sender, _extension);
     } else {
       // Updating the extension.
 
       // Check if extension owner is the one trying to edit it.
-      require(msg.sender == extensions[_hash].owner);
+      require(msg.sender == developer[_extension.hash]);
 
       // Check whether they are updating the version.
-      if (keccak256(bytes(_extension.crx)) != keccak256(bytes(extensions[_hash].extension.crx))) {
-        require(keccak256(bytes(_extension.version)) != keccak256(bytes(extensions[_hash].extension.version)));
+      if (keccak256(bytes(_extension.version)) != keccak256(bytes(versions[_extension.hash]))) {
+        versions[_extension.hash] = _extension.version;
 
-        // Update the extension.
-        extensions[_hash].extension.developer = _extension.developer;
-        extensions[_hash].extension.developerETH = _extension.developerETH;
-        extensions[_hash].extension.name = _extension.name;
-        extensions[_hash].extension.overview = _extension.overview;
-        extensions[_hash].extension.category = _extension.category;
-        extensions[_hash].extension.size = _extension.size;
-        extensions[_hash].extension.iconURL = _extension.iconURL;
-        extensions[_hash].extension.updated = _extension.updated;
-        extensions[_hash].extension.version = _extension.version;
-        extensions[_hash].extension.crx = _extension.crx;
-        extensions[_hash].owner = msg.sender;
-
-        emit Extension(extensions[_hash]);
-        emit ExtensionVersion(_hash, _extension.version, _extension.crx);
-
-        return true;
+        emit ExtensionVersion(_extension.hash, _extension.version, _extension.crx);
       }
 
-      // Update the extension.
-      extensions[_hash].extension.developer = _extension.developer;
-      extensions[_hash].extension.developerETH = _extension.developerETH;
-      extensions[_hash].extension.name = _extension.name;
-      extensions[_hash].extension.overview = _extension.overview;
-      extensions[_hash].extension.category = _extension.category;
-      extensions[_hash].extension.size = _extension.size;
-      extensions[_hash].extension.iconURL = _extension.iconURL;
-      extensions[_hash].extension.updated = _extension.updated;
-      extensions[_hash].extension.version = _extension.version;
-      extensions[_hash].extension.crx = _extension.crx;
-      extensions[_hash].owner = msg.sender;
-
-      emit Extension(extensions[_hash]);
-
-      return true;
+      emit Extension(msg.sender, _extension);
     }
   }
 
-  function addReview(string memory _hash, string memory _review, uint _rating) public returns(bool) {
+  function addReview(uint32 _rating, string memory _review, string memory _hash) public {
     require (isExtension(_hash));
 
-    emit ExtensionReview(_hash, _review, _rating);
-
-    return true;
+    emit ExtensionReview(_rating, _review, _hash);
   }
 }

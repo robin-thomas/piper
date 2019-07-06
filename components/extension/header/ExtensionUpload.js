@@ -56,6 +56,7 @@ const ExtensionUpload = props => {
                     name="myname"
                     type="file"
                     hidden
+                    accept=".crx"
                     onChange={e => uploadExtension(e, ctx)}
                   />
                   <SpinnerButton

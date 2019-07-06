@@ -33,7 +33,7 @@ const Content = props => (
     <EmptyRow cls="sidebar-search-bottom-border" />
     <Row>
       {props.extensions.map(extension => (
-        <Col md="4">
+        <Col md="3">
           <ExtensionList
             rating={extension.rating}
             iconURL={extension.iconURL}
