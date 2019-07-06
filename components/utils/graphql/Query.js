@@ -1,8 +1,8 @@
 import { gql } from "apollo-boost";
 
 const GET_EXTENSIONS = gql`
-  {
-    extensions(orderBy: updated, orderDirection: desc, first: 10) {
+  query Extensions($skip: String!) {
+    extensions(orderBy: updated, orderDirection: desc, first: 10, skip: $skip) {
       hash
       developer
       developerETH
@@ -22,7 +22,7 @@ const GET_EXTENSIONS = gql`
 `;
 
 const GET_EXTENSION_VERSIONS = gql`
-  {
+  query ExtensionVersions($hash: String!) {
     extensionVersions(where: { hash: $hash }) {
       hash
       version
@@ -32,7 +32,7 @@ const GET_EXTENSION_VERSIONS = gql`
 `;
 
 const GET_EXTENSION_REVIEWS = gql`
-  {
+  query ExtensionReviews($hash: String!) {
     extensionReviews(where: { hash: $hash }) {
       hash
       version

@@ -50,7 +50,7 @@ const Index = props => {
   );
 };
 
-Index.getInitialProps = async function({ query: { hash } }) {
+Index.getInitialProps = async ({ query: { hash } }) => {
   // Create a new extension.
   let extension = {
     hash: hash

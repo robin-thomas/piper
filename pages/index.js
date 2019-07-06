@@ -1,11 +1,12 @@
 import { Container, Row, Col } from "react-bootstrap";
 
-import GlobalHead from "../components/utils/GlobalHead";
+import Content from "../components/Content";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import Content from "../components/Content";
+import GlobalHead from "../components/utils/GlobalHead";
+import Apollo from "../components/utils/graphql/Apollo";
 
-export default () => (
+const Index = ({ extensions }) => (
   <div>
     <GlobalHead title="Piper | Decentralized Chromium web store" />
     <Header />
@@ -15,9 +16,27 @@ export default () => (
           <Sidebar />
         </Col>
         <Col>
-          <Content />
+          <Content extensions={extensions} />
         </Col>
       </Row>
     </Container>
   </div>
 );
+
+Index.getInitialProps = async () => {
+  let extensions = [];
+
+  try {
+    extensions = await Apollo.getExtensionList();
+    console.log(extensions);
+  } catch (err) {
+    console.log(err);
+    extensions = [];
+  }
+
+  return {
+    extensions: extensions
+  };
+};
+
+export default Index;

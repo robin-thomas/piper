@@ -1,4 +1,5 @@
 import ApolloClient from "apollo-boost";
+import "cross-fetch/polyfill";
 
 import config from "../../../config.json";
 import {
@@ -20,21 +21,34 @@ const Apollo = {
     return Apollo.client;
   },
 
-  getExtensionList: async () => {
-    return Apollo.getClient().query({
-      query: GET_EXTENSIONS
+  execQuery: async (query, args = {}) => {
+    try {
+      const result = await Apollo.getClient().query({
+        query: query,
+        variables: args
+      });
+
+      return result.data;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  },
+
+  getExtensionList: async (skip = 0) => {
+    return await Apollo.execQuery(GET_EXTENSIONS, {
+      skip: skip
     });
   },
 
-  getExtensionVersions: async () => {
-    return Apollo.getClient().query({
-      query: GET_EXTENSION_VERSIONS
+  getExtensionVersions: async hash => {
+    return await Apollo.execQuery(GET_EXTENSION_VERSIONS, {
+      hash: hash
     });
   },
 
-  getExtensionReviews: async () => {
-    return Apollo.getClient().query({
-      query: GET_EXTENSION_REVIEWS
+  getExtensionReviews: async hash => {
+    return await Apollo.execQuery(GET_EXTENSION_REVIEWS, {
+      hash: hash
     });
   }
 };
