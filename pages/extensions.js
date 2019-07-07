@@ -38,16 +38,16 @@ const Index = props => {
     }
   };
 
-  useEffect(() => selectPage(props.hash, ctx, props.extension, props.owner), [
-    ctx.address,
-    props.hash
-  ]);
+  useEffect(
+    () => selectPage(props.extension.hash, ctx, props.extension, props.owner),
+    [ctx.address, props.extension.hash]
+  );
 
   return (
     <div>
       <GlobalHead title="Piper | Decentralized Chromium web store" />
       <Header />
-      <Extension hash={props.hash} />
+      <Extension hash={props.extension.hash} />
     </div>
   );
 };
