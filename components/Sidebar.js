@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { MDBInput } from "mdbreact";
 import { Container, Row, Col } from "react-bootstrap";
 
+import SidebarAbout from "./sidebar/SidebarAbout";
 import SidebarCategory from "./sidebar/SidebarCategory";
 import SidebarRating from "./sidebar/SidebarRating";
 import SidebarSearch from "./sidebar/SidebarSearch";
@@ -66,11 +67,7 @@ const Sidebar = props => {
         <Col>&nbsp;</Col>
       </Row>
       <SidebarLine />
-      <Row>
-        <Col>
-          <span className="sidebar-link">About Piper</span>
-        </Col>
-      </Row>
+      <SidebarAbout />
       <style jsx global>{`
         .sidebar {
           background: #f5f5f5;
@@ -99,22 +96,6 @@ const Sidebar = props => {
           width: 17px;
           margin-right: 10px;
           margin-top: -3px;
-        }
-
-        .sidebar-link {
-          letter-spacing: 0.01785714em;
-          font-size: 0.875rem;
-          font-weight: 500;
-          line-height: 1.25rem;
-          color: #80868b;
-          display: block;
-          margin: 0 0 16px 0;
-          text-decoration: none;
-          cursor: pointer;
-        }
-
-        .sidebar-link:hover {
-          color: #1a73e8;
         }
       `}</style>
     </Container>
