@@ -1,10 +1,6 @@
 import { Row, Col } from "react-bootstrap";
 
-const EmptyRow = () => (
-  <Row>
-    <Col>&nbsp;</Col>
-  </Row>
-);
+import EmptyRow from "../utils/EmptyRow";
 
 const SidebarTitle = ({ title, clear, onClearClick }) => (
   <div>

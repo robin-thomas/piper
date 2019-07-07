@@ -47,7 +47,7 @@ const Index = props => {
     <div>
       <GlobalHead title="Piper | Decentralized Chromium web store" />
       <Header />
-      <Extension />
+      <Extension hash={props.hash} />
     </div>
   );
 };
@@ -71,13 +71,16 @@ Index.getInitialProps = async ({ query: { hash } }) => {
           extension = { extension: { ..._ext }, owner: _ext.owner };
         }
       } catch (err) {
-        extension = await PiperContract.methods.getExtensionByHash(hash).call();
+        const _ext = await Apollo.getExtensionByHash(hash);
+
+        extension = { extension: { ..._ext }, owner: _ext.owner };
 
         if (extension === null) {
           throw new Error(`Extension ${hash} cannot be found`);
         }
 
-        // TODO: put it in the cache.
+        // Put it into cache.
+        Cache.put(hash, extension.extension, extension.owner);
       }
     } catch (err) {
       extension = {

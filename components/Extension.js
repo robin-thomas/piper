@@ -1,19 +1,60 @@
-import { Container } from "react-bootstrap";
+import { Container, Tab, Row, Col, Nav } from "react-bootstrap";
 
 import ExtensionHeader from "./extension/ExtensionHeader";
 import ExtensionDetails from "./extension/ExtensionDetails";
 import ExtensionImageSlider from "./extension/ExtensionImageSlider";
+import ExtensionReviews from "./extension/ExtensionReviews";
 
-const Extension = () => (
+import EmptyRow from "./utils/EmptyRow";
+
+const Extension = ({ hash }) => (
   <Container>
     <ExtensionHeader />
-    <ExtensionImageSlider
-      images={[
-        "https://lh3.googleusercontent.com/YemW9Jy9G0HvL3XcdvR5UcFbULGXS1n4QTf2BjROzdXvqjPnycrZeMVy59kkh-3NpQkljlPyiA=w640-h400-e365",
-        "https://lh3.googleusercontent.com/AREyFzev3wVPpGJf0edj0HBFGRD7lj_XVw35c1jZ0JdPATsjrx0XXKaibJMAchPJJzdueJIYHA=w640-h400-e365"
-      ]}
-    />
-    <ExtensionDetails />
+    <EmptyRow />
+    {hash === "new" ? (
+      <div>
+        <ExtensionImageSlider
+          images={[
+            "https://lh3.googleusercontent.com/YemW9Jy9G0HvL3XcdvR5UcFbULGXS1n4QTf2BjROzdXvqjPnycrZeMVy59kkh-3NpQkljlPyiA=w640-h400-e365",
+            "https://lh3.googleusercontent.com/AREyFzev3wVPpGJf0edj0HBFGRD7lj_XVw35c1jZ0JdPATsjrx0XXKaibJMAchPJJzdueJIYHA=w640-h400-e365"
+          ]}
+        />
+        <ExtensionDetails />
+      </div>
+    ) : (
+      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Row>
+          <Col md="4" className="text-center mx-auto">
+            <Nav fill className="justify-content-center" variant="tabs">
+              <Nav.Item>
+                <Nav.Link eventKey="first">Overview</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="second">Reviews</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Tab.Content>
+              <Tab.Pane eventKey="first">
+                <ExtensionImageSlider
+                  images={[
+                    "https://lh3.googleusercontent.com/YemW9Jy9G0HvL3XcdvR5UcFbULGXS1n4QTf2BjROzdXvqjPnycrZeMVy59kkh-3NpQkljlPyiA=w640-h400-e365",
+                    "https://lh3.googleusercontent.com/AREyFzev3wVPpGJf0edj0HBFGRD7lj_XVw35c1jZ0JdPATsjrx0XXKaibJMAchPJJzdueJIYHA=w640-h400-e365"
+                  ]}
+                />
+                <ExtensionDetails />
+              </Tab.Pane>
+              <Tab.Pane eventKey="second">
+                <ExtensionReviews hash={hash} />
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
+    )}
   </Container>
 );
 
