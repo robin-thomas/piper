@@ -6,7 +6,8 @@ import {
   GET_EXTENSIONS,
   GET_EXTENSION_VERSIONS,
   GET_EXTENSION_REVIEWS,
-  SEARCH_EXTENSIONS
+  SEARCH_EXTENSIONS,
+  GET_EXTENSIONS_BY_HASH
 } from "./Query";
 
 const Apollo = {
@@ -81,11 +82,43 @@ const Apollo = {
     });
   },
 
-  searchExtensions: async (category, name, rating) => {
+  searchExtensions: async ({ category, text, rating }, skip = 0) => {
+    try {
+      let result = await Apollo.getClient().query({
+        query: SEARCH_EXTENSIONS,
+        variables: {
+          category: category,
+          name: text,
+          rating: rating
+        }
+      });
+
+      let hashes = [];
+      const ext = result.data.extensions
+        .filter(e => e.hash !== undefined)
+        .map(e => e.hash);
+      if (rating > 0) {
+        const extR = result.data.extensionReviews
+          .filter(e => e.hash !== undefined)
+          .map(e => e.hash);
+        hashes = ext.filter(val => extR.includes(val));
+      } else {
+        hashes = ext;
+      }
+
+      if (hashes.length > 0) {
+        return await Apollo.execQuery(GET_EXTENSIONS_BY_HASH, {
+          hash: hashes
+        });
+      }
+
+      return [];
+    } catch (err) {
+      throw new Error(err.message);
+    }
+
     return await Apollo.execQuery(SEARCH_EXTENSIONS, {
-      category: category,
-      name: name,
-      rating: rating
+      skip: skip
     });
   }
 };

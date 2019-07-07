@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-import { Row, Col } from "react-bootstrap";
 import { MDBInput } from "mdbreact";
-
+import { Row, Col } from "react-bootstrap";
 import StarRatings from "react-star-ratings";
 
 import SidebarTitle from "./SidebarTitle";
+import { DataConsumer } from "../utils/DataProvider";
 
 const SidebarRatingItem = ({ rating, currentRating, onUpdate }) => (
   <Row className="sidebar-ratings-radio-button">
@@ -56,42 +56,60 @@ const SidebarRatingItem = ({ rating, currentRating, onUpdate }) => (
   </Row>
 );
 
-const SidebarRating = props => {
-  const [rating_, setRating] = useState(0);
+const SidebarRating = ({ onChange }) => {
+  const submit = (val, ctx) => {
+    const search = { ...ctx.search, rating: val };
+    ctx.setSearch(search);
+    onChange(search);
+  };
 
   return (
-    <div>
-      <SidebarTitle
-        title="Ratings"
-        clear={rating_ > 0 ? true : false}
-        onClearClick={() => setRating(0)}
-      />
-      <SidebarRatingItem
-        rating={5}
-        currentRating={rating_}
-        onUpdate={setRating}
-      />
-      <SidebarRatingItem
-        rating={4}
-        currentRating={rating_}
-        onUpdate={setRating}
-      />
-      <SidebarRatingItem
-        rating={3}
-        currentRating={rating_}
-        onUpdate={setRating}
-      />
-      <SidebarRatingItem
-        rating={2}
-        currentRating={rating_}
-        onUpdate={setRating}
-      />
-      <SidebarRatingItem
-        rating={1}
-        currentRating={rating_}
-        onUpdate={setRating}
-      />
-    </div>
+    <DataConsumer>
+      {ctx => (
+        <div>
+          <SidebarTitle
+            title="Ratings"
+            clear={ctx.search && ctx.search.rating > 0 ? true : false}
+            onClearClick={() => submit(0, ctx)}
+          />
+          <SidebarRatingItem
+            rating={5}
+            currentRating={
+              ctx.search && ctx.search.rating ? ctx.search.rating : 0
+            }
+            onUpdate={() => submit(5, ctx)}
+          />
+          <SidebarRatingItem
+            rating={4}
+            currentRating={
+              ctx.search && ctx.search.rating ? ctx.search.rating : 0
+            }
+            onUpdate={() => submit(4, ctx)}
+          />
+          <SidebarRatingItem
+            rating={3}
+            currentRating={
+              ctx.search && ctx.search.rating ? ctx.search.rating : 0
+            }
+            onUpdate={() => submit(3, ctx)}
+          />
+          <SidebarRatingItem
+            rating={2}
+            currentRating={
+              ctx.search && ctx.search.rating ? ctx.search.rating : 0
+            }
+            onUpdate={() => submit(2, ctx)}
+          />
+          <SidebarRatingItem
+            rating={1}
+            currentRating={
+              ctx.search && ctx.search.rating ? ctx.search.rating : 0
+            }
+            onUpdate={() => submit(1, ctx)}
+          />
+        </div>
+      )}
+    </DataConsumer>
   );
 };
 

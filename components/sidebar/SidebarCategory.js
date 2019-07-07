@@ -1,10 +1,10 @@
-import { useState, useImperativeHandle } from "react";
+import { useState } from "react";
 
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
-const SidebarCategory = () => {
-  const [category_, setCategory] = useState("All");
+import { DataConsumer } from "../utils/DataProvider";
 
+const SidebarCategory = ({ onChange }) => {
   const categories = [
     "All",
     "Accessibility",
@@ -20,25 +20,40 @@ const SidebarCategory = () => {
     "Sports"
   ];
 
-  const updateCategory = e => {
+  const updateCategory = (e, ctx) => {
     e.preventDefault();
 
-    setCategory(e.target.innerHTML.replace(/&amp;/g, "&"));
+    const category = e.target.innerHTML.replace(/&amp;/g, "&");
+    const search = { ...ctx.search, category: category };
+    ctx.setSearch(search);
+
+    onChange(search);
   };
 
   return (
     <div>
-      <DropdownButton
-        className="sidebar-category-dropdown"
-        variant="outline-dark"
-        title={category_}
-      >
-        {categories.map(category => (
-          <Dropdown.Item key={category} onClick={updateCategory}>
-            {category}
-          </Dropdown.Item>
-        ))}
-      </DropdownButton>
+      <DataConsumer>
+        {ctx => (
+          <DropdownButton
+            className="sidebar-category-dropdown"
+            variant="outline-dark"
+            title={
+              ctx.search && ctx.search.category
+                ? ctx.search.category
+                : categories[0]
+            }
+          >
+            {categories.map(category => (
+              <Dropdown.Item
+                key={category}
+                onClick={e => updateCategory(e, ctx)}
+              >
+                {category}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
+        )}
+      </DataConsumer>
       <style jsx global>{`
         .sidebar-category-dropdown > button {
           width: 100%;

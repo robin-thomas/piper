@@ -35,6 +35,7 @@ contract Piper {
       hasExtension[_extension.hash] = true;
 
       emit Extension(msg.sender, _extension);
+      emit ExtensionVersion(_extension.hash, _extension.version, _extension.crx);
     } else {
       // Updating the extension.
 

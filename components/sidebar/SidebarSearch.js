@@ -1,25 +1,46 @@
 import { MDBInput } from "mdbreact";
 
-const SidebarSearch = props => (
-  <div>
-    <MDBInput
-      containerClass="sidebar-search-item"
-      label="Search"
-      outline
-      size="md"
-    />
-    <style jsx global>{`
-      .sidebar-search-item {
-        background: #e8eaed;
-        margin-bottom: 0 !important;
-        margin-top: 0 !important;
-      }
+import { DataConsumer } from "../utils/DataProvider";
 
-      .sidebar-search-item label.active {
-        background: #e8eaed !important;
-      }
-    `}</style>
-  </div>
-);
+const SidebarSearch = ({ onChange }) => {
+  const onInput = (e, ctx) => {
+    ctx.setSearch({ ...ctx.search, text: e.target.value });
+  };
+
+  const submit = (e, ctx) => {
+    e.preventDefault();
+    onChange(ctx.search);
+  };
+
+  return (
+    <div>
+      <DataConsumer>
+        {ctx => (
+          <form onSubmit={e => submit(e, ctx)}>
+            <MDBInput
+              containerClass="sidebar-search-item"
+              label="Search"
+              outline
+              size="md"
+              value={ctx.search && ctx.search.text ? ctx.search.text : ""}
+              onInput={e => onInput(e, ctx)}
+            />
+          </form>
+        )}
+      </DataConsumer>
+      <style jsx global>{`
+        .sidebar-search-item {
+          background: #e8eaed;
+          margin-bottom: 0 !important;
+          margin-top: 0 !important;
+        }
+
+        .sidebar-search-item label.active {
+          background: #e8eaed !important;
+        }
+      `}</style>
+    </div>
+  );
+};
 
 export default SidebarSearch;

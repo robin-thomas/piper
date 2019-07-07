@@ -66,30 +66,23 @@ const GET_EXTENSION_REVIEWS = gql`
 `;
 
 const SEARCH_EXTENSIONS = gql`
-  query SearchExtensions(
-    $skip: Int!
-    $rating: Int!
-    $category: String!
-    $name: String
-  ) {
-    extensions(
-      orderBy: updated
-      orderDirection: desc
-      first: 10
-      skip: $skip
-      where: {
-        rating_gte: $rating
-        category: $category
-        name_starts_with: $name
-      }
-    ) {
+  query SearchExtensions($rating: Int!, $category: String!, $name: String!) {
+    extensions(where: { name_starts_with: $name, category: $category }) {
+      hash
+    }
+
+    extensionReviews(where: { rating_gte: $rating }) {
+      hash
+    }
+  }
+`;
+
+const GET_EXTENSIONS_BY_HASH = gql`
+  query Extension($hash: [String!]!) {
+    extensions(where: { hash_in: $hash }) {
       hash
       developer
-      developerETH
       iconURL
-      rating
-      reviews
-      downloads
       category
       version
       crx
@@ -97,6 +90,7 @@ const SEARCH_EXTENSIONS = gql`
       updated
       size
       owner
+      name
     }
   }
 `;
@@ -107,3 +101,4 @@ export { GET_EXTENSIONS };
 export { GET_EXTENSION_VERSIONS };
 export { GET_EXTENSION_REVIEWS };
 export { SEARCH_EXTENSIONS };
+export { GET_EXTENSIONS_BY_HASH };
