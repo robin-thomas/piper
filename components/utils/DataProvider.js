@@ -14,6 +14,7 @@ const DataProvider = props => {
   const [extUploadProgress, setExtUploadProgress] = useState(0);
   const [textDisabled, setTextDisabled] = useState(false);
   const [search, setSearch] = useState(null);
+  const [extensions, setExtensions] = useState([]);
 
   return (
     <DataContext.Provider
@@ -39,7 +40,9 @@ const DataProvider = props => {
         textDisabled,
         setTextDisabled,
         search,
-        setSearch
+        setSearch,
+        extensions,
+        setExtensions
       }}
     >
       {props.children}

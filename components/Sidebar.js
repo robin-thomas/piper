@@ -1,3 +1,5 @@
+import { useContext } from "react";
+
 import { MDBInput } from "mdbreact";
 import { Container, Row, Col } from "react-bootstrap";
 
@@ -6,6 +8,7 @@ import SidebarRating from "./sidebar/SidebarRating";
 import SidebarSearch from "./sidebar/SidebarSearch";
 import SidebarTitle from "./sidebar/SidebarTitle";
 
+import { DataContext } from "./utils/DataProvider";
 import Apollo from "./utils/graphql/Apollo";
 
 const SidebarLine = () => (
@@ -22,12 +25,18 @@ const SidebarLine = () => (
 );
 
 const Sidebar = props => {
+  const ctx = useContext(DataContext);
+
   const search = args => {
     args.text = args.text !== undefined ? args.text : "";
     args.category = args.category !== undefined ? args.category : "All";
     args.rating = args.rating !== undefined ? args.rating : 0;
 
-    Apollo.searchExtensions(args).then(console.log);
+    ctx.setExtensions(null);
+
+    Apollo.searchExtensions(args).then(extensions => {
+      ctx.setExtensions(extensions);
+    });
   };
 
   return (

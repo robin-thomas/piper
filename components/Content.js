@@ -34,18 +34,65 @@ const Content = props => (
     />
     <EmptyRow cls="sidebar-search-bottom-border" />
     <EmptyRow />
-    <Row>
-      {props.extensions.map(extension => (
-        <Col md="3" key={extension.hash}>
-          <ExtensionList
-            name={extension.name}
-            rating={extension.rating}
-            iconURL={extension.iconURL}
-            hash={extension.hash}
-          />
+    {props.extensions === null ? (
+      <Row style={{ height: "350px" }}>
+        <Col className="align-self-center text-center mx-auto" md="4">
+          <div>
+            <img
+              src="/static/images/loading.svg"
+              style={{ width: "150px", marginBottom: "20px" }}
+            />
+          </div>
         </Col>
-      ))}
-    </Row>
+      </Row>
+    ) : props.extensions.length === 0 ? (
+      <Row style={{ height: "350px" }}>
+        <Col
+          className="content-extensions-empty-col align-self-center text-center mx-auto"
+          md="4"
+        >
+          <div>
+            <img
+              src="/static/images/search.svg"
+              style={{ width: "50px", marginBottom: "20px" }}
+            />
+            <p className="content-extensions-empty">No Results Found</p>
+            <p>
+              <i>
+                We searched far and wide and couldnt find any <b>extensions</b>{" "}
+                matching your search
+              </i>
+            </p>
+          </div>
+        </Col>
+      </Row>
+    ) : (
+      <Row>
+        {props.extensions.map(extension => (
+          <Col md="3" key={extension.hash}>
+            <ExtensionList
+              name={extension.name}
+              rating={extension.rating}
+              iconURL={extension.iconURL}
+              hash={extension.hash}
+            />
+          </Col>
+        ))}
+      </Row>
+    )}
+    <style jsx global>{`
+      .content-extensions-empty-col {
+        border: 10px solid black;
+        border-radius: 100%;
+        padding: 20px;
+      }
+
+      .content-extensions-empty {
+        font-size: 18px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+    `}</style>
   </Container>
 );
 
