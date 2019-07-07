@@ -2,6 +2,7 @@ import Router from "next/router";
 
 import _ from "lodash";
 import moment from "moment";
+import fetch from "node-fetch";
 import { Row, Col, Button } from "react-bootstrap";
 
 import ExtensionCategory from "./header/ExtensionCategory";
@@ -64,9 +65,9 @@ const ExtensionHeader = props => {
     // iconURL is updated.
     if (/^data:.+\/(.+);base64,(.*)$/.test(extension.iconURL)) {
       try {
-        extension.iconURL = await IPFS.uploadBuffer(
-          new Buffer(extension.iconURL.split(","), "base64")
-        );
+        const blob = await (await fetch(extension.iconURL)).blob();
+        const buffer = await new Response(blob).arrayBuffer();
+        extension.iconURL = await IPFS.uploadBuffer(new Buffer(buffer));
       } catch (err) {
         console.log(err);
 
@@ -75,7 +76,6 @@ const ExtensionHeader = props => {
     }
 
     console.log(extension);
-    ctx.setCurrExt({ ...ctx.currExt, updated: updatedTime });
 
     // upload it to the contract.
     const { web3, portis, contract } = PiperContract.getWeb3(true);
@@ -91,6 +91,7 @@ const ExtensionHeader = props => {
       throw new Error("Failed to update the extension!");
     }
 
+    ctx.setCurrExt({ ...ctx.currExt, updated: updatedTime });
     Cache.set(extension.hash, extension, ctx.address);
 
     return {

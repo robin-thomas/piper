@@ -22,6 +22,14 @@ const ExtensionIcon = props => {
     r.readAsDataURL(file);
   };
 
+  const getExtensionIcon = iconURL => {
+    if (/^data:.+\/(.+);base64,(.*)$/.test(iconURL)) {
+      return iconURL;
+    } else {
+      return `https://ipfs.infura.io/ipfs/${iconURL}`;
+    }
+  };
+
   return (
     <div>
       <Row>
@@ -32,7 +40,7 @@ const ExtensionIcon = props => {
                 className="extension-header-icon"
                 src={
                   ctx.currExt && ctx.currExt.iconURL
-                    ? ctx.currExt.iconURL
+                    ? getExtensionIcon(ctx.currExt.iconURL)
                     : "/static/images/camera.svg"
                 }
                 title="Extension Icon"

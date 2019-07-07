@@ -2,7 +2,7 @@ pragma solidity >=0.5.0 <0.6.0;
 pragma experimental ABIEncoderV2;
 
 contract Piper {
-  struct Extension_ {
+  struct Ext {
     uint32 updated;
     uint32 size;
     string version;
@@ -16,23 +16,22 @@ contract Piper {
   }
 
   mapping(string => string) versions;
-  mapping(string => address) developer;
+  mapping(string => address) owner;
   mapping(string => bool) hasExtension;
 
   function isExtension(string memory _hash) public view returns(bool) {
     return hasExtension[_hash] == true;
   }
 
-  event Extension(address, Extension_);
+  event Extension(address owner, Ext extension);
   event ExtensionVersion(string hash, string version, string crx);
-  event ExtensionReview(uint32 rating, string review, string hash);
+  event ExtensionReview(string hash, uint32 rating, string review);
 
-  function createNewExtension(Extension_ memory _extension) public {
-    // Creating a new extension.
+  function createNewExtension(Ext memory _extension) public {
     if (!isExtension(_extension.hash)) {
       // Create new extension.
       versions[_extension.hash] = _extension.version;
-      developer[_extension.hash] = msg.sender;
+      owner[_extension.hash] = msg.sender;
       hasExtension[_extension.hash] = true;
 
       emit Extension(msg.sender, _extension);
@@ -40,7 +39,7 @@ contract Piper {
       // Updating the extension.
 
       // Check if extension owner is the one trying to edit it.
-      require(msg.sender == developer[_extension.hash]);
+      require(msg.sender == owner[_extension.hash]);
 
       // Check whether they are updating the version.
       if (keccak256(bytes(_extension.version)) != keccak256(bytes(versions[_extension.hash]))) {
@@ -53,9 +52,9 @@ contract Piper {
     }
   }
 
-  function addReview(uint32 _rating, string memory _review, string memory _hash) public {
+  function addReview(string memory _hash, uint32 _rating, string memory _review) public {
     require (isExtension(_hash));
 
-    emit ExtensionReview(_rating, _review, _hash);
+    emit ExtensionReview(_hash, _rating, _review);
   }
 }
