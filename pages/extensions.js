@@ -39,6 +39,7 @@ const Index = props => {
   };
 
   useEffect(() => selectPage(props.hash, ctx, props.extension, props.owner), [
+    ctx.address,
     props.hash
   ]);
 
