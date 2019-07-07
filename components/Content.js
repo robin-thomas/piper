@@ -2,10 +2,12 @@ import Link from "next/link";
 
 import { Container, Row, Col } from "react-bootstrap";
 
+import ExtensionList from "./content/ExtensionList";
+import ExtensionImageSlider from "./extension/ExtensionImageSlider";
+
 import { DataConsumer } from "./utils/DataProvider";
 import EmptyRow from "./utils/EmptyRow";
 import SpinnerButton from "./utils/SpinnerButton";
-import ExtensionImageSlider from "./extension/ExtensionImageSlider";
 
 const Content = props => (
   <Container fluid="true" style={{ padding: "0" }}>
@@ -31,10 +33,12 @@ const Content = props => (
       ]}
     />
     <EmptyRow cls="sidebar-search-bottom-border" />
+    <EmptyRow />
     <Row>
       {props.extensions.map(extension => (
-        <Col md="3">
+        <Col md="3" key={extension.hash}>
           <ExtensionList
+            name={extension.name}
             rating={extension.rating}
             iconURL={extension.iconURL}
             hash={extension.hash}

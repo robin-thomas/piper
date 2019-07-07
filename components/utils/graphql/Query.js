@@ -5,11 +5,7 @@ const GET_EXTENSIONS = gql`
     extensions(orderBy: updated, orderDirection: desc, first: 10, skip: $skip) {
       hash
       developer
-      developerETH
       iconURL
-      rating
-      reviews
-      downloads
       category
       version
       crx
@@ -17,6 +13,7 @@ const GET_EXTENSIONS = gql`
       updated
       size
       owner
+      name
     }
   }
 `;
@@ -35,8 +32,8 @@ const GET_EXTENSION_REVIEWS = gql`
   query ExtensionReviews($hash: String!) {
     extensionReviews(where: { hash: $hash }) {
       hash
-      version
-      crx
+      rating
+      reviews
     }
   }
 `;

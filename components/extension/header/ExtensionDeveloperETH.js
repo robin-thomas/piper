@@ -9,14 +9,10 @@ const ExtensionDeveloperETH = props => (
     <Col md="auto">
       <DataConsumer>
         {ctx =>
-          ctx.editable !== true ? (
+          ctx.editable !== true && ctx.currExt && ctx.currExt.owner ? (
             <Button
               variant="dark"
-              href={`https://widget.kyber.network/v0.7.0/?type=pay&mode=tab&receiveAddr=${
-                ctx.currExt && ctx.currExt.owner ? ctx.currExt.owner : ""
-              }&receiveToken=ETH&network=${
-                config.network.name
-              }&lang=en&theme=theme-dark`}
+              href={`https://widget.kyber.network/v0.7.0/?type=pay&mode=tab&receiveAddr=${ctx.currExt.owner}&receiveToken=ETH&network=${config.network.name}&lang=en&theme=theme-dark`}
               target="_blank"
               size="sm"
             >
