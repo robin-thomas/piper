@@ -26,6 +26,34 @@ import TextInput from "../utils/TextInput";
 import Validator from "../utils/Validator";
 
 const ExtensionHeader = props => {
+  const getChromeVersion = () => {
+    const version = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+    return version ? parseInt(version[2], 10) : 0;
+  };
+
+  const downloadExtension = async ctx => {
+    const url = `https://ipfs.infura.io/ipfs/${ctx.currExt.crx}`;
+    const data = await (await fetch(url)).arrayBuffer();
+
+    const a = document.createElement("a");
+    a.download = "piper.crx";
+    a.style.display = "none";
+
+    if (getChromeVersion() >= 75) {
+      a.href = window.URL.createObjectURL(
+        new Blob([data], { type: "application/octet-stream" })
+      );
+    } else {
+      a.href = window.URL.createObjectURL(
+        new Blob([data], { type: "application/x-chrome-extension" })
+      );
+    }
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   const save = async ctx => {
     // Update the last updated time.
     const updatedTime = moment()
@@ -192,15 +220,34 @@ const ExtensionHeader = props => {
                       </Row>
                     </div>
                   ) : ctx.authorEditable === true ? (
-                    <Button
-                      variant="success"
-                      onClick={() => ctx.setEditable(true)}
-                      disabled={ctx.textDisabled}
-                    >
-                      Edit
-                    </Button>
+                    <div>
+                      <Row>
+                        <Col>
+                          <Button
+                            variant="success"
+                            onClick={() => ctx.setEditable(true)}
+                            disabled={ctx.textDisabled}
+                          >
+                            Edit
+                          </Button>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <SpinnerButton
+                            variant="dark"
+                            onClick={() => downloadExtension(ctx)}
+                            text="Add to Chrome"
+                          />
+                        </Col>
+                      </Row>
+                    </div>
                   ) : (
-                    <Button variant="dark">Add to Chrome</Button>
+                    <SpinnerButton
+                      variant="dark"
+                      onClick={() => downloadExtension(ctx)}
+                      text="Add to Chrome"
+                    />
                   )
                 }
               </DataConsumer>

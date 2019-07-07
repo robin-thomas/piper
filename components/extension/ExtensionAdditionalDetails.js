@@ -10,7 +10,7 @@ const AdditionalDetails = ({ name, value }) => {
     // TODO: figure out why its called so much.
     switch (name) {
       case "updated":
-        return Formatter.formatDate(data);
+        return Formatter.formatDate(1000 * data);
         break;
 
       case "size":

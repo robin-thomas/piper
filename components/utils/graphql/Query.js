@@ -1,5 +1,32 @@
 import { gql } from "apollo-boost";
 
+const IS_EXTENSION_UPDATED = gql`
+  query Extension($hash: String!) {
+    extension(hash: $hash) {
+      hash
+      updated
+    }
+  }
+`;
+
+const GET_EXTENSION_BY_HASH = gql`
+  query Extension($hash: String!) {
+    extension(hash: $hash) {
+      hash
+      developer
+      iconURL
+      category
+      version
+      crx
+      overview
+      updated
+      size
+      owner
+      name
+    }
+  }
+`;
+
 const GET_EXTENSIONS = gql`
   query Extensions($skip: Int!) {
     extensions(orderBy: updated, orderDirection: desc, first: 10, skip: $skip) {
@@ -74,6 +101,8 @@ const SEARCH_EXTENSIONS = gql`
   }
 `;
 
+export { IS_EXTENSION_UPDATED };
+export { GET_EXTENSION_BY_HASH };
 export { GET_EXTENSIONS };
 export { GET_EXTENSION_VERSIONS };
 export { GET_EXTENSION_REVIEWS };

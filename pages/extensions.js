@@ -4,9 +4,11 @@ import { useContext, useEffect } from "react";
 
 import Extension from "../components/Extension";
 import Header from "../components/Header";
+
 import Cache from "../components/utils/Cache";
 import { DataContext } from "../components/utils/DataProvider";
 import GlobalHead from "../components/utils/GlobalHead";
+import Apollo from "../components/utils/graphql/Apollo";
 
 const Index = props => {
   if (props.err) {
@@ -25,15 +27,14 @@ const Index = props => {
       ctx.setAuthorEditable(true);
       ctx.setEditable(false);
 
-      ctx.setExtension({ ...extension });
-      ctx.setCurrExt({ ...extension });
+      ctx.setExtension({ ...extension, owner: owner });
+      ctx.setCurrExt({ ...extension, owner: owner });
     } else {
       ctx.setNewExt(false);
       ctx.setAuthorEditable(false);
       ctx.setEditable(false);
 
-      ctx.setCurrExt({ ...extension });
-      ctx.setExtension({ ...extension });
+      ctx.setCurrExt({ ...extension, owner: owner });
     }
   };
 
@@ -59,14 +60,23 @@ Index.getInitialProps = async ({ query: { hash } }) => {
   if (hash !== "new") {
     try {
       try {
-        // Load from the cache.
-        extension = Cache.get(hash);
+        const isUpdated = await Apollo.isExtensionUpdated(hash);
+        if (!isUpdated) {
+          // Load from the cache.
+          extension = Cache.get(hash);
+        } else {
+          const _ext = await Apollo.getExtensionByHash(hash);
+
+          extension = { extension: { ..._ext }, owner: _ext.owner };
+        }
       } catch (err) {
         extension = await PiperContract.methods.getExtensionByHash(hash).call();
 
         if (extension === null) {
           throw new Error(`Extension ${hash} cannot be found`);
         }
+
+        // TODO: put it in the cache.
       }
     } catch (err) {
       extension = {
@@ -74,6 +84,8 @@ Index.getInitialProps = async ({ query: { hash } }) => {
       };
     }
   }
+
+  console.log(extension);
 
   return extension;
 };

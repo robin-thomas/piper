@@ -22,17 +22,45 @@ const Apollo = {
     return Apollo.client;
   },
 
-  execQuery: async (query, args = {}) => {
+  execQuery: async (query, args = {}, key = "extensions") => {
     try {
       const result = await Apollo.getClient().query({
         query: query,
         variables: args
       });
 
-      return result.data.extensions;
+      return result.data[key];
     } catch (err) {
       throw new Error(err.message);
     }
+  },
+
+  isExtensionUpdated: async (hash, lastUpdated) => {
+    try {
+      const extension = await Apollo.execQuery(
+        IS_EXTENSION_UPDATED,
+        {
+          hash: hash
+        },
+        "extension"
+      );
+
+      if (extension.updated > lastUpdated) {
+        return true;
+      }
+    } catch (err) {}
+
+    return false;
+  },
+
+  getExtensionByHash: async hash => {
+    return await Apollo.execQuery(
+      GET_EXTENSION_BY_HASH,
+      {
+        hash: hash
+      },
+      "extension"
+    );
   },
 
   getExtensionList: async (skip = 0) => {
