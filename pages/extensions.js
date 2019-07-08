@@ -47,14 +47,14 @@ const Index = props => {
     <div>
       <GlobalHead title="Piper | Decentralized Chromium web store" />
       <Header />
-      <Extension hash={props.extension.hash} />
+      <Extension hash={props.extension.hash} reviews={props.reviews} />
     </div>
   );
 };
 
 Index.getInitialProps = async ({ query: { hash } }) => {
   // Create a new extension.
-  let extension = {
+  let props = {
     hash: hash
   };
 
@@ -64,34 +64,40 @@ Index.getInitialProps = async ({ query: { hash } }) => {
         const isUpdated = await Apollo.isExtensionUpdated(hash);
         if (!isUpdated) {
           // Load from the cache.
-          extension = Cache.get(hash);
+          props = Cache.get(hash);
         } else {
           const _ext = await Apollo.getExtensionByHash(hash);
 
-          extension = { extension: { ..._ext }, owner: _ext.owner };
+          props = { extension: { ..._ext }, owner: _ext.owner };
         }
       } catch (err) {
         const _ext = await Apollo.getExtensionByHash(hash);
 
-        extension = { extension: { ..._ext }, owner: _ext.owner };
+        props = { extension: { ..._ext }, owner: _ext.owner };
 
-        if (extension === null) {
+        if (props === null) {
           throw new Error(`Extension ${hash} cannot be found`);
         }
 
         // Put it into cache.
-        Cache.put(hash, extension.extension, extension.owner);
+        Cache.put(hash, props.extension, props.owner);
       }
     } catch (err) {
-      extension = {
+      props = {
         err: true
       };
     }
   }
 
-  console.log(extension);
+  // Get the reviews of this extension.
+  try {
+    const _reviews = await Apollo.getExtensionReviews(hash);
+    props.reviews = _reviews;
+  } catch (err) {}
 
-  return extension;
+  console.log(props);
+
+  return props;
 };
 
 export default Index;

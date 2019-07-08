@@ -77,9 +77,13 @@ const Apollo = {
   },
 
   getExtensionReviews: async hash => {
-    return await Apollo.execQuery(GET_EXTENSION_REVIEWS, {
-      hash: hash
-    });
+    return await Apollo.execQuery(
+      GET_EXTENSION_REVIEWS,
+      {
+        hash: hash
+      },
+      "extensionReviews"
+    );
   },
 
   searchExtensions: async ({ category, text, rating }, skip = 0) => {

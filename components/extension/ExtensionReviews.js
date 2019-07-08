@@ -4,6 +4,8 @@ import { MDBInput } from "mdbreact";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import StarRatings from "react-star-ratings";
 
+import ExtensionReviewList from "./ExtensionReviewList";
+
 import { DataConsumer } from "../utils/DataProvider";
 import EmptyRow from "../utils/EmptyRow";
 import PiperContract from "../utils/PiperContract";
@@ -49,13 +51,24 @@ const ExtensionReviews = ({ hash, reviews }) => {
                 </span>
               </Col>
             </Row>
-          ) : null}
+          ) : (
+            reviews.map(review => (
+              <div>
+                <ExtensionReviewList
+                  rating={review.rating}
+                  review={review.review}
+                  updated={review.updated}
+                />
+                <EmptyRow />
+              </div>
+            ))
+          )}
           <EmptyRow />
           <EmptyRow />
           <EmptyRow />
           <DataConsumer>
             {ctx =>
-              ctx.address !== null ? (
+              ctx.address !== null && ctx.currExt.owner !== ctx.address ? (
                 <div>
                   <Row>
                     <Col className="align-self-center">
@@ -95,6 +108,9 @@ const ExtensionReviews = ({ hash, reviews }) => {
                       />
                     </Col>
                   </Row>
+                  <EmptyRow />
+                  <EmptyRow />
+                  <EmptyRow />
                 </div>
               ) : null
             }

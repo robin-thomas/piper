@@ -7,7 +7,7 @@ import ExtensionReviews from "./extension/ExtensionReviews";
 
 import EmptyRow from "./utils/EmptyRow";
 
-const Extension = ({ hash }) => (
+const Extension = ({ hash, reviews }) => (
   <Container>
     <ExtensionHeader />
     <EmptyRow />
@@ -48,7 +48,13 @@ const Extension = ({ hash }) => (
                 <ExtensionDetails />
               </Tab.Pane>
               <Tab.Pane eventKey="second">
-                <ExtensionReviews hash={hash} />
+                <ExtensionReviews
+                  hash={hash}
+                  reviews={[
+                    { updated: 1562626318, rating: 3, review: "hello all" },
+                    { rating: 4, review: "hello bb all" }
+                  ]}
+                />
               </Tab.Pane>
             </Tab.Content>
           </Col>
