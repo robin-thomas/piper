@@ -5,6 +5,7 @@ import { Container, Row, Col } from "react-bootstrap";
 
 import SidebarAbout from "./sidebar/SidebarAbout";
 import SidebarCategory from "./sidebar/SidebarCategory";
+import SidebarHelp from "./sidebar/SidebarHelp";
 import SidebarRating from "./sidebar/SidebarRating";
 import SidebarSearch from "./sidebar/SidebarSearch";
 import SidebarTitle from "./sidebar/SidebarTitle";
@@ -68,6 +69,7 @@ const Sidebar = props => {
       </Row>
       <SidebarLine />
       <SidebarAbout />
+      <SidebarHelp />
       <style jsx global>{`
         .sidebar {
           background: #f5f5f5;
