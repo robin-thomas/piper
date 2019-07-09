@@ -11,6 +11,7 @@ import SidebarSearch from "./sidebar/SidebarSearch";
 import SidebarTitle from "./sidebar/SidebarTitle";
 
 import { DataContext } from "./utils/DataProvider";
+import EmptyRow from "./utils/EmptyRow";
 import Apollo from "./utils/graphql/Apollo";
 
 const SidebarLine = () => (
@@ -64,12 +65,16 @@ const Sidebar = props => {
         </Col>
       </Row>
       <SidebarRating onChange={search} />
-      <Row>
-        <Col>&nbsp;</Col>
-      </Row>
+      <EmptyRow />
       <SidebarLine />
       <SidebarAbout />
       <SidebarHelp />
+      <EmptyRow />
+      <Row>
+        <Col>
+          <span className="sidebar-copyright">Copyright ©, Robin Thomas</span>
+        </Col>
+      </Row>
       <style jsx global>{`
         .sidebar {
           background: #f5f5f5;
@@ -98,6 +103,14 @@ const Sidebar = props => {
           width: 17px;
           margin-right: 10px;
           margin-top: -3px;
+        }
+
+        .sidebar-copyright {
+          letter-spacing: 0.01785714em;
+          font-size: 0.8rem;
+          font-weight: bold;
+          line-height: 1.25rem;
+          color: #80868b;
         }
       `}</style>
     </Container>
