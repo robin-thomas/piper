@@ -24,7 +24,7 @@ contract Piper {
   }
 
   event Extension(address owner, Ext extension);
-  event ExtensionVersion(string hash, string version, string crx);
+  event ExtensionVersion(string hash, string version, string crx, uint32 size, uint32 updated);
   event ExtensionReview(string hash, uint32 rating, string review, uint32 updated);
 
   function createNewExtension(Ext memory _extension) public {
@@ -35,7 +35,7 @@ contract Piper {
       hasExtension[_extension.hash] = true;
 
       emit Extension(msg.sender, _extension);
-      emit ExtensionVersion(_extension.hash, _extension.version, _extension.crx);
+      emit ExtensionVersion(_extension.hash, _extension.version, _extension.crx, _extension.size, _extension.updated);
     } else {
       // Updating the extension.
 
@@ -46,7 +46,7 @@ contract Piper {
       if (keccak256(bytes(_extension.version)) != keccak256(bytes(versions[_extension.hash]))) {
         versions[_extension.hash] = _extension.version;
 
-        emit ExtensionVersion(_extension.hash, _extension.version, _extension.crx);
+        emit ExtensionVersion(_extension.hash, _extension.version, _extension.crx, _extension.size, _extension.updated);
       }
 
       emit Extension(msg.sender, _extension);

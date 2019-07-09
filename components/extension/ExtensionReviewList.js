@@ -15,7 +15,7 @@ const ExtensionReviewList = ({ rating, review, updated }) => {
   const choice = choices[Math.floor(Math.random() * choices.length)];
 
   return (
-    <Card bg={choice} text="black" style={{ padding: "10px" }}>
+    <Card bg={choice} text="#495057" style={{ padding: "10px" }}>
       <Row>
         <Col>
           <Card.Img
@@ -29,7 +29,7 @@ const ExtensionReviewList = ({ rating, review, updated }) => {
         </Col>
       </Row>
       <Card.Body style={{ padding: "1.25rem 0.7rem" }}>
-        <Card.Text style={{ color: "#000" }}>{review}</Card.Text>
+        <Card.Text style={{ color: "#495057" }}>{review}</Card.Text>
       </Card.Body>
     </Card>
   );
