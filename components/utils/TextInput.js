@@ -24,7 +24,9 @@ const TextInput = props => {
           />
         ) : props.link ? (
           <Link href={props.value}>
-            <a target="_blank">{props.value}</a>
+            <a className="extension-header-name-link" target="_blank">
+              {props.value}
+            </a>
           </Link>
         ) : props.formatter ? (
           props.formatter(props.value)
@@ -39,6 +41,12 @@ const TextInput = props => {
           line-height: 2.25rem;
           color: #202124;
           text-transform: capitalize;
+        }
+
+        .extension-header-name-link {
+          width: 100%;
+          display: inline-block;
+          overflow: hidden;
         }
       `}</style>
     </Row>

@@ -116,6 +116,42 @@ const SidebarHelp = () => {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
+            <Card>
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey="4">
+                  Error CRX_HEADER_INVALID
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey="4">
+                <Card.Body>
+                  <p>
+                    That means the CRX version used to pack the extension and
+                    the version supported by your browser are both different.
+                  </p>
+                  <p>To resolve this:</p>
+                  <ul>
+                    <li>Unpack downloaded CRX file using 7zip</li>
+                    <li>In Chromium extension page, turn ON Developer mode</li>
+                    <li>Click "Load unpacked" and select your folder</li>
+                  </ul>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+            <Card>
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey="5">
+                  Can I install any extensions?
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey="5">
+                <Card.Body>
+                  <p>
+                    Kindly refrain from installing these extensions as all are
+                    test extensions at the moment.
+                  </p>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
           </Accordion>
         </Modal.Body>
 
