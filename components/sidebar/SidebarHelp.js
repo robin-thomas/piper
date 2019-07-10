@@ -84,6 +84,38 @@ const SidebarHelp = () => {
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
+            <Card>
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey="2">
+                  What Ethereum network does Piper runs on?
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey="2">
+                <Card.Body>
+                  <p>
+                    Currently Piper is running on{" "}
+                    <a href="https://ropsten.etherscan.io/" target="_blank">
+                      Ropsten network
+                    </a>
+                    .
+                  </p>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+            <Card>
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey="3">
+                  Who can rate/review an extension?
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey="3">
+                <Card.Body>
+                  <p>
+                    Anyone who logins into Piper, expect the extension uploader.
+                  </p>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
           </Accordion>
         </Modal.Body>
 

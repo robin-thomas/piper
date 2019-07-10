@@ -26,7 +26,12 @@ const Formatter = {
   },
 
   formatDate: timestamp => {
-    if (timestamp === null || timestamp === undefined) {
+    if (
+      timestamp === null ||
+      timestamp === undefined ||
+      isNaN(timestamp) ||
+      timestamp === 0
+    ) {
       return null;
     }
 

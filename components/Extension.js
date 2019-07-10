@@ -48,13 +48,7 @@ const Extension = ({ hash, reviews }) => (
                 <ExtensionDetails />
               </Tab.Pane>
               <Tab.Pane eventKey="second">
-                <ExtensionReviews
-                  hash={hash}
-                  reviews={[
-                    { updated: 1562626318, rating: 3, review: "hello all" },
-                    { rating: 4, review: "hello bb all" }
-                  ]}
-                />
+                <ExtensionReviews hash={hash} reviews={reviews} />
               </Tab.Pane>
             </Tab.Content>
           </Col>

@@ -17,11 +17,16 @@ const Index = props => {
 
   const ctx = useContext(DataContext);
 
-  const selectPage = (hash, ctx, extension, owner) => {
+  const selectPage = (extension, ctx, owner) => {
+    const hash = extension.hash;
+
     if (hash === "new") {
       ctx.setNewExt(true);
       ctx.setEditable(true);
       ctx.setAuthorEditable(true);
+
+      ctx.setExtension({});
+      ctx.setCurrExt({});
     } else if (owner && owner === ctx.address) {
       ctx.setNewExt(false);
       ctx.setAuthorEditable(true);
@@ -38,10 +43,11 @@ const Index = props => {
     }
   };
 
-  useEffect(
-    () => selectPage(props.extension.hash, ctx, props.extension, props.owner),
-    [ctx.address, props.extension.hash]
-  );
+  useEffect(() => selectPage(props.extension, ctx, props.owner), [
+    ctx.address,
+    props.extension.hash,
+    props.extension.updated
+  ]);
 
   return (
     <div>
@@ -55,7 +61,9 @@ const Index = props => {
 Index.getInitialProps = async ({ query: { hash } }) => {
   // Create a new extension.
   let props = {
-    hash: hash
+    extension: {
+      hash: hash
+    }
   };
 
   if (hash !== "new") {
@@ -82,18 +90,18 @@ Index.getInitialProps = async ({ query: { hash } }) => {
         // Put it into cache.
         Cache.put(hash, props.extension, props.owner);
       }
+
+      // Get the reviews of this extension.
+      try {
+        const _reviews = await Apollo.getExtensionReviews(hash);
+        props.reviews = _reviews;
+      } catch (err) {}
     } catch (err) {
       props = {
         err: true
       };
     }
   }
-
-  // Get the reviews of this extension.
-  try {
-    const _reviews = await Apollo.getExtensionReviews(hash);
-    props.reviews = _reviews;
-  } catch (err) {}
 
   console.log(props);
 

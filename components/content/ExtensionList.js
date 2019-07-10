@@ -17,15 +17,21 @@ const ExtensionList = ({ name, rating, iconURL, hash }) => {
   ];
   const choice = choices[Math.floor(Math.random() * choices.length)];
 
+  const getExtensionIcon = iconURL => {
+    try {
+      new URL(iconURL);
+      return iconURL;
+    } catch (err) {
+      return `https://ipfs.infura.io/ipfs/${iconURL}`;
+    }
+  };
+
   return (
     <div>
       <Link href={`/extensions?hash=${hash}`} as={`/extensions/${hash}`}>
         <a className="content-extension-listing-rating">
           <Card bg={choice} text="white" style={{ padding: "10px" }}>
-            <Card.Img
-              variant="top"
-              src={`https://ipfs.infura.io/ipfs/${iconURL}`}
-            />
+            <Card.Img variant="top" src={getExtensionIcon(iconURL)} />
           </Card>
           <EmptyRow cls="content-extension-listing-name-margin" />
           <span className="content-extension-listing-name">{name}</span>

@@ -25,7 +25,12 @@ const ExtensionIcon = props => {
   const getExtensionIcon = iconURL => {
     if (/^data:.+\/(.+);base64,(.*)$/.test(iconURL)) {
       return iconURL;
-    } else {
+    }
+
+    try {
+      new URL(iconURL);
+      return iconURL;
+    } catch (err) {
       return `https://ipfs.infura.io/ipfs/${iconURL}`;
     }
   };

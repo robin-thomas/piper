@@ -52,8 +52,8 @@ const ExtensionReviews = ({ hash, reviews }) => {
               </Col>
             </Row>
           ) : (
-            reviews.map(review => (
-              <div>
+            reviews.map((review, index) => (
+              <div key={index}>
                 <ExtensionReviewList
                   rating={review.rating}
                   review={review.review}

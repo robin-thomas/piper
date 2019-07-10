@@ -62,6 +62,7 @@ const ExtensionHeader = props => {
 
     // Get the extension object.
     let extension = { ...ctx.currExt };
+    console.log(extension);
     extension.updated = updatedTime;
     extension.category =
       extension.category === undefined ? "All" : extension.category;
@@ -120,6 +121,10 @@ const ExtensionHeader = props => {
     }
 
     ctx.setCurrExt({ ...ctx.currExt, updated: updatedTime });
+    ctx.setExtensions([
+      ...ctx.extensions,
+      { ...ctx.currExt, updated: updatedTime }
+    ]);
     Cache.set(extension.hash, extension, ctx.address);
 
     return {
