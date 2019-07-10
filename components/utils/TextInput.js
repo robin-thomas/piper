@@ -10,6 +10,14 @@ import { DataContext } from "./DataProvider";
 const TextInput = props => {
   const ctx = useContext(DataContext);
 
+  const prettifyLink = link => {
+    if (link.length > 80) {
+      return `${link.substring(0, 80)}...`;
+    } else {
+      return link;
+    }
+  };
+
   return (
     <Row>
       <Col className={props.class ? props.class : null}>
@@ -25,7 +33,7 @@ const TextInput = props => {
         ) : props.link ? (
           <Link href={props.value}>
             <a className="extension-header-name-link" target="_blank">
-              {props.value}
+              {prettifyLink(props.value)}
             </a>
           </Link>
         ) : props.formatter ? (

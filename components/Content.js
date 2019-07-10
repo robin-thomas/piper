@@ -69,7 +69,7 @@ const Content = props => (
     ) : (
       <Row>
         {props.extensions.map((extension, index) => (
-          <Col md="3" key={index}>
+          <Col md="3" key={index} style={{ marginBottom: "25px" }}>
             <ExtensionList
               name={extension.name}
               rating={extension.rating}
