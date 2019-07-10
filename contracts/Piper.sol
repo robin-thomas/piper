@@ -25,7 +25,7 @@ contract Piper {
 
   event Extension(address owner, Ext extension);
   event ExtensionVersion(string hash, string version, string crx, uint32 size, uint32 updated);
-  event ExtensionReview(string hash, uint32 rating, string review, uint32 updated);
+  event ExtensionReview(string hash, uint32 rating, string review, uint32 updated, address reviewer);
 
   function createNewExtension(Ext memory _extension) public {
     if (!isExtension(_extension.hash)) {
@@ -56,6 +56,6 @@ contract Piper {
   function addReview(string memory _hash, uint32 _rating, string memory _review, uint32 _updated) public {
     require (isExtension(_hash));
 
-    emit ExtensionReview(_hash, _rating, _review, _updated);
+    emit ExtensionReview(_hash, _rating, _review, _updated, msg.sender);
   }
 }

@@ -36,6 +36,14 @@ const ExtensionReviews = ({ hash, reviews }) => {
     }
   };
 
+  const hasReviewed = ctx => {
+    if (reviews.map(e => e.reviewer === ctx.address).length > 0) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <Container>
       <EmptyRow cls="extension-details-empty-row" />
@@ -68,7 +76,10 @@ const ExtensionReviews = ({ hash, reviews }) => {
           <EmptyRow />
           <DataConsumer>
             {ctx =>
-              ctx.address !== null && ctx.currExt.owner !== ctx.address ? (
+              ctx.address !== null &&
+              ctx.currExt &&
+              ctx.currExt.owner !== ctx.address &&
+              !hasReviewed(ctx) ? (
                 <div>
                   <Row>
                     <Col className="align-self-center">

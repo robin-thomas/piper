@@ -39,6 +39,7 @@ const Index = props => {
       ctx.setAuthorEditable(false);
       ctx.setEditable(false);
 
+      ctx.setExtension({ ...extension, owner: owner });
       ctx.setCurrExt({ ...extension, owner: owner });
     }
   };
@@ -95,6 +96,13 @@ Index.getInitialProps = async ({ query: { hash } }) => {
       try {
         const _reviews = await Apollo.getExtensionReviews(hash);
         props.reviews = _reviews;
+
+        props.extension.reviews = _reviews.length;
+        if (_reviews.length > 0) {
+          props.extension.rating =
+            _reviews.length.map(e => e.rating).reduce((p, c) => p + c, 0) /
+            _reviews.length;
+        }
       } catch (err) {}
     } catch (err) {
       props = {

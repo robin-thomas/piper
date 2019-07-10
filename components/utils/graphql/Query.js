@@ -61,6 +61,7 @@ const GET_EXTENSION_REVIEWS = gql`
       hash
       rating
       reviews
+      reviewer
     }
   }
 `;
