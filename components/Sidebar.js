@@ -37,7 +37,19 @@ const Sidebar = props => {
 
     ctx.setExtensions(null);
 
-    Apollo.searchExtensions(args).then(extensions => {
+    Apollo.searchExtensions(args).then(async extensions => {
+      for (let ext of extensions) {
+        const _reviews = await Apollo.getExtensionReviews(ext.hash);
+        ext.reviews = _reviews.length;
+        if (_reviews.length > 0) {
+          ext.rating =
+            _reviews.map(e => parseInt(e.rating)).reduce((p, c) => p + c, 0) /
+            _reviews.length;
+
+          ext.rating = ext.rating.toFixed(1) * 1;
+        }
+      }
+
       ctx.setExtensions(extensions);
     });
   };

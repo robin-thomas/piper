@@ -96,7 +96,6 @@ Index.getInitialProps = async ({ query: { hash } }) => {
       try {
         const _reviews = await Apollo.getExtensionReviews(hash);
         props.reviews = _reviews;
-        console.log(_reviews);
 
         props.extension.reviews = _reviews.length;
         if (_reviews.length > 0) {

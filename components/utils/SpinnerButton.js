@@ -7,7 +7,7 @@ import { Button, Spinner } from "react-bootstrap";
 
 import { DataContext, DataConsumer } from "./DataProvider";
 
-const SpinnerButton = ({ text, onClick, variant, redirect }) => {
+const SpinnerButton = ({ text, onClick, variant }) => {
   const [disabled, setDisabled] = useState(false);
 
   const ctx = useContext(DataContext);
@@ -41,7 +41,7 @@ const SpinnerButton = ({ text, onClick, variant, redirect }) => {
     }
     ctx.setTextDisabled(false);
 
-    if (!_.isEmpty(res) && res.redirect && redirect === undefined) {
+    if (!_.isEmpty(res) && res.redirect) {
       Router.push(res.redirect.href, res.redirect.as);
     }
   };

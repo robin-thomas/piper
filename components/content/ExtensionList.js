@@ -15,7 +15,7 @@ const ExtensionList = ({ name, rating, iconURL, hash }) => {
     "info",
     "dark"
   ];
-  const choice = choices[Math.floor(Math.random() * choices.length)];
+  const choice = choices[hash.charCodeAt(hash.length - 1) % choices.length];
 
   const getExtensionIcon = iconURL => {
     try {
@@ -34,7 +34,11 @@ const ExtensionList = ({ name, rating, iconURL, hash }) => {
             <Card.Img variant="top" src={getExtensionIcon(iconURL)} />
           </Card>
           <EmptyRow cls="content-extension-listing-name-margin" />
-          <span className="content-extension-listing-name">{name}</span>
+          <span className="content-extension-listing-name">
+            {name !== null && name.length > 20
+              ? `${name.substring(0, 20)}...`
+              : name}
+          </span>
           <Row>
             <ExtensionRating rating={rating} />
           </Row>
