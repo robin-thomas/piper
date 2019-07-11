@@ -2,7 +2,7 @@
 ![](https://img.shields.io/badge/nodejs-8.10-blue.svg) [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 # Arweave
-arweave status 7PGGRb3HOlSoObT7552ryowb00IiNU5GGeKar1b72XE
+https://arweave.net/7PGGRb3HOlSoObT7552ryowb00IiNU5GGeKar1b72XE
 
 # Table of Contents
 1. [What is it?](#what-is-it)
