@@ -3,7 +3,6 @@ import { Dropdown, DropdownButton } from "react-bootstrap";
 import { DataConsumer } from "../../utils/DataProvider";
 
 const categories = [
-  "All",
   "Accessibility",
   "Blogging",
   "Developer Tools",

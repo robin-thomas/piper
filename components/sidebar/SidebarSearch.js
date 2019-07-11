@@ -9,7 +9,8 @@ const SidebarSearch = ({ onChange }) => {
 
   const submit = (e, ctx) => {
     e.preventDefault();
-    onChange(ctx.search);
+    console.log(ctx.search);
+    onChange(ctx.search === null ? { text: "" } : ctx.search);
   };
 
   return (

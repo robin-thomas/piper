@@ -17,9 +17,7 @@ const ExtensionRating = ({ rating }) => (
           starSpacing="0"
         />
         &nbsp;
-        <span className="align-text-top">
-          {Formatter.prettifyString(rating)}
-        </span>
+        <span className="align-text-top">{rating}</span>
       </Col>
     )}
   </DataConsumer>

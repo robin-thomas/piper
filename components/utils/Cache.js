@@ -9,7 +9,7 @@ const Cache = {
       throw new Error("Not found in the cache");
     }
 
-    return val;
+    return JSON.parse(val);
   },
 
   set: (hash, extension, owner) => {

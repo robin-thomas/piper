@@ -96,14 +96,19 @@ Index.getInitialProps = async ({ query: { hash } }) => {
       try {
         const _reviews = await Apollo.getExtensionReviews(hash);
         props.reviews = _reviews;
+        console.log(_reviews);
 
         props.extension.reviews = _reviews.length;
         if (_reviews.length > 0) {
           props.extension.rating =
-            _reviews.length.map(e => e.rating).reduce((p, c) => p + c, 0) /
+            _reviews.map(e => parseInt(e.rating)).reduce((p, c) => p + c, 0) /
             _reviews.length;
+
+          props.extension.rating = props.extension.rating.toFixed(1) * 1;
         }
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     } catch (err) {
       props = {
         err: true

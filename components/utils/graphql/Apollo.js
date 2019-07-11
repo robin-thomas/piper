@@ -7,6 +7,7 @@ import {
   GET_EXTENSION_VERSIONS,
   GET_EXTENSION_REVIEWS,
   SEARCH_EXTENSIONS,
+  SEARCH_EXTENSIONS_ALL_CATEGORY,
   GET_EXTENSIONS_BY_HASH
 } from "./Query";
 
@@ -89,7 +90,10 @@ const Apollo = {
   searchExtensions: async ({ category, text, rating }, skip = 0) => {
     try {
       let result = await Apollo.getClient().query({
-        query: SEARCH_EXTENSIONS,
+        query:
+          category === "All"
+            ? SEARCH_EXTENSIONS_ALL_CATEGORY
+            : SEARCH_EXTENSIONS,
         variables: {
           category: category,
           name: text,

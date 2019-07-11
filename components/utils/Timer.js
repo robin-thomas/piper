@@ -27,11 +27,7 @@ class Timer extends Component {
   };
 
   render() {
-    return (
-      <span>
-        <i>{this.state.timeStr}</i>
-      </span>
-    );
+    return <span>{this.state.timeStr}</span>;
   }
 }
 

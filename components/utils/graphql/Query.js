@@ -60,8 +60,9 @@ const GET_EXTENSION_REVIEWS = gql`
     extensionReviews(where: { hash: $hash }) {
       hash
       rating
-      reviews
+      review
       reviewer
+      updated
     }
   }
 `;
@@ -69,6 +70,18 @@ const GET_EXTENSION_REVIEWS = gql`
 const SEARCH_EXTENSIONS = gql`
   query SearchExtensions($rating: Int!, $category: String!, $name: String!) {
     extensions(where: { name_starts_with: $name, category: $category }) {
+      hash
+    }
+
+    extensionReviews(where: { rating_gte: $rating }) {
+      hash
+    }
+  }
+`;
+
+const SEARCH_EXTENSIONS_ALL_CATEGORY = gql`
+  query SearchExtensions($rating: Int!, $name: String!) {
+    extensions(where: { name_starts_with: $name }) {
       hash
     }
 
@@ -102,4 +115,5 @@ export { GET_EXTENSIONS };
 export { GET_EXTENSION_VERSIONS };
 export { GET_EXTENSION_REVIEWS };
 export { SEARCH_EXTENSIONS };
+export { SEARCH_EXTENSIONS_ALL_CATEGORY };
 export { GET_EXTENSIONS_BY_HASH };

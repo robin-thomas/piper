@@ -1,37 +1,52 @@
-import { Row, Col, Card } from "react-bootstrap";
+import Link from "next/link";
+
+import {
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBCardTitle,
+  MDBCardText,
+  MDBIcon
+} from "mdbreact";
+import { Row, Col, Card, Button } from "react-bootstrap";
 import StarRatings from "react-star-ratings";
 
 import Timer from "../utils/Timer";
 
-const ExtensionReviewList = ({ rating, review, updated }) => {
-  const choices = [
-    "primary",
-    "secondary",
-    "success",
-    "danger",
-    "warning",
-    "info"
+const ExtensionReviewList = ({ rating, review, updated, reviewer }) => {
+  const images = [
+    "https://mdbootstrap.com/img/Photos/Others/photo1.jpg",
+    "https://mdbootstrap.com/img/Photos/Others/photo2.jpg",
+    "https://mdbootstrap.com/img/Photos/Others/photo3.jpg",
+    "https://mdbootstrap.com/img/Photos/Others/photo4.jpg",
+    "https://mdbootstrap.com/img/Photos/Others/photo5.jpg",
+    "https://mdbootstrap.com/img/Photos/Others/photo6.jpg",
+    "https://mdbootstrap.com/img/Photos/Others/photo7.jpg"
   ];
-  const choice = choices[Math.floor(Math.random() * choices.length)];
+  const image = images[Math.floor(Math.random() * images.length)];
 
   return (
-    <Card bg={choice} text="#495057" style={{ padding: "10px" }}>
-      <Row>
-        <Col>
-          <Card.Img
-            variant="top"
-            src="/static/images/user.svg"
-            style={{ width: "50px" }}
-          />
-        </Col>
-        <Col className="ml-auto text-right">
-          <Timer time={1000 * updated} />
-        </Col>
-      </Row>
-      <Card.Body style={{ padding: "1.25rem 0.7rem" }}>
-        <Card.Text style={{ color: "#495057" }}>{review}</Card.Text>
-      </Card.Body>
-    </Card>
+    <MDBCard style={{ width: "26.5rem" }}>
+      <MDBCardImage className="img-fluid" src={image} waves />
+      <MDBCardBody>
+        <MDBCardText>{review}</MDBCardText>
+        <Link href={`https://ropsten.etherscan.io/address/${reviewer}`}>
+          <a target="_blank" className="extension-review-address">
+            <Button variant="primary">{reviewer}</Button>
+          </a>
+        </Link>
+      </MDBCardBody>
+      <div className="rounded-bottom mdb-color lighten-3 text-center pt-3">
+        <ul className="list-unstyled list-inline font-small">
+          <li className="list-inline-item pr-2 white-text">
+            <MDBIcon far icon="clock" />
+            &nbsp;
+            <Timer time={1000 * updated} />
+          </li>
+        </ul>
+      </div>
+    </MDBCard>
   );
 };
 
