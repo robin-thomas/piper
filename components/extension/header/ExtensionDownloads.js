@@ -7,7 +7,10 @@ const ExtensionDownloads = props => (
   <DataConsumer>
     {ctx => (
       <Col md="auto" className="align-self-center">
-        <img src="/static/images/user.svg" style={{ width: "25px" }} />
+        <img
+          src={require("../../../static/images/user.svg")}
+          style={{ width: "25px" }}
+        />
         &nbsp;
         <span className="align-text-top">
           {Formatter.prettifyString(

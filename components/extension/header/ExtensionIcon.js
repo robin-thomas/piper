@@ -46,7 +46,7 @@ const ExtensionIcon = props => {
                 src={
                   ctx.currExt && ctx.currExt.iconURL
                     ? getExtensionIcon(ctx.currExt.iconURL)
-                    : "/static/images/camera.svg"
+                    : require("../../../static/images/camera.svg")
                 }
                 title="Extension Icon"
               />

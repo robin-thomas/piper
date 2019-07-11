@@ -20,7 +20,10 @@ const Extension = ({ hash, reviews }) => {
     } else if (ctx.currExt && ctx.currExt.owner === ctx.address) {
       setAddReview(false);
       console.log("owner");
-    } else if (reviews.filter(e => e.reviewer === ctx.address).length > 0) {
+    } else if (
+      reviews &&
+      reviews.filter(e => e.reviewer === ctx.address).length > 0
+    ) {
       setAddReview(false);
     } else {
       setAddReview(true);

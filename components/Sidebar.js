@@ -64,7 +64,7 @@ const Sidebar = props => {
       <Row>
         <Col>
           <div className="sidebar-extension">
-            <img src="/static/images/extension.svg" />
+            <img src={require("../static/images/extension.svg")} />
             Extensions
           </div>
         </Col>

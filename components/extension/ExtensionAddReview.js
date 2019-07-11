@@ -32,9 +32,11 @@ const ExtensionAddReview = ({ hash, setAddReview }) => {
     checkShowAddReviewButton(rating, newReview);
   };
 
-  const submitReview = async ctx => {
+  const submitReview = async (e, ctx) => {
+    e.preventDefault();
+
     setDisabled(true);
-    ctx.textDisabled(true);
+    ctx.setTextDisabled(true);
 
     const updatedTime = moment()
       .local()
@@ -58,7 +60,7 @@ const ExtensionAddReview = ({ hash, setAddReview }) => {
       setDisabled(false);
     }
 
-    ctx.textDisabled(false);
+    ctx.setTextDisabled(false);
   };
 
   return (

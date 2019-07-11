@@ -50,7 +50,7 @@ const Header = () => {
           <Container>
             <Row>
               <Col>
-                <img src="/static/images/chrome.svg" />
+                <img src={require("../static/images/chrome.svg")} />
                 <Link href="../index">
                   <a className="header-home-link" title="Piper">
                     <span>Piper | chromium web store</span>
@@ -66,12 +66,12 @@ const Header = () => {
                     onClick={() => signIn(context)}
                   >
                     <img
-                      src="/static/images/settings.svg"
+                      src={require("../static/images/settings.svg")}
                       style={{ width: "20px" }}
                     />
                     {context.email === null ? (
                       <img
-                        src="/static/images/loading.svg"
+                        src={require("../static/images/loading.svg")}
                         style={{ width: "20px" }}
                       />
                     ) : (

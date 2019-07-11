@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Router from "next/router";
 
 import { Container, Row, Col } from "react-bootstrap";
 
@@ -16,7 +17,7 @@ const Content = props => (
         <DataConsumer>
           {ctx =>
             ctx.loggedIn === true ? (
-              <Link href="extensions?hash=new" as="extensions/new">
+              <Link href={`extensions?hash=new`} as="extensions/new">
                 <a>
                   <SpinnerButton variant="success" text="Add New Extension" />
                 </a>
@@ -39,7 +40,7 @@ const Content = props => (
         <Col className="align-self-center text-center mx-auto" md="4">
           <div>
             <img
-              src="/static/images/loading.svg"
+              src={require("../static/images/loading.svg")}
               style={{ width: "150px", marginBottom: "20px" }}
             />
           </div>
@@ -53,7 +54,7 @@ const Content = props => (
         >
           <div>
             <img
-              src="/static/images/search.svg"
+              src={require("../static/images/search.svg")}
               style={{ width: "50px", marginBottom: "20px" }}
             />
             <p className="content-extensions-empty">No Results Found</p>

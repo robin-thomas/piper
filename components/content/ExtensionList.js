@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Router from "next/router";
 
 import { Card, Row } from "react-bootstrap";
 
@@ -28,7 +29,7 @@ const ExtensionList = ({ name, rating, iconURL, hash }) => {
 
   return (
     <div>
-      <Link href={`/extensions?hash=${hash}`} as={`/extensions/${hash}`}>
+      <Link href={`extensions?hash=${hash}`} as={`extensions/${hash}`}>
         <a className="content-extension-listing-rating">
           <Card bg={choice} text="white" style={{ padding: "10px" }}>
             <Card.Img variant="top" src={getExtensionIcon(iconURL)} />

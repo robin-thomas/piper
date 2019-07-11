@@ -1,16 +1,13 @@
 import Link from "next/link";
 
 import {
-  MDBBtn,
   MDBCard,
   MDBCardBody,
   MDBCardImage,
-  MDBCardTitle,
   MDBCardText,
   MDBIcon
 } from "mdbreact";
-import { Row, Col, Card, Button } from "react-bootstrap";
-import StarRatings from "react-star-ratings";
+import { Button } from "react-bootstrap";
 
 import Timer from "../utils/Timer";
 

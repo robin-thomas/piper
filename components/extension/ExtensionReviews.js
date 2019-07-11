@@ -12,7 +12,10 @@ const ExtensionReviews = ({ hash, reviews }) => {
           <Col md="7" className="mx-auto">
             <Row>
               <Col className="mx-auto" md="auto">
-                <img src="/static/images/cat.svg" style={{ width: "60px" }} />
+                <img
+                  src={require("../../static/images/cat.svg")}
+                  style={{ width: "60px" }}
+                />
                 <br />
                 <span className="no-reviews-found">
                   Uh oh. No reviews found!

@@ -32,7 +32,11 @@
   "devDependencies": {
     "@rauschma/stringio": "^1.4.0",
     "husky": "^2.3.0",
+    "imagemin-svgo": "^7.0.0",
     "lint-staged": "^8.2.1",
+    "next-compose-plugins": "^2.2.0",
+    "next-optimized-images": "^2.5.3",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "prettier": "^1.18.2",
     "truffle-hdwallet-provider": "1.0.12"
   },
@@ -41,8 +45,11 @@
     "build": "next build",
     "start": "node ./scripts/start.js",
     "export": "next export",
+    "deploy": "npm run build && npm run export && npm run deploy:dapp",
+    "deploy:dapp": "arweave deploy out/packaged.html --key-file arweave-keyfile.json",
     "deploy:contract": "node ./scripts/deploy.js truffle",
-    "init:graph": "node ./scripts/deploy.js graph"
+    "init:graph": "node ./scripts/deploy.js graph",
+    "now-build": "next build && next export -o dist"
   },
   "repository": {
     "type": "git",
