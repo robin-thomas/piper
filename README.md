@@ -24,7 +24,8 @@ https://www.youtube.com/watch?v=IQofZUFtTSk
 * Leave rating and review for an extension (immutable and cannot be edited)
 * Load extension details from Chrome web store to auto-full details while creating an extension
 * Create an extension by filling details like name, category, version details and more.
-* Edit an extension
+* Edit an extension details and create another version if required.
+* Track different versions of the extension
 * Help page to solve most issues
 
 # Architecture
