@@ -6,6 +6,7 @@ https://arweave.net/P2oYjLl1g0wi_9pCBiE8h4MwElLb3JdfIEQ4Yokn4rI
 
 # Demo video
 https://www.youtube.com/watch?v=IQofZUFtTSk
+[![](https://i.ibb.co/3mhwRgk/piper.png)](https://www.youtube.com/watch?v=IQofZUFtTSk)
 
 # Table of Contents
 1. [What is it?](#what-is-it)
