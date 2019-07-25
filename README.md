@@ -1,9 +1,6 @@
 # Piper
 ![](https://img.shields.io/badge/nodejs-8.10-blue.svg) [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-# Arweave
-https://arweave.net/P2oYjLl1g0wi_9pCBiE8h4MwElLb3JdfIEQ4Yokn4rI
-
 # Demo video
 https://www.youtube.com/watch?v=IQofZUFtTSk
 [![](https://i.ibb.co/3mhwRgk/piper.png)](https://www.youtube.com/watch?v=IQofZUFtTSk)
